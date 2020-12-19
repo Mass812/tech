@@ -13,7 +13,7 @@ module.exports = async (email) => {
   };
 
   try {
-    const data = await db.getItem(Params).promise();
+    const data = await db.get(Params).promise();
     console.log(data);
     return data;
   } catch (err) {

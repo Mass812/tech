@@ -66,18 +66,18 @@ File: createWorkout_ddb.js
 pk: 'user_email'
 sk: "workoutFocus_timestamp"
 attributes: {
-      pk: "stefanie@gmail.com",
-      sk: "core" + "_" + new Date().toISOString(), //types: core, aerobic, weights, cardio, calesthenics
-      email: "stefanie@gmail.com",
-      category: "core",
+ pk: "ashton@gmail.com",
+      sk: "aerobic" + "_" + new Date().toISOString(),
+      email: "ashton@gmail.com",
+      category: "aerobic",
       courseDirected: false,
       courseRelation: "none",
-      exercise: "Ab Crunches",
+      exercise: "Cycling",
       timestamp: new Date().toISOString(),
-      duration: 16,
-      sets: 4,
-      reps: 45,
-      weightLbValue: 15
+      duration: 54,
+      sets: 0,
+      reps: 0,
+      weightLbValue: 0,
 }
 
 
