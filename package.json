@@ -1,0 +1,33 @@
+{
+  "name": "tech",
+  "version": "1.0.0",
+  "description": "trial and error",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "nodemon server.js"
+  },
+  "keywords": [
+    "graphql",
+    "rn",
+    "typescript",
+    "apollo",
+    "server",
+    "express"
+  ],
+  "author": "Matt Wellman",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server-express": "^2.19.0",
+    "aws-sdk": "^2.809.0",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "graphql": "^15.4.0",
+    "graphql-tools": "^4.0.8",
+    "lodash": "^4.17.20"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
+}
