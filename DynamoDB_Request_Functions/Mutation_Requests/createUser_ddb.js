@@ -41,6 +41,6 @@ module.exports = createUser = async () => {
     console.log(data);
     return data;
   } catch (err) {
-    console.log("Oops there was an err ", err);
+    console.log("Oops there was an err creating this user ", err);
   }
 };
