@@ -44,5 +44,3 @@ module.exports = createUser = async () => {
     console.log("Oops there was an err ", err);
   }
 };
-
-//createUser();

@@ -30,5 +30,3 @@ const createIndependentWorkout = async () => {
     console.log("Oops there was an err ", err);
   }
 };
-
-createIndependentWorkout();

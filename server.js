@@ -14,13 +14,13 @@ const getUserWorkoutsByCategory = require("./DynamoDB_Request_Functions/Query_Re
 const getUserProfile = require("./DynamoDB_Request_Functions/Query_Requests/getUserProfile_ddb");
 const getCoursesByName = require("./DynamoDB_Request_Functions/Query_Requests/getCoursesByName_ddb");
 const getAllCourses = require("./DynamoDB_Request_Functions/Query_Requests/getAllCourses_ddb");
+const getCoursesForCategory = require("./DynamoDB_Request_Functions/Query_Requests/getCoursesForCategory_ddb");
 
 //db mutation calls
 const createUser = require("./DynamoDB_Request_Functions/Mutation_Requests/createUser_ddb");
 const createCourse = require("./DynamoDB_Request_Functions/Mutation_Requests/createCourse_ddb");
 const createWorkout = require("./DynamoDB_Request_Functions/Mutation_Requests/createWorkout_ddb");
-const getCoursesForCategory = require("./DynamoDB_Request_Functions/Query_Requests/getCoursesForCategory_ddb");
-
+const updateUserProfile = require("./DynamoDB_Request_Functions/Mutation_Requests/updateUser_ddb");
 // Construct a schema, using GraphQL schema language
 const Query = gql`
   type Query {
@@ -45,6 +45,8 @@ const Query = gql`
 
   input UserInput {
     email: String
+    attribute: String
+    value: String
   }
 
   type Workout {
@@ -95,11 +97,20 @@ const Query = gql`
   }
 `;
 
-const Mutation = `type Mutation {
+const Mutation = gql`
+  type Mutation {
     createUser: User!
+    updateUser(email: String!, attribute: String!, value: String!): User
     createCourse: Course!
     createWorkout: Workout!
-}`;
+  }
+  input UserUpdateInput {
+    email: String!
+    attribute: String!
+    value: String!
+  }
+`;
+
 //add later
 //read the current directory and load types and resolvers automatically
 //  fs.readdirSync(_dirname)
@@ -147,6 +158,11 @@ let resolvers = {
       let data = await createUser();
       return data;
     },
+    updateUser: async (_, args) => {
+      let data = await updateUserProfile(args);
+
+      return data;
+    },
     createCourse: async () => {
       let data = await createCourse();
       return data;
@@ -177,11 +193,3 @@ app.listen(PORT, () =>
     `🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`
   )
 );
-
-//      Access Points
-//     _get specific user
-//     _get courses
-//     _get course by category
-//     _get courses by instructor
-//     _get all user workouts
-//     get all user specific type workouts

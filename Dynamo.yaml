@@ -1,5 +1,17 @@
 
-
+//      Access Points
+// Done
+//     _create user profile 
+//     _get specific user 
+//     _get courses 
+//     _get course by category 
+//     _get courses by instructor 
+//     _get all user workouts 
+//     _get all user workouts by category 
+// ToDo
+//     delete user workout
+//     delete user and all documents from db
+//     
 
 
 
@@ -22,7 +34,7 @@ user_workout_course_relation          pk              courseRelation
 
 
 ++++++++++++++++
-Table Entities
+App_Table Entities
 ++++++++++++++++
 --
 TabkeName: 'App_Table'
