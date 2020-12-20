@@ -29,7 +29,7 @@ module.exports = createUser = async () => {
             street: "222 Cameo Way",
             city: "Jeffersonville",
             state: "IN",
-            zipCode: 47129,
+            zipCode: 47189,
           },
         },
       ],
