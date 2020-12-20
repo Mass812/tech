@@ -3,25 +3,22 @@ AWS.config.update({ region: "us-east-2" });
 
 const db = new AWS.DynamoDB.DocumentClient();
 
-const getAllUserWorkouts = async () => {
+module.exports = getUserWorkoutsByCategory = async (args) => {
+  let { email, category } = args;
   const Params = {
     TableName: "App_Table",
-    KeyConditionExpression: "#id = :v",
-    ExpressionAttributeNames: {
-      "#id": "pk",
-    },
+    KeyConditionExpression: "pk = :pk and begins_with(sk,:sk)",
     ExpressionAttributeValues: {
-      ":v": "williamwellman98@gmail.com",
+      ":pk": `${email}`,
+      ":sk": `${category}`,
     },
   };
 
   try {
     const data = await db.query(Params).promise();
-    console.log(data);
-    return data;
+    console.log(data.Items);
+    return data.Items;
   } catch (err) {
     console.log("Oops there was an err ", err);
   }
 };
-
-getAllUserWorkouts();

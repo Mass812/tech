@@ -1,20 +1,36 @@
 const express = require("express");
 const { ApolloServer, gql } = require("apollo-server-express");
-//const getSpecificUser = require("./getSpecificUser_ddb");
+const AWS = require("aws-sdk");
+AWS.config.update({ region: "us-east-2" });
+const db = new AWS.DynamoDB.DocumentClient();
+
+//spread resolvers later if needed
 const fs = require("fs");
 const path = require("path");
 const { merge } = require("lodash");
-const AWS = require("aws-sdk");
-AWS.config.update({ region: "us-east-2" });
 
-const db = new AWS.DynamoDB.DocumentClient();
+//db query calls
+const getUserWorkoutsByCategory = require("./DynamoDB_Request_Functions/Query_Requests/getUserWorkoutsByCategory_ddb");
+const getUserProfile = require("./DynamoDB_Request_Functions/Query_Requests/getUserProfile_ddb");
+const getCoursesByName = require("./DynamoDB_Request_Functions/Query_Requests/getCoursesByName_ddb");
+const getAllCourses = require("./DynamoDB_Request_Functions/Query_Requests/getAllCourses_ddb");
+
+//db mutation calls
+const createUser = require("./DynamoDB_Request_Functions/Mutation_Requests/createUser_ddb");
+const createCourse = require("./DynamoDB_Request_Functions/Mutation_Requests/createCourse_ddb");
+const createWorkout = require("./DynamoDB_Request_Functions/Mutation_Requests/createWorkout_ddb");
+const getCoursesForCategory = require("./DynamoDB_Request_Functions/Query_Requests/getCoursesForCategory_ddb");
 
 // Construct a schema, using GraphQL schema language
 const Query = gql`
   type Query {
-    user(email: String!): User!
+    user(email: String!): User
+
     course(course: String): Course
     courses: [Course]
+    coursesByCategory(category: String!): [Course]
+
+    userWorkoutsByCategory(email: String!, category: String!): [Workout]
     workouts(category: String!, email: String!): [Workout]!
   }
 
@@ -80,9 +96,11 @@ const Query = gql`
 `;
 
 const Mutation = `type Mutation {
-    empty:String
+    createUser: User!
+    createCourse: Course!
+    createWorkout: Workout!
 }`;
-
+//add later
 //read the current directory and load types and resolvers automatically
 //  fs.readdirSync(_dirname)
 //  .filter(dir => (dir.indexOf( ' . ' )< 0))
@@ -96,72 +114,46 @@ const Mutation = `type Mutation {
 let resolvers = {
   Query: {
     user: async (_, args) => {
-      const Params = {
-        TableName: "App_Table",
-        Key: {
-          pk: args.email,
-          sk: "profile",
-        },
-      };
-
-      try {
-        const data = await db.get(Params).promise();
-        console.log(data);
-        return data.Item;
-      } catch (err) {
-        console.log("Oops there was an err ", err);
-      }
+      let data = await getUserProfile(args);
+      return data;
     },
-    course: async (_, args) => {
-      const Params = {
-        TableName: "App_Table",
-        Key: {
-          sk: args.course,
-          pk: "course",
-        },
-      };
 
-      try {
-        const data = await db.get(Params).promise();
-        console.log(data);
-        return data.Item;
-      } catch (err) {
-        console.log("Oops there was an err ", err);
-      }
+    course: async (_, args) => {
+      let data = await getCoursesByName(args);
+      return data;
     },
     courses: async () => {
-      const Params = {
-        TableName: "App_Table",
-        KeyConditionExpression: "pk = :v",
-        ExpressionAttributeValues: { ":v": "course" },
-      };
-
-      try {
-        const data = await db.query(Params).promise();
-        console.log(data);
-        return data.Items;
-      } catch (err) {
-        console.log("Oops there was an err ", err);
-      }
+      let data = await getAllCourses();
+      return data;
     },
-    workouts: async (_, args) => {
-      console.log("passed in", args);
-      const Params = {
-        TableName: "App_Table",
-        KeyConditionExpression: "pk = :pk and begins_with(sk,:sk)",
-        ExpressionAttributeValues: {
-          ":pk": `${args.email}`,
-          ":sk": `${args.category}`,
-        },
-      };
 
-      try {
-        const data = await db.query(Params).promise();
-        console.log(data.Items);
-        return data.Items;
-      } catch (err) {
-        console.log("Oops there was an err ", err);
-      }
+    coursesByCategory: async (_, args) => {
+      let data = await getCoursesForCategory(args);
+      return data;
+    },
+    userWorkoutsByCategory: async (_, args) => {
+      let data = await getUserWorkoutsByCategory(args);
+      return data;
+    },
+
+    workouts: async (_, args) => {
+      let data = await getUserWorkoutsByCategory(args);
+      return data;
+    },
+  },
+
+  Mutation: {
+    createUser: async () => {
+      let data = await createUser();
+      return data;
+    },
+    createCourse: async () => {
+      let data = await createCourse();
+      return data;
+    },
+    createWorkout: async () => {
+      let data = await createWorkout();
+      return data;
     },
   },
 };
@@ -186,13 +178,10 @@ app.listen(PORT, () =>
   )
 );
 
+//      Access Points
 //     _get specific user
-//     get all users
 //     _get courses
-//     _get specific courses
+//     _get course by category
+//     _get courses by instructor
 //     _get all user workouts
 //     get all user specific type workouts
-//     get user specific workout
-//     get user courses
-//
-//

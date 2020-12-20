@@ -3,15 +3,15 @@ AWS.config.update({ region: "us-east-2" });
 
 const db = new AWS.DynamoDB.DocumentClient();
 
-const createItem = async () => {
+module.exports = createUser = async () => {
   const Params = {
     TableName: "App_Table",
     Item: {
-      pk: "ashton@gmail.com",
+      pk: "User#tim@gmail.com",
       sk: "profile",
-      firstName: "Ashton",
-      lastName: "Wellman",
-      email: "ashton@gmail.com",
+      firstName: "Tim",
+      lastName: "Allen",
+      email: "tim@gmail.com",
       courses: ["Extreme Chest Definition"],
       created: new Date().toISOString(),
       phone: 8123334444,
@@ -37,7 +37,7 @@ const createItem = async () => {
   };
 
   try {
-    const data = db.put(Params).promise();
+    const data = await db.put(Params).promise();
     console.log(data);
     return data;
   } catch (err) {
@@ -45,4 +45,4 @@ const createItem = async () => {
   }
 };
 
-createItem();
+//createUser();

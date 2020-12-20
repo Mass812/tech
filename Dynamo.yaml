@@ -12,10 +12,10 @@ __________                          _____________     _________
 course_cost                           pk              cost
 course_courseFocus                    pk              courseFocus
 course_instructor                     pk              instuctor
-user_category                         pk              category
+user_category   **                    pk              category
 user_workout_course_relation          pk              courseRelation
 
-
+** used for course catagory as pk = course, sk=category -- user_ was incidental
 
 
 
@@ -26,7 +26,7 @@ Table Entities
 ++++++++++++++++
 --
 TabkeName: 'App_Table'
-Type: user,
+Type: create a user,
 File: createUser.js
 pk: 'user_email',
 sk: "profile"
@@ -61,7 +61,7 @@ attributes: {
 
 --
 TabkeName: 'App_Table'
-Type: userIndependentWorkout
+Type: create a user workout
 File: createWorkout_ddb.js
 pk: 'user_email'
 sk: "workoutFocus_timestamp"
@@ -83,7 +83,7 @@ attributes: {
 
 --
 TabkeName: 'App_Table'
-Type: Course,
+Type: create a course,
 File: createCourse.js,
 pk: 'course_name'
 sk: "course"
@@ -103,4 +103,5 @@ attributes: {
       onSale: false,
       length: "45 hours",
       currentStudentCount: 1,
+      otherCourses: [] //maybe in future, not constituted
 }
