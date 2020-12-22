@@ -21,6 +21,7 @@ const createUser = require("./DynamoDB_Request_Functions/Mutation_Requests/creat
 const createCourse = require("./DynamoDB_Request_Functions/Mutation_Requests/createCourse_ddb");
 const createWorkout = require("./DynamoDB_Request_Functions/Mutation_Requests/createWorkout_ddb");
 const updateUserProfile = require("./DynamoDB_Request_Functions/Mutation_Requests/updateUser_ddb");
+
 // Construct a schema, using GraphQL schema language
 const Query = gql`
   type Query {
@@ -38,7 +39,7 @@ const Query = gql`
     firstName: String
     lastName: String
     email: String
-    courses: [String]
+    courses: [Course]
     created: String
     phone: String
   }
@@ -53,7 +54,7 @@ const Query = gql`
     email: String
     category: String
     courseDirected: Boolean
-    courseRelation: String
+    courseRelation: Course
     exercise: String
     timestamp: String
     duration: Int
@@ -79,6 +80,7 @@ const Query = gql`
     onSale: Boolean
     length: String
     currentStudentCount: Int
+    keywords: [String]
   }
 
   input CourseInput {
@@ -122,6 +124,7 @@ const Mutation = gql`
 // })
 
 // Provide resolver functions for your schema fields
+
 let resolvers = {
   Query: {
     user: async (_, args) => {
@@ -170,6 +173,30 @@ let resolvers = {
     createWorkout: async () => {
       let data = await createWorkout();
       return data;
+    },
+  },
+  Workout: {
+    courseRelation: async (parent, args) => {
+      let courseNeeded = parent.courseRelation;
+      console.log("Relation Resolver", courseNeeded);
+
+      let Params = {
+        TableName: "App_Table",
+        Key: {
+          pk: "course",
+          // sk: courseNeeded,
+          sk: courseNeeded,
+        },
+      };
+
+      try {
+        let data = await db.get(Params).promise();
+        console.log(data.Item);
+
+        return data.Item;
+      } catch (err) {
+        console.log("error", err);
+      }
     },
   },
 };
