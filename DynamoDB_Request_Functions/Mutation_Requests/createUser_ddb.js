@@ -3,6 +3,8 @@ AWS.config.update({ region: "us-east-2" });
 
 const db = new AWS.DynamoDB.DocumentClient();
 
+//  TODO password creation salting JWT for Sign on, Context through app
+
 module.exports = createUser = async () => {
   const Params = {
     TableName: "App_Table",

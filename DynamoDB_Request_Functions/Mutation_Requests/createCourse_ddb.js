@@ -3,25 +3,32 @@ AWS.config.update({ region: "us-east-2" });
 
 const db = new AWS.DynamoDB.DocumentClient();
 
-const createCourse = async () => {
+module.exports = async () => {
   const Params = {
     TableName: "App_Table",
     Item: {
       pk: "course",
-      sk: "Adventure Aerobics",
-      courseName: "Adventure Aerobics",
-      category: "aerobics",
-      courseFocus: "aerobics",
-      instructor: "Cam Shelt",
+      sk: "Bionic Body Design",
+      courseName: "Bionic Body Design",
+      category: "crossfit",
+      courseFocus: "whole body",
+      instructor: "Richard Simmons",
       created: new Date().toISOString(),
-      lectureCount: 16,
-      description: `The key to life longevity is staying in shape. Weights and calisthetics go a long way in shaping your body with tones provided by additional muscle
-      however, at the body's core, the heart, mind and lungs are strengthened by aerobics more profoundly. Join me in an adventure to bring your inner-self to its acme.`,
-      cost: "34.00",
-      saleCost: "23.99",
+      keywords: [
+        "cardio",
+        "intense",
+        "heart",
+        "extreme",
+        "intense",
+        "crossfit",
+      ],
+      lectureCount: 15,
+      description: `You have not experienced energy until you experience Richard Simmons.`,
+      cost: "45.00",
+      saleCost: "32.99",
       onSale: false,
-      length: "15 hours",
-      currentStudentCount: 16,
+      length: "16 hours",
+      currentStudentCount: 351,
     },
   };
 

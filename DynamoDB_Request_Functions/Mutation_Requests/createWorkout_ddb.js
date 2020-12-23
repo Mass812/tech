@@ -3,7 +3,7 @@ AWS.config.update({ region: "us-east-2" });
 
 const db = new AWS.DynamoDB.DocumentClient();
 
-const createIndependentWorkout = async () => {
+module.exports = async () => {
   const Params = {
     TableName: "App_Table",
     Item: {

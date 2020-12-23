@@ -21,6 +21,7 @@ const createUser = require("./DynamoDB_Request_Functions/Mutation_Requests/creat
 const createCourse = require("./DynamoDB_Request_Functions/Mutation_Requests/createCourse_ddb");
 const createWorkout = require("./DynamoDB_Request_Functions/Mutation_Requests/createWorkout_ddb");
 const updateUserProfile = require("./DynamoDB_Request_Functions/Mutation_Requests/updateUser_ddb");
+const createLesson = require("./DynamoDB_Request_Functions/Mutation_Requests/createLesson_ddb");
 
 // Construct a schema, using GraphQL schema language
 const Query = gql`
@@ -81,6 +82,8 @@ const Query = gql`
     length: String
     currentStudentCount: Int
     keywords: [String]
+    img: String
+    id: String
   }
 
   input CourseInput {
@@ -97,6 +100,17 @@ const Query = gql`
     length: String!
     currentStudentCount: Int!
   }
+
+  type Lesson {
+    title: String
+    subtitile: String
+    lessonFocus: String
+    video: String
+    img: String
+    course: String
+    lesson: Int
+    duration: String
+  }
 `;
 
 const Mutation = gql`
@@ -104,6 +118,7 @@ const Mutation = gql`
     createUser: User!
     updateUser(email: String!, attribute: String!, value: String!): User
     createCourse: Course!
+    createLesson: Lesson!
     createWorkout: Workout!
   }
   input UserUpdateInput {
@@ -168,6 +183,10 @@ let resolvers = {
     },
     createCourse: async () => {
       let data = await createCourse();
+      return data;
+    },
+    createLesson: async () => {
+      let data = await createLesson();
       return data;
     },
     createWorkout: async () => {

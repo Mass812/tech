@@ -25,7 +25,8 @@
     "dotenv": "^8.2.0",
     "graphql": "^15.4.0",
     "graphql-tools": "^4.0.8",
-    "lodash": "^4.17.20"
+    "lodash": "^4.17.20",
+    "urql": "^1.11.4"
   },
   "devDependencies": {
     "nodemon": "^2.0.6"
