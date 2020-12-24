@@ -29,8 +29,8 @@ const LessonCard: React.FC<LessonCardProps> = ({ onPress, courseName, img, instr
 
 
     return (
-        <TouchableWithoutFeedback  style={styles.parent} onPress = {onPress}>
-<View>
+        <TouchableWithoutFeedback   onPress = {onPress}>
+<View style={styles.parent}>
 
 
             <Text style={styles.lectureCount}>{lectureCount} classes</Text>
@@ -68,26 +68,26 @@ const LessonCard: React.FC<LessonCardProps> = ({ onPress, courseName, img, instr
 const styles = StyleSheet.create({
     parent: {
         width: '100%',
-        padding: 5,
-        paddingTop: 10,
+        //padding: 5,
+        // paddingTop: 10,
         marginTop: 4,
-        borderWidth: 7,
-        borderRadius: 10,
+        borderWidth: 1,
+        borderRadius: 9,
         borderColor: 'lightgrey',
-        borderTopColor: 'green'
+        backgroundColor: 'rgba(198,227,231, .03)',
 
 
 
     },
     card: {
         
-         borderBottomWidth: 2,
+         paddingBottom: 5,
         display: 'flex',
         marginBottom: 28,
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column',
-        //   backgroundColor: 'lightgrey',
+          backgroundColor: 'rgba(198,227,231, .2)',
 
     },
     lectureCount: {
@@ -154,7 +154,8 @@ const styles = StyleSheet.create({
         fontWeight: "600",
         position: "absolute",
         top: 30,
-        left: 65,
+        left: 55,
+        zIndex:2,
     },
     focus: {
         color: 'teal',
