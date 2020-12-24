@@ -1,6 +1,7 @@
-import { isTypeSystemExtensionNode } from 'graphql';
+
+import { VolumeId } from 'aws-sdk/clients/storagegateway';
 import * as React from 'react'
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet,TouchableWithoutFeedback, Image } from 'react-native';
 
 
 
@@ -12,25 +13,29 @@ interface LessonCardProps {
     description: string
     lectureCount: string
     length: string
-
+    onPress: (e: React.SyntheticEvent 
+    ) => void 
     keywords: string[]
+   
 }
 
 
 
-const LessonCard: React.FC<LessonCardProps> = ({ courseName, img, instructor, description, lectureCount, keywords }) => {
+const LessonCard: React.FC<LessonCardProps> = ({ onPress, courseName, img, instructor, description, lectureCount, keywords }) => {
 
 
-        const name = instructor.length
+    
 
 
 
     return (
+        <TouchableWithoutFeedback  style={styles.parent} onPress = {onPress}>
+<View>
 
-        <View style={styles.parent}>
+
             <Text style={styles.lectureCount}>{lectureCount} classes</Text>
             <Text style={styles.instructorName}>{instructor}</Text>
-                      
+
             <Text style={styles.title}>{courseName}</Text>
             <View style={styles.card}>
                 <View style={styles.topCardRow}>
@@ -42,19 +47,20 @@ const LessonCard: React.FC<LessonCardProps> = ({ courseName, img, instructor, de
                         <Text style={styles.description}>{description}</Text>
                     </View>
                 </View>
-                    <View > 
-                        <View style={styles.topCardRow}>
+                <View >
+                    <View style={styles.topCardRow}>
                         <Text style={styles.focusTitle}>Focus:</Text>
 
-                            {keywords.map((n, idx) => (
-                            <Text style={styles.focus} key={idx}>{n }{' '}</Text>
+                        {keywords.map((n, idx) => (
+                            <Text style={styles.focus} key={idx}>{n}{' '}</Text>
                         ))}
-                    
-                        </View>
-                      
-                        </View>
+
+                    </View>
+
+                </View>
             </View>
-        </View>
+</View>
+        </TouchableWithoutFeedback>
 
     )
 }
@@ -65,22 +71,23 @@ const styles = StyleSheet.create({
         padding: 5,
         paddingTop: 10,
         marginTop: 4,
-        borderWidth: 2,
+        borderWidth: 7,
         borderRadius: 10,
         borderColor: 'lightgrey',
+        borderTopColor: 'green'
 
-        
-        
+
+
     },
     card: {
-
-       // borderWidth: 2,
+        
+         borderBottomWidth: 2,
         display: 'flex',
-        margin: 'auto',
+        marginBottom: 28,
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column',
-      //   backgroundColor: 'lightgrey',
+        //   backgroundColor: 'lightgrey',
 
     },
     lectureCount: {
@@ -90,7 +97,7 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         margin: 2,
         padding: 2,
-        backgroundColor: '#fefed9'
+        backgroundColor: 'rgba(153,172,194, 0.3)'
     },
     topCardRow: {
         display: 'flex',
@@ -101,7 +108,7 @@ const styles = StyleSheet.create({
     instructorName: {
         fontSize: 30,
         color: 'teal'
- 
+
     },
     right: {
         display: "flex",
@@ -114,8 +121,9 @@ const styles = StyleSheet.create({
 
     },
     description: {
-      
-        fontSize: 12,
+
+        fontSize: 15,
+        overflow: 'hidden'
     },
     detail: {
         marginTop: 3,
@@ -130,7 +138,7 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         marginRight: 7,
         justifyContent: 'center',
-        
+
 
 
     },
@@ -145,11 +153,11 @@ const styles = StyleSheet.create({
         color: 'black',
         fontWeight: "600",
         position: "absolute",
-        top: 38,
+        top: 30,
         left: 65,
     },
     focus: {
-        color: 'slategrey',
+        color: 'teal',
         marginRight: 2
     },
     focusTitle: {

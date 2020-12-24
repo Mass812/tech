@@ -1,7 +1,9 @@
-import React from 'react'
-import { View, Text, StyleSheet, SafeAreaView, Dimensions, FlatList, Image } from 'react-native';
+import React, {useRef, useState} from 'react'
+import { View, Text, StyleSheet, SafeAreaView, Dimensions, FlatList, Image, TouchableOpacity } from 'react-native';
+
 import LessonCard from '../components/LessonCard'
 import { useQuery } from 'urql'
+import { useNavigation } from '@react-navigation/native';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -49,8 +51,13 @@ interface HomeProps {
   
 }
 
-const Home: React.FC<HomeProps> = () => {
 
+
+
+const Home: React.FC<HomeProps> = () => {
+    const nav = useNavigation()
+    const buttonRef = React.useRef<HTMLButtonElement>(null);
+    const [display, setDisplay] = useState<string>()
     const [result, reexecuteQuery] = useQuery({
         query: CoursesQuery,
     });
@@ -60,22 +67,40 @@ const Home: React.FC<HomeProps> = () => {
     if (fetching) return <Text>Loading...</Text>;
     if (error) return <Text>Oh no... {error.message}</Text>;
 
-    console.log('data =>', data)
+    
+
+
+
+    const sendToLesson=(e, idx: string)=>{
+       
+        setDisplay(idx)
+
+        nav.navigate('Lessons', {params: idx})
+
+
+    }
+
 
     const renderItem = ({ item }: { item: AllCoursesProps }) => {
         return (
-            <LessonCard instructor={item.instructor} img={item.img} cost={item.cost}  courseName={item.courseName} keywords={item.keywords}
+            <LessonCard onPress={(e: any)=>sendToLesson(e, item.id)} instructor={item.instructor} img={item.img} cost={item.cost}  courseName={item.courseName} keywords={item.keywords}
             description={item.description} lectureCount={item.lectureCount} length={item.length}
             />
         )
     }
 
+
+
+
+
+
     return (
         <SafeAreaView style={styles.container}>
+           <Text>{display}</Text> 
+
+       
             <View style={styles.main}>
 
-
-                <View>
                     <FlatList
                         data={data.courses}
                         renderItem={renderItem}
@@ -83,8 +108,6 @@ const Home: React.FC<HomeProps> = () => {
                     />
                 </View>
 
-               
-            </View>
         </SafeAreaView>
 
     )
