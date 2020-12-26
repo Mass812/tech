@@ -3,22 +3,19 @@ import { View, StyleSheet, Text, } from 'react-native';
   
    
    
-interface CarouselProps {   }
+interface ProfileProps {   }
 
 
 
-const Carousel : React.FC <CarouselProps> = ( ) => {
+const Profile : React.FC <ProfileProps> = ( ) => {
 
         return (
 
         <View style={styles.container}>
-          <Text style={styles.title}>this is the Carousel component</Text>
+          <Text style={styles.title}>this is the Profile component</Text>
         </View>
 
 )}
-
-
-
 
  const styles = StyleSheet.create({
 container: {
@@ -31,4 +28,4 @@ fontSize: 20,
 color: 'green',
 }
 })
-export default Carousel;
+export default Profile;

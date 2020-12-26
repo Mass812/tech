@@ -1,9 +1,10 @@
-import React, {useRef, useState} from 'react'
+import React, { useState, useContext} from 'react'
 import { View, Text, StyleSheet, SafeAreaView, Dimensions, FlatList, Image, TouchableOpacity } from 'react-native';
-
-import LessonCard from '../components/LessonCard'
+import LessonCard from '../Components/LessonCard'
 import { useQuery } from 'urql'
 import { useNavigation } from '@react-navigation/native';
+
+
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -55,6 +56,7 @@ interface HomeProps {
 
 
 const Home: React.FC<HomeProps> = () => {
+
     const nav = useNavigation()
     const buttonRef = React.useRef<HTMLButtonElement>(null);
     const [display, setDisplay] = useState<string>()
@@ -71,11 +73,14 @@ const Home: React.FC<HomeProps> = () => {
 
 
 
-    const sendToLesson=(e, idx: string)=>{
+    const sendToLesson= async (e: EventTarget, idx: string, courseName: string)=>{
        
-        setDisplay(idx)
+         setDisplay('Clicked Id =' + idx)
 
-        nav.navigate('Lessons', {params: idx})
+         
+         
+
+       nav.navigate('Lessons',  {courseName})
 
 
     }
@@ -83,7 +88,7 @@ const Home: React.FC<HomeProps> = () => {
 
     const renderItem = ({ item }: { item: AllCoursesProps }) => {
         return (
-            <LessonCard onPress={(e: any)=>sendToLesson(e, item.id)} instructor={item.instructor} img={item.img} cost={item.cost}  courseName={item.courseName} keywords={item.keywords}
+            <LessonCard onPress={(e: EventTarget)=>sendToLesson(e, item.id, item.courseName)} instructor={item.instructor} img={item.img} cost={item.cost}  courseName={item.courseName} keywords={item.keywords}
             description={item.description} lectureCount={item.lectureCount} length={item.length}
             />
         )
@@ -96,9 +101,13 @@ const Home: React.FC<HomeProps> = () => {
 
     return (
         <SafeAreaView style={styles.container}>
-           <Text>{display}</Text> 
 
-       
+            <TouchableOpacity onPress={()=>console.log('Home tsx')}>
+  
+            </TouchableOpacity>
+                <Text>{display}</Text>
+
+            
             <View style={styles.main}>
 
                     <FlatList

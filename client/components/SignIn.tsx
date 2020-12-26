@@ -3,22 +3,19 @@ import { View, StyleSheet, Text, } from 'react-native';
   
    
    
-interface CarouselProps {   }
+interface SignInProps {   }
 
 
 
-const Carousel : React.FC <CarouselProps> = ( ) => {
+const SignIn : React.FC <SignInProps> = ( ) => {
 
         return (
 
         <View style={styles.container}>
-          <Text style={styles.title}>this is the Carousel component</Text>
+          <Text style={styles.title}>this is the SignIn component</Text>
         </View>
 
 )}
-
-
-
 
  const styles = StyleSheet.create({
 container: {
@@ -31,4 +28,4 @@ fontSize: 20,
 color: 'green',
 }
 })
-export default Carousel;
+export default SignIn;

@@ -1,57 +1,84 @@
 // In App.js in a new project
 
-import * as React from 'react';
 
-import { createClient, Provider } from 'urql';
+import React, {useState} from 'react';
+
+import { createClient, Provider as UrqlProvider} from 'urql';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from './screens/Home'
-import Carousel from './components/Carousel/Carousel';
+import Carousel from './Components/Carousel/Carousel';
 import Lessons from './screens/Lessons';
+import LoadingScreen from './screens/Loading';
+import Programs from './Components/Programs';
+import Workouts from './Components/Workouts';
+import Meditation from './Components/Meditation';
+import Profile from './Components/Profile';
+import SignIn from './Components/SignIn'
+import {AuthContext} from './Context/authContext'
+
+
+
 
 const client = createClient({
   url: 'http://localhost:4321/graphql',
 });
 
-const Stack = createStackNavigator();
 
-type RootStackParamList = {
-  Home: undefined;
+
+
+
+
+type HomeStackParams = {
+  Home: undefined
   Lessons: { courseId: string };
 }
 
 
-const HomeStack =()=>{
+const HomeStack = createStackNavigator<HomeStackParams>();
+const HomeAndTabStack = createStackNavigator()
+
+
+
+
+
+const HomeStackRoutes =()=>{
   return(
 
-    <Stack.Navigator>
-      <Stack.Screen 
+    <HomeStack.Navigator>
+      <HomeStack.Screen 
       name="Home" 
       component={Home} 
       options={({ navigation }) => ({
     title: 'Fitness',
         
   })}/>
-      <Stack.Screen name="Lessons" component={Lessons} 
+      <HomeStack.Screen 
+      name="Lessons" 
+      component={Lessons} 
+      
       options= {
         ({navigation})=>({
-          title: 'Lesson'
+          title: 'Lesson',
+          
         })
       }/>
-    </Stack.Navigator>
+    </HomeStack.Navigator>
  
   )
 }
 
 const Bottom = createBottomTabNavigator()
-const TabNavigator =()=>{
-  return (
 
-      
+const BottomNavigatorScreens =()=>{
+  return (      
       <Bottom.Navigator>
-        <Bottom.Screen name='Home' component={HomeStack}/>
-        <Bottom.Screen name='Carousel' component={Carousel}/>
+        <Bottom.Screen name='Home' component={HomeStackRoutes}/>
+        <Bottom.Screen name='Programs' component={Programs}/>
+        <Bottom.Screen name='Workouts' component={Workouts}/>
+        <Bottom.Screen name='Meditation' component={Meditation}/>
+        <Bottom.Screen name='Profile' component={Profile}/>
       </Bottom.Navigator>
 
   )
@@ -60,17 +87,41 @@ const TabNavigator =()=>{
 
 
 function App() {
+
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [userToken, setUserToken]= useState<string | null>('')
+ 
+  const doThiis = React.useMemo(()=>{
+    return {
+      sigIn: ()=>{
+        setUserToken('abcde')
+      },
+      signOut: ()=>{
+        setUserToken(null)
+      }
+
+    }
+  },[])
+
+
+
+
   return (
-    <Provider value={client}>
+    <UrqlProvider value={client}>
+     <AuthContext.Provider value={{userToken: 'Matt Wellman'}}>
     <NavigationContainer>
-      <Stack.Navigator>
-        {/* <Stack.Screen name="Home" component={Home} /> */}
-        <Stack.Screen name="Profile" component={TabNavigator} />
-      
-      </Stack.Navigator>
+      {userToken !== '' ? (<HomeAndTabStack.Navigator>
+        <HomeAndTabStack.Screen name="SignedOut" component={BottomNavigatorScreens} />
+      </HomeAndTabStack.Navigator>) : (
+      <HomeAndTabStack.Navigator>
+        <HomeAndTabStack.Screen name="SignedIn" component={BottomNavigatorScreens} />
+      </HomeAndTabStack.Navigator>)
+}
     </NavigationContainer>
+
+     </AuthContext.Provider>
     
-    </Provider>
+    </UrqlProvider>
   );
 }
 
