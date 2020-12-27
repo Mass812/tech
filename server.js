@@ -82,6 +82,7 @@ const Query = gql`
     length: String
     currentStudentCount: Int
     keywords: [String]
+    equipment: [String]
     img: String
     id: String
   }

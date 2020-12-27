@@ -5,18 +5,19 @@ import React, {useState} from 'react';
 
 import { createClient, Provider as UrqlProvider} from 'urql';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator, HeaderTitle } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from './screens/Home'
 import Carousel from './Components/Carousel/Carousel';
-import Lessons from './screens/Lessons';
+import ClassDetail from './screens/ClassDetail';
 import LoadingScreen from './screens/Loading';
-import Programs from './Components/Programs';
-import Workouts from './Components/Workouts';
-import Meditation from './Components/Meditation';
-import Profile from './Components/Profile';
-import SignIn from './Components/SignIn'
+import Programs from './screens/Programs';
+import Workouts from './screens/Workouts'
+import Meditation from './screens/Meditation';
+import Profile from './screens/Profile';
+import SignIn from './screens/SignIn'
 import {AuthContext} from './Context/authContext'
+
 
 
 
@@ -32,7 +33,7 @@ const client = createClient({
 
 type HomeStackParams = {
   Home: undefined
-  Lessons: { courseId: string };
+  ClassDetail: { courseId: string };
 }
 
 
@@ -46,22 +47,21 @@ const HomeAndTabStack = createStackNavigator()
 const HomeStackRoutes =()=>{
   return(
 
-    <HomeStack.Navigator>
+    <HomeStack.Navigator >
       <HomeStack.Screen 
       name="Home" 
       component={Home} 
-      options={({ navigation }) => ({
-    title: 'Fitness',
-        
-  })}/>
+      options={{headerShown: false}}
+     />
       <HomeStack.Screen 
-      name="Lessons" 
-      component={Lessons} 
+      
+      name="ClassDetail" 
+      component={ClassDetail} 
       
       options= {
         ({navigation})=>({
           title: 'Lesson',
-          
+         
         })
       }/>
     </HomeStack.Navigator>
@@ -73,7 +73,7 @@ const Bottom = createBottomTabNavigator()
 
 const BottomNavigatorScreens =()=>{
   return (      
-      <Bottom.Navigator>
+      <Bottom.Navigator >
         <Bottom.Screen name='Home' component={HomeStackRoutes}/>
         <Bottom.Screen name='Programs' component={Programs}/>
         <Bottom.Screen name='Workouts' component={Workouts}/>
@@ -109,11 +109,11 @@ function App() {
   return (
     <UrqlProvider value={client}>
      <AuthContext.Provider value={{userToken: 'Matt Wellman'}}>
-    <NavigationContainer>
-      {userToken !== '' ? (<HomeAndTabStack.Navigator>
+    <NavigationContainer >
+      {userToken !== '' ? (<HomeAndTabStack.Navigator headerMode="none">
         <HomeAndTabStack.Screen name="SignedOut" component={BottomNavigatorScreens} />
       </HomeAndTabStack.Navigator>) : (
-      <HomeAndTabStack.Navigator>
+      <HomeAndTabStack.Navigator headerMode="none">
         <HomeAndTabStack.Screen name="SignedIn" component={BottomNavigatorScreens} />
       </HomeAndTabStack.Navigator>)
 }

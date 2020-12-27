@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import Mega from '../Components/Mega';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import PopularClassesCard from '../Components/PopularClassesCard';
+import ProgramCard from '../Components/ProgramCard'
 
 
 
@@ -28,7 +28,7 @@ query {
         lectureCount
         length
         created
-        keywords
+        equipment
         id
         img
     }
@@ -39,21 +39,27 @@ query {
 interface AllCoursesProps {
     courseName: string
     instructor: string
+    cost: string
+    saleCost: string
+    onSale: boolean
+    description: string
     lectureCount: string
-    keywords: string[]
+    length: string
+    created: string
+    equipment: string[]
     id: string
     img: string
 }
 
 
-interface HomeProps {
+interface ProgramsProps {
   
 }
 
 
 
 
-const Home: React.FC<HomeProps> = () => {
+const Programs: React.FC<ProgramsProps> = () => {
 
     const nav = useNavigation()
     const buttonRef = React.useRef<HTMLButtonElement>(null);
@@ -67,49 +73,57 @@ const Home: React.FC<HomeProps> = () => {
     if (fetching) return <Text>Loading...</Text>;
     if (error) return <Text>Oh no... {error.message}</Text>;
 
+    
 
-    const sendToLesson= async (e: EventTarget, idx: string, courseName: string)=>{      
+
+
+    const sendToLesson= async (e: EventTarget, idx: string, courseName: string)=>{
+       
          setDisplay('Clicked Id =' + idx)
+
        nav.navigate('ClassDetail',  {courseName})
+
+
     }
 
+
+   
 
     const renderItem = ({ item }: { item: AllCoursesProps }) => {
         return (
-            <PopularClassesCard onPress={(e: EventTarget)=>sendToLesson(e, item.id, item.courseName)} instructor={item.instructor} img={item.img}  courseName={item.courseName} keywords={item.keywords}
-           
-            />
+            <TouchableOpacity onPress ={(e: React.SyntheticEvent)=>sendToLesson(e, item.id, item.courseName)}>
+
+                <ProgramCard button={false} id={item.id} onPress={(e: EventTarget)=>sendToLesson(e, item.id, item.courseName)} instructor={item.instructor} photo={item.img} title={item.courseName} 
+               bulletPoints={`${item.lectureCount } ClassDetail *  ${item.length}`} 
+               />
+            </TouchableOpacity>
         )
     }
 
-
     return (
-        <SafeAreaProvider >
+       
 
+              <ScrollView>
 
-            <TouchableOpacity onPress={()=>console.log('Home tsx')}>
+            <TouchableOpacity onPress={()=>console.log('Programs tsx')}>
   
             </TouchableOpacity>
 
             
             <View style={styles.main}>
-                <Mega />
-                </View>
-                <View style={styles.sectionTitleParent}>
-
-                <Text style={styles.sectionTitle}>Popular Classes</Text>
+               
                 </View>
                 <View style={styles.bottom}>
                     <FlatList
                         data={data.courses}
                         renderItem={renderItem}
                         keyExtractor={item => item.id}
-                        horizontal= {true}
                     />
 
                 </View>
+              </ScrollView>
 
-        </SafeAreaProvider>
+       
 
     )
 }
@@ -120,22 +134,13 @@ const styles = StyleSheet.create({
     },
   main: {
       flex: 1,
-  
+      padding: 5
   },
   bottom: {
-    //flex: 1
-  },
-  sectionTitle: {
-      fontSize: 18,
-      color: 'black',
-      marginLeft: 10
-  },
-  sectionTitleParent: {
-      height: 40,
-      justifyContent: 'center'
+    flex: 1
   }
 
 })
 
 
-export default Home;
+export default Programs;

@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
         borderRadius: 9,
         borderColor: 'lightgrey',
         backgroundColor: 'rgba(198,227,231, .03)',
-
+      
 
 
     },
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     },
     instructorName: {
         fontSize: 30,
-        color: 'teal'
+        color: 'orange'
 
     },
     right: {

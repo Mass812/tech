@@ -22,6 +22,12 @@ module.exports = async () => {
         "intense",
         "crossfit",
       ],
+      equipment: [
+        "Weight Bench",
+        "Heavy Dumbbells",
+        "Bench Press",
+        "Weight Set",
+      ],
       lectureCount: 15,
       description: `You have not experienced energy until you experience Richard Simmons.`,
       cost: "45.00",
@@ -29,6 +35,8 @@ module.exports = async () => {
       onSale: false,
       length: "16 hours",
       currentStudentCount: 351,
+      img: "",
+      courseImg: "",
     },
   };
 
