@@ -8,7 +8,7 @@ module.exports = async (args) => {
   const Params = {
     TableName: "App_Table",
     Key: {
-      pk: email,
+      pk: `userEmail#${email}`,
       sk: "profile",
     },
   };

@@ -9,7 +9,7 @@ module.exports = getUserWorkoutsByCategory = async (args) => {
     TableName: "App_Table",
     KeyConditionExpression: "pk = :pk and begins_with(sk,:sk)",
     ExpressionAttributeValues: {
-      ":pk": `${email}`,
+      ":pk": `userEmail#${email}`,
       ":sk": `${category}`,
     },
   };

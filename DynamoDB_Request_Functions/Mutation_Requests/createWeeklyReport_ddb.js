@@ -3,27 +3,23 @@ AWS.config.update({ region: "us-east-2" });
 
 const db = new AWS.DynamoDB.DocumentClient();
 
-//  TODO password creation salting JWT for Sign on, Context through app
-
+//  This will be a cloud driven operation Lambda or Strapi ? ?
 module.exports = async () => {
   let userEmail = "matt@gmail.com";
+  let weekNumber = 52;
+  let year = 2020;
 
   const Params = {
     TableName: "App_Table",
     Item: {
       pk: `userEmail#${userEmail}`,
-      sk: "profile",
-      firstName: "Matthew",
-      lastName: "Wellman",
-      email: "matt@gmail.com",
-      courses: ["The Rock Formula"],
-      created: new Date().toISOString(),
-      phone: 8123334444,
-      weeklyInDependentWorkouts: 0,
-      weeklyGuidedWorkouts: 0,
-      streak: 0,
-      coursesCompleted: 0,
-      lessonsCompleted: 0,
+      sk: `year#${year}weekNumber${weekNumber}`,
+      weekNumber: 51,
+      streak: 4,
+      weeklyInDependentWorkouts: 4,
+      weeklyGuidedWorkouts: 4,
+      height: 52,
+      weight: 167,
     },
   };
 

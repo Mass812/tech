@@ -15,20 +15,28 @@ const getUserProfile = require("./DynamoDB_Request_Functions/Query_Requests/getU
 const getCoursesByName = require("./DynamoDB_Request_Functions/Query_Requests/getCoursesByName_ddb");
 const getAllCourses = require("./DynamoDB_Request_Functions/Query_Requests/getAllCourses_ddb");
 const getCoursesForCategory = require("./DynamoDB_Request_Functions/Query_Requests/getCoursesForCategory_ddb");
+const getAllLessonsOfACourse_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getAllLessonsOfACourse_ddb");
 
 //db mutation calls
 const createUser = require("./DynamoDB_Request_Functions/Mutation_Requests/createUser_ddb");
 const createCourse = require("./DynamoDB_Request_Functions/Mutation_Requests/createCourse_ddb");
 const createWorkout = require("./DynamoDB_Request_Functions/Mutation_Requests/createWorkout_ddb");
 const updateUserProfile = require("./DynamoDB_Request_Functions/Mutation_Requests/updateUser_ddb");
-const createLesson = require("./DynamoDB_Request_Functions/Mutation_Requests/createLesson_ddb");
+const createLesson = require("./DynamoDB_Request_Functions/Mutation_Requests/createCourseLesson_ddb");
+const createInstructorProfile = require("./DynamoDB_Request_Functions/Mutation_Requests/createInstructorProfile_ddb");
+const createCourseCompletionDoc_ddb = require("./DynamoDB_Request_Functions/Mutation_Requests/createCourseCompletionDoc_ddb");
 
 // Construct a schema, using GraphQL schema language
 const Query = gql`
   type Query {
     user(email: String!): User
-
-    course(course: String): Course
+    lessons(instructor: String!, courseName: String!): [Lesson]
+    lesson(
+      instructor: String!
+      courseName: String!
+      lessonNumber: String!
+    ): Lesson
+    course(courseName: String!): Course
     courses: [Course]
     coursesByCategory(category: String!): [Course]
 
@@ -45,6 +53,34 @@ const Query = gql`
     phone: String
   }
 
+  type WeekReport {
+    weekNumber: Int
+    streak: Int
+    weeklyInDependentWorkouts: Int
+    weeklyGuidedWorkouts: Int
+    height: Int
+    weight: Int
+    duration: Int
+  }
+  type MonthReport {
+    monthNumber: Int
+    highestStreak: Int
+    weeklyInDependentWorkouts: Int
+    weeklyGuidedWorkouts: Int
+    height: Int
+    weight: Int
+    duration: Int
+  }
+
+  type CourseCompletionDoc {
+    completedLessonsArray: [String]
+    completedCourseArray: [String]
+    streak: Int
+    highestStreak: Int
+    weight: Int
+    height: Int
+  }
+
   input UserInput {
     email: String
     attribute: String
@@ -55,13 +91,11 @@ const Query = gql`
     email: String
     category: String
     courseDirected: Boolean
-    courseRelation: Course
     exercise: String
     timestamp: String
     duration: Int
-    sets: Int
-    reps: Int
-    weightLbValue: Int
+    intensity: Int
+    bodyWeight: Int
   }
 
   input WorkoutInput {
@@ -69,22 +103,56 @@ const Query = gql`
   }
 
   type Course {
+    id: String
+    category: String
     courseName: String
+    created: String
+    description: String
+    equipment: [String]
+    courseImg: String
+    targets: String
+    instructor: String
+    intensity: String
+    keywords: [String]
+    lectureCount: Int
+    length: String
+    targetArmsValue: Int
+    targetBackValue: Int
+    targetAbstValues: Int
+    trgetChestValue: Int
+    targetLegsValue: Int
+    courseRelation: [Lesson]
+  }
+
+  type Lesson {
+    id: String
+    category: String
+    contentLength: String
+    contentUrl: String
+    courseImg: String
+    courseName: String
+    created: String
+    description: String
+    equipment: [String]
+    instructor: String
+    intensity: String
+    lessonNumber: String
+    outfitTopId: String
+    outfitTopName: String
+    outfitTopImgUrl: String
+    outfitBottomId: String
+    outfitBottomName: String
+    outfitBottomImgUrl: String
+    courseRelation: Course
+  }
+
+  type InstructorProfile {
+    courses: [String]
     category: String
     courseFocus: String
     instructor: String
-    created: String
-    lectureCount: Int
     description: String
-    cost: String
-    saleCost: String
-    onSale: Boolean
-    length: String
-    currentStudentCount: Int
-    keywords: [String]
-    equipment: [String]
     img: String
-    id: String
   }
 
   input CourseInput {
@@ -101,17 +169,6 @@ const Query = gql`
     length: String!
     currentStudentCount: Int!
   }
-
-  type Lesson {
-    title: String
-    subtitile: String
-    lessonFocus: String
-    video: String
-    img: String
-    course: String
-    lesson: Int
-    duration: String
-  }
 `;
 
 const Mutation = gql`
@@ -120,7 +177,9 @@ const Mutation = gql`
     updateUser(email: String!, attribute: String!, value: String!): User
     createCourse: Course!
     createLesson: Lesson!
+    createInstructorProfile: InstructorProfile
     createWorkout: Workout!
+    createCourseCompletionDoc: CourseCompletionDoc
   }
   input UserUpdateInput {
     email: String!
@@ -170,11 +229,27 @@ let resolvers = {
       let data = await getUserWorkoutsByCategory(args);
       return data;
     },
+    lesson: async (_, args) => {
+      let data = getSpecificCourseLesson_ddb(args);
+      return data;
+    },
+    lessons: async (_, args) => {
+      let data = getAllLessonsOfACourse_ddb(args);
+      return data;
+    },
   },
 
   Mutation: {
     createUser: async () => {
       let data = await createUser();
+      return data;
+    },
+    createCourseCompletionDoc: async () => {
+      let data = await createCourseCompletionDoc_ddb();
+      return data;
+    },
+    createInstructorProfile: async () => {
+      let data = await createInstructorProfile();
       return data;
     },
     updateUser: async (_, args) => {
@@ -195,25 +270,25 @@ let resolvers = {
       return data;
     },
   },
-  Workout: {
-    courseRelation: async (parent, args) => {
-      let courseNeeded = parent.courseRelation;
-      console.log("Relation Resolver", courseNeeded);
 
+  Course: {
+    courseRelation: async (parent, args) => {
+      let { instructor, courseName } = parent;
+      console.log("", instructor);
       let Params = {
         TableName: "App_Table",
-        Key: {
-          pk: "course",
-          // sk: courseNeeded,
-          sk: courseNeeded,
+        KeyConditionExpression: `pk = :pk and begins_with(sk, :sk)`,
+        ExpressionAttributeValues: {
+          ":pk": `instructor#${instructor}`,
+          ":sk": `courseName#${courseName}#lesson`,
         },
       };
 
       try {
-        let data = await db.get(Params).promise();
-        console.log(data.Item);
+        let data = await db.query(Params).promise();
+        console.log(data.Items);
 
-        return data.Item;
+        return data.Items;
       } catch (err) {
         console.log("error", err);
       }

@@ -37,5 +37,3 @@ const createItem = async () => {
     console.log("Oops there was an err ", err);
   }
 };
-
-createItem();

@@ -10,7 +10,7 @@ module.exports = async (args) => {
   const Params = {
     TableName: "App_Table",
     Key: {
-      pk: `${args.email}`,
+      pk: `userEmail#${args.email}`,
       sk: "profile",
     },
     UpdateExpression: `set #attr = :value`,
