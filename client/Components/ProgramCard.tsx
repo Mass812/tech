@@ -6,7 +6,7 @@ const height = Dimensions.get('window').height;
    
 interface ProgramCardProps { 
     photo: any,
-    instructor: string
+    instructor?: string
     title: string
     buttonText?: string
     bulletPoints: string

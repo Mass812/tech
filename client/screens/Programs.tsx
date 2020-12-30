@@ -29,7 +29,6 @@ query {
         description
         lectureCount
         length
-        created
         equipment
         id
         courseImg
@@ -60,11 +59,21 @@ const Programs: React.FC<ProgramsProps> = () => {
 
   let {data, fetching, error} = result;
 
-  if (fetching) return <Text>Loading...</Text>;
-  if (error) return <Text>Oh no... {error.message}</Text>;
+  if (fetching)
+    return (
+      <View style={styles.main}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  if (error)
+    return (
+      <View style={styles.main}>
+        <Text>Oh, No...{error.message}</Text>
+      </View>
+    );
 
   const sendToLesson = async (e: EventTarget, courseName: string) => {
-    nav.navigate('ClassDetail', {courseName});
+    nav.navigate('ProgramDetail', {courseName});
   };
 
   const renderItem = ({item}: {item: AllCoursesProps}) => {
@@ -85,33 +94,24 @@ const Programs: React.FC<ProgramsProps> = () => {
   };
 
   return (
-    <View>
-      <TouchableOpacity
-        onPress={() => console.log('Programs tsx')}></TouchableOpacity>
-
-      <View style={styles.main}></View>
-      <View style={styles.bottom}>
+    <ScrollView>
+      <View style={styles.main}>
         <FlatList
           data={data.courses}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
         />
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    //  flex: 1,
-  },
   main: {
-    flex: 1,
-    padding: 5,
+    display: 'flex',
+    height: '100%',
   },
-  bottom: {
-    flex: 1,
-  },
+  bottom: {},
 });
 
 export default Programs;

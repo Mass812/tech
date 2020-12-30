@@ -12,11 +12,13 @@ import Carousel from './Components/Carousel/Carousel';
 import ClassDetail from './screens/ClassDetail';
 import LoadingScreen from './screens/Loading';
 import Programs from './screens/Programs';
+import ProgramDetail from './screens/ProgramDetail'
 import Workouts from './screens/Workouts'
 import Meditation from './screens/Meditation';
 import Profile from './screens/Profile';
 import SignIn from './screens/SignIn'
 import {AuthContext} from './Context/authContext'
+import MeditationPlayer from './screens/MeditationPlayer'
 
 
 
@@ -34,10 +36,22 @@ const client = createClient({
 type HomeStackParams = {
   Home: undefined
   ClassDetail: { courseId: string };
+
 }
 
+type ProgramStackParams ={
+  Programs: undefined
+  ProgramDetail: {courseName: string}
+}
+
+type MeditationStackParams = {
+  Meditation: undefined
+  MeditationPlayer: {contentUrl: string}
+}
 
 const HomeStack = createStackNavigator<HomeStackParams>();
+const ProgramStack = createStackNavigator<ProgramStackParams>()
+const MeditationStack = createStackNavigator<MeditationStackParams>()
 const HomeAndTabStack = createStackNavigator()
 
 
@@ -69,15 +83,64 @@ const HomeStackRoutes =()=>{
   )
 }
 
+
+const ProgramStackRoutes =()=>{
+  return(
+
+    <ProgramStack.Navigator >
+      <ProgramStack.Screen 
+      name="Programs" 
+      component={Programs} 
+      options={{headerShown: false}}
+     />
+      <ProgramStack.Screen 
+      
+      name="ProgramDetail" 
+      component={ProgramDetail} 
+     // options={{headerShown: false}}
+
+      />
+    </ProgramStack.Navigator>
+ 
+  )
+}
+
+const MeditationStackRoutes =()=>{
+  return(
+
+    <MeditationStack.Navigator >
+      <MeditationStack.Screen 
+      name="Meditation" 
+      component={Meditation} 
+      options={{headerShown: false}}
+     />
+      <MeditationStack.Screen 
+      
+      name="MeditationPlayer" 
+      component={MeditationPlayer} 
+     // options={{headerShown: false}}
+
+      />
+    </MeditationStack.Navigator>
+ 
+  )
+}
+
+
+
+
+
+
+
 const Bottom = createBottomTabNavigator()
 
 const BottomNavigatorScreens =()=>{
   return (      
       <Bottom.Navigator >
         <Bottom.Screen name='Home' component={HomeStackRoutes}/>
-        <Bottom.Screen name='Programs' component={Programs}/>
+        <Bottom.Screen name='Programs' component={ProgramStackRoutes}/>
         <Bottom.Screen name='Workouts' component={Workouts}/>
-        <Bottom.Screen name='Meditation' component={Meditation}/>
+        <Bottom.Screen name='Meditation' component={MeditationStackRoutes}/>
         <Bottom.Screen name='Profile' component={Profile}/>
       </Bottom.Navigator>
 

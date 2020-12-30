@@ -3,7 +3,7 @@ const { ApolloServer, gql } = require("apollo-server-express");
 const AWS = require("aws-sdk");
 AWS.config.update({ region: "us-east-2" });
 const db = new AWS.DynamoDB.DocumentClient();
-
+require('dotenv').config();
 //spread resolvers later if needed
 const fs = require("fs");
 const path = require("path");
@@ -16,6 +16,7 @@ const getCoursesByName = require("./DynamoDB_Request_Functions/Query_Requests/ge
 const getAllCourses = require("./DynamoDB_Request_Functions/Query_Requests/getAllCourses_ddb");
 const getCoursesForCategory = require("./DynamoDB_Request_Functions/Query_Requests/getCoursesForCategory_ddb");
 const getAllLessonsOfACourse_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getAllLessonsOfACourse_ddb");
+const getAllMeditations_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getAllMeditations_ddb");
 
 //db mutation calls
 const createUser = require("./DynamoDB_Request_Functions/Mutation_Requests/createUser_ddb");
@@ -25,6 +26,7 @@ const updateUserProfile = require("./DynamoDB_Request_Functions/Mutation_Request
 const createLesson = require("./DynamoDB_Request_Functions/Mutation_Requests/createCourseLesson_ddb");
 const createInstructorProfile = require("./DynamoDB_Request_Functions/Mutation_Requests/createInstructorProfile_ddb");
 const createCourseCompletionDoc_ddb = require("./DynamoDB_Request_Functions/Mutation_Requests/createCourseCompletionDoc_ddb");
+const createMeditation_ddb = require("./DynamoDB_Request_Functions/Mutation_Requests/createMeditation_ddb");
 
 // Construct a schema, using GraphQL schema language
 const Query = gql`
@@ -39,7 +41,7 @@ const Query = gql`
     course(courseName: String!): Course
     courses: [Course]
     coursesByCategory(category: String!): [Course]
-
+    meditations: [Meditation]
     userWorkoutsByCategory(email: String!, category: String!): [Workout]
     workouts(category: String!, email: String!): [Workout]!
   }
@@ -109,6 +111,7 @@ const Query = gql`
     created: String
     description: String
     equipment: [String]
+    img: String
     courseImg: String
     targets: String
     instructor: String
@@ -127,15 +130,16 @@ const Query = gql`
   type Lesson {
     id: String
     category: String
-    contentLength: String
+    length: String
     contentUrl: String
-    courseImg: String
+    contentImg: String
     courseName: String
     created: String
+    title: String
     description: String
     equipment: [String]
     instructor: String
-    intensity: String
+    intensity: Int
     lessonNumber: String
     outfitTopId: String
     outfitTopName: String
@@ -143,7 +147,16 @@ const Query = gql`
     outfitBottomId: String
     outfitBottomName: String
     outfitBottomImgUrl: String
-    courseRelation: Course
+    selfGuidedLesson: Boolean
+  }
+
+  type Meditation {
+    title: String
+    length: String
+    contentUrl: String
+    contentImg: String
+    subTitle: String
+    id: String
   }
 
   type InstructorProfile {
@@ -153,6 +166,7 @@ const Query = gql`
     instructor: String
     description: String
     img: String
+    id: String
   }
 
   input CourseInput {
@@ -180,6 +194,7 @@ const Mutation = gql`
     createInstructorProfile: InstructorProfile
     createWorkout: Workout!
     createCourseCompletionDoc: CourseCompletionDoc
+    createMeditation: Meditation
   }
   input UserUpdateInput {
     email: String!
@@ -237,6 +252,10 @@ let resolvers = {
       let data = getAllLessonsOfACourse_ddb(args);
       return data;
     },
+    meditations: async ()=>{
+      let data = getAllMeditations_ddb()
+      return data
+    }
   },
 
   Mutation: {
@@ -261,6 +280,7 @@ let resolvers = {
       let data = await createCourse();
       return data;
     },
+
     createLesson: async () => {
       let data = await createLesson();
       return data;
@@ -269,6 +289,10 @@ let resolvers = {
       let data = await createWorkout();
       return data;
     },
+    createMeditation: async ()=>{
+      let data = await createMeditation_ddb()
+      return data
+    }
   },
 
   Course: {

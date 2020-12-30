@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {View, StyleSheet, Image, Text} from 'react-native';
-import PopularClassesCard from './PopularClassesCard';
 
 interface ProgramBreakDownProps {
   photo: string;

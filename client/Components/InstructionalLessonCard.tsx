@@ -9,38 +9,65 @@ import {
 
 interface InstructionalLessonCardProps {
   img: string;
-  instructor: string;
-  courseName: string;
+  superscriptTitle?: string;
+  title: string;
+  length: string;
   onPress: (e: React.SyntheticEvent) => void;
-  keywords?: string[];
-  targets: string;
-  equipment: string[];
+  additionalInfo?: string[];
+  id?: string;
+  category?: string;
+  wideDimension: boolean;
 }
 
 const InstructorLessonCard: React.FC<InstructionalLessonCardProps> = ({
   onPress,
-  courseName,
+  title,
   img,
-  instructor,
-  keywords,
-  targets,
-  equipment,
+  superscriptTitle,
+  additionalInfo,
+  id,
+  length,
+  category,
+  wideDimension,
 }) => {
+  let displayAdditionalInfo = additionalInfo?.map((n: any, idx) =>
+    idx < additionalInfo.length - 1 ? (
+      <Text key={idx} style={styles.rightDetail}>
+        {n},
+      </Text>
+    ) : (
+      <Text key={idx} style={styles.rightDetail}>
+        {n}
+      </Text>
+    ),
+  );
+
   return (
     <TouchableWithoutFeedback onPress={onPress}>
-      <View style={styles.parent}>
+      <View style={wideDimension ? styles.parentWide : styles.parent}>
         <View style={styles.card}>
           <View style={styles.topCardRow}>
             <Image source={{uri: img}} style={styles.image} />
+            {category ? (
+              <View style={styles.tabIcon}>
+                <Text style={styles.tabFont}>{category.toUpperCase()}</Text>
+              </View>
+            ) : null}
           </View>
-          <View style={styles.secondRow}>
-            <Text style={styles.instructorName}>{instructor}</Text>
-          </View>
-          <View style={styles.thirdRow}>
-            <Text style={styles.title}>{courseName.substring(0, 32)}</Text>
-          </View>
-          <View style={styles.fourthRow}>
-            <Text style={styles.focus}>{targets}</Text>
+
+          <View style={styles.bottomParent}>
+            {superscriptTitle ? (
+              <View style={styles.secondRow}>
+                <Text style={styles.instructorName}>{superscriptTitle}</Text>
+              </View>
+            ) : null}
+            <View style={styles.thirdRow}>
+              <Text style={styles.title}>{title}</Text>
+            </View>
+            <View style={styles.fourthRow}>
+              <Text style={styles.leftDetail}>{length}</Text>
+              <View style={styles.additionalInfo}>{displayAdditionalInfo}</View>
+            </View>
           </View>
         </View>
       </View>
@@ -58,65 +85,110 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     width: 300,
   },
+  parentWide: {
+    //  padding: 10,
+    borderWidth: 1,
+    borderRadius: 9,
+    borderColor: 'lightgrey',
+    backgroundColor: 'rgba(198,227,231, .03)',
+    marginLeft: 10,
+    width: 330,
+  },
   card: {
     borderColor: 'grey',
     display: 'flex',
-    height: 275,
+    // height: 300,
     backgroundColor: 'white',
+    shadowOffset: {width: 9, height: 2},
+    shadowColor: 'grey',
+    shadowRadius: 12,
   },
 
   topCardRow: {
-    height: 175,
+    // height: 220,
+  },
+  tabIcon: {
+    position: 'absolute',
+    display: 'flex',
+    backgroundColor: 'rgb(13,175,211)',
+    padding: 4,
+    paddingLeft: 10,
+    borderTopLeftRadius: 25,
+    borderBottomLeftRadius: 25,
+    bottom: 12,
+    right: 0,
+  },
+  tabFont: {
+    color: 'white',
+    marginRight: 8,
+    fontWeight: '500',
+    fontSize: 16,
+  },
+  bottomParent: {
+    padding: 10,
   },
   secondRow: {
     minHeight: 'auto',
     textAlign: 'left',
   },
   thirdRow: {
-    display: 'flex',
-    height: 175,
+    // display: 'flex',
+
+    // alignSelf: 'left',
+    //justifyContent: 'left',
+    borderBottomWidth: 1,
+    borderColor: 'grey',
+    borderStyle: 'solid',
+
+    //width: 250,
   },
   fourthRow: {
     display: 'flex',
-    height: 175,
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
+    paddingTop: 12,
+    paddingBottom: 12,
+  },
+  additionalInfo: {
+    display: 'flex',
+    flexDirection: 'row',
   },
   instructorName: {
     width: '100%',
+    marginTop: 7,
     borderBottomWidth: 2,
-    borderColor: 'grey',
+    borderColor: 'black',
     textAlign: 'left',
-    marginTop: 15,
-    marginLeft: 8,
-    fontSize: 28,
+    fontSize: 14,
     color: 'black',
     fontWeight: '200',
   },
 
   image: {
     minWidth: '100%',
-    height: 175,
+    height: 220,
     borderRadius: 8,
   },
   title: {
-    fontSize: 16,
-    color: 'grey',
-    fontWeight: '600',
-    marginLeft: 15,
-    // textAlign: 'center',
-  },
-  focus: {
-    color: 'rgb(239,150,128)',
-    marginRight: 2,
-    marginTop: 15,
-    fontWeight: '500',
-  },
-  focusTitle: {
+    fontSize: 19,
     color: 'black',
-    fontSize: 13,
-    fontWeight: '500',
+    fontWeight: '300',
+    marginBottom: 10,
+    textAlign: 'left',
+  },
+  leftDetail: {
+    color: 'black',
+    marginLeft: 2,
+
+    fontWeight: '300',
+    fontSize: 14,
+  },
+  rightDetail: {
+    color: 'black',
     marginRight: 2,
+
+    fontWeight: '300',
+    fontSize: 14,
   },
 });
 export default InstructorLessonCard;

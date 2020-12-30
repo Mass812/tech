@@ -40,7 +40,7 @@ query ($courseName: String!) {
   }
 `;
 
-interface ClassDetailProps {
+interface ProgramDetailProps {
   courseName: string;
   instructor: string;
   targets: string;
@@ -72,7 +72,8 @@ type ParamList = {
 
 type Params = {courseName: string};
 
-const ClassDetail: React.FC<ClassDetailProps> = () => {
+const ProgramDetail: React.FC<ProgramDetailProps> = () => {
+  const [showThis, setShowThis] = useState<any>('');
   const route = useRoute<ParamList>();
   const nav = useNavigation();
   let courseName = route.params.courseName;
@@ -87,22 +88,19 @@ const ClassDetail: React.FC<ClassDetailProps> = () => {
   if (fetching) return <Text>Loading...</Text>;
   if (error) return <Text>Oh no... {error.message}</Text>;
 
-  const sendToLesson = async (
-    e: EventTarget,
-    id: string,
-    courseName: string,
-  ) => {
-  
-    nav.navigate('ClassDetail', {courseName});
+  const onPress = () => {
+    console.log('hit the card');
+    setShowThis(data.course);
   };
+  console.log('desired state attribute: ', showThis);
 
-  const renderItem = ({item}: {item: ClassDetailProps}) => {
+  const renderItem = ({item}: {item: ProgramDetailProps}) => {
     return (
       <InstructionalLessonCard
         key={item.id}
         img={item.contentImg}
         title={item.title}
-        onPress={(e: EventTarget) => sendToLesson(e, item.id, item.courseName)}
+        onPress={onPress}
         additionalInfo={item.equipment}
         length={item.length}
         wideDimension={false}
@@ -115,14 +113,14 @@ const ClassDetail: React.FC<ClassDetailProps> = () => {
     <ScrollView style={styles.container}>
       <ProgramCard
         button={true}
-        buttonText={'Start Class'}
+        buttonText={'Start Program'}
         id={data.course.id}
         instructor={data.course.instructor}
         photo={data.course.courseImg}
         title={data.course.courseName}
-        bulletPoints={`${data.course.lectureCount} Classes *  ${data.course.length}`}
+        bulletPoints={`${data.course.lectureCount} Programes *  ${data.course.length}`}
         //TODO Link This to  All Course Videos Componet
-        onPress={() => console.log('send me to video lesson')}
+        onPress={() => nav.navigate('Home')}
       />
       <CourseOverview
         equipment={data.course.equipment}
@@ -136,10 +134,16 @@ const ClassDetail: React.FC<ClassDetailProps> = () => {
         category={data.course.category}
         img={data.course.img}
         created={data.course.created}
-        displayProgramLink={true}
-        onPress={() => nav.navigate('ProgramDetail', {courseName})}
+       
       />
 
+      <Text style={{margin: 12, fontSize: 23}}>Program BreakDown</Text>
+      <FlatList
+        data={data.course.courseRelation}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        horizontal={true}
+      />
     </ScrollView>
   );
 };
@@ -153,4 +157,4 @@ const styles = StyleSheet.create({
     color: 'green',
   },
 });
-export default ClassDetail;
+export default ProgramDetail;

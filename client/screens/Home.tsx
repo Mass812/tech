@@ -16,7 +16,7 @@ import {useNavigation} from '@react-navigation/native';
 import Mega from '../Components/Mega';
 import {ScrollView} from 'react-native-gesture-handler';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import PopularClassesCard from '../Components/PopularClassesCard';
+import InstructionalLessonCard from '../Components/InstructionalLessonCard';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -33,6 +33,7 @@ query {
         keywords
         lectureCount
         length
+        category
         
     }
 }
@@ -45,6 +46,8 @@ interface AllCoursesProps {
   keywords: string[];
   id: string;
   courseImg: string;
+  length: string;
+  category: string;
 }
 
 interface HomeProps {}
@@ -73,18 +76,21 @@ const Home: React.FC<HomeProps> = () => {
 
   const renderItem = ({item}: {item: AllCoursesProps}) => {
     return (
-      <PopularClassesCard
+      <InstructionalLessonCard
         onPress={(e: EventTarget) => sendToLesson(e, item.id, item.courseName)}
-        instructor={item.instructor}
+        superscriptTitle={item.instructor}
         img={item.courseImg}
-        courseName={item.courseName}
-        keywords={item.keywords}
+        title={item.courseName}
+        additionalInfo={item.keywords}
+        length={item.length}
+        wideDimension={false}
+        category={item.category}
       />
     );
   };
 
   return (
-    <SafeAreaProvider>
+    <ScrollView>
       <TouchableOpacity
         onPress={() => console.log('Home tsx')}></TouchableOpacity>
 
@@ -103,7 +109,7 @@ const Home: React.FC<HomeProps> = () => {
           horizontal={true}
         />
       </View>
-    </SafeAreaProvider>
+    </ScrollView>
   );
 };
 
@@ -113,17 +119,19 @@ const styles = StyleSheet.create({
   },
   main: {
     flex: 1,
+    marginTop: -50,
   },
   bottom: {
-    //flex: 1
+    // flex: 1,
   },
   sectionTitle: {
-    fontSize: 18,
-    color: 'black',
-    marginLeft: 10,
+    fontSize: 20,
+    color: 'darkgrey',
+    marginLeft: 12,
+    marginTop: 23,
   },
   sectionTitleParent: {
-    height: 40,
+    //height: 30,
     justifyContent: 'center',
   },
 });

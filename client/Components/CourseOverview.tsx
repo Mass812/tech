@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
+import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 
 interface CourseOverviewProps {
   courseName: string;
@@ -14,6 +14,9 @@ interface CourseOverviewProps {
   img: string;
   equipment: string[];
   targets: string;
+  displayProgramLink?: boolean
+  onPress?: (event: React.SyntheticEvent) => void 
+
 }
 
 const CourseOverview: React.FC<CourseOverviewProps> = ({
@@ -25,13 +28,15 @@ const CourseOverview: React.FC<CourseOverviewProps> = ({
   length,
   created,
   category,
-
   equipment,
+  onPress,
+  courseName,
+  displayProgramLink = false
 }) => {
   return (
     <ScrollView>
       <View style={styles.container}>
-        <Text style={styles.title}>About this class</Text>
+      {displayProgramLink ? <Text style={styles.title}>About this Class</Text> : <Text style={styles.title}>About this Program</Text>}
         <Text style={styles.description}>{description}</Text>
 
         <View style={{marginBottom: 15}}>
@@ -44,11 +49,11 @@ const CourseOverview: React.FC<CourseOverviewProps> = ({
           <Text style={styles.title}>Details</Text>
         </View>
         <TableItem itemTitle={'trainer'} itemValue={instructor} />
-        <TableItem itemTitle={'created'} itemValue={created} />
+       {displayProgramLink ?  <TableItem itemButton={true} itemTitle={'programs'} itemValue={courseName} onPress={onPress} />: null}
         <TableItem itemTitle={'course length'} itemValue={length} />
         <TableItem itemTitle={'targets'} itemValue={targets} />
         <TableItem itemTitle={'category'} itemValue={category} />
-        <Text>ID: {id}</Text>
+        <Text style={{color: 'lightgrey'}}>ID: {id}</Text>
       </View>
     </ScrollView>
   );
@@ -56,14 +61,21 @@ const CourseOverview: React.FC<CourseOverviewProps> = ({
 
 interface TableItemProps {
   itemTitle: string;
-  itemValue: string;
+  itemValue?: string;
+  itemButton?: boolean
+
+  onPress?: (event: React.SyntheticEvent) => void 
+
 }
 
-const TableItem: React.FC<TableItemProps> = ({itemTitle, itemValue}) => {
+const TableItem: React.FC<TableItemProps> = ({itemTitle, itemValue, itemButton = false, onPress}) => {
   return (
     <View style={styles.tableItemView}>
       <Text style={styles.tableItemName}>{itemTitle}: </Text>
-      <Text style={styles.tableItemValue}>{itemValue} </Text>
+      
+      {itemButton ? <TouchableOpacity style={styles.button} onPress = {onPress}>
+        <Text style={styles.buttonText}>{itemValue}</Text></TouchableOpacity> : 
+      <Text style={styles.tableItemValue}>{itemValue} </Text>}
     </View>
   );
 };
@@ -76,6 +88,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     textAlign: 'left',
   },
+
   title: {
     fontSize: 20,
     color: 'black',
@@ -103,10 +116,26 @@ const styles = StyleSheet.create({
   tableItemName: {
     marginLeft: 5,
     color: 'grey',
+    minWidth: 120
+   // flex: .4
   },
   tableItemValue: {
-    marginLeft: 5,
+   // flex: .6,
     color: 'black',
   },
+  button:{
+    //alignItems: 'center',
+    backgroundColor: 'aqua',
+    padding: 4,
+    borderRadius: 5,
+  
+
+  },
+  buttonText: {
+    color: 'slategrey', 
+    fontWeight: "700",
+    alignSelf: 'center',
+  
+  }
 });
 export default CourseOverview;

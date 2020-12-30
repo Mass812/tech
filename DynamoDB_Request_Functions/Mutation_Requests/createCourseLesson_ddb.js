@@ -5,8 +5,8 @@ AWS.config.update({ region: "us-east-2" });
 const db = new AWS.DynamoDB.DocumentClient();
 
 module.exports = async () => {
-  let courseName = `Dance, Sweat and Love Yourself`;
-  let instructor = "Richard Simmons";
+  let courseName = `The Rock Formula`;
+  let instructor = "Dwayne Johnson";
   let lessonNumber = "1";
 
   const Params = {
@@ -15,26 +15,25 @@ module.exports = async () => {
       pk: `instructor#${instructor}`,
       sk: `courseName#${courseName}#lesson#${lessonNumber}`,
       id: uuidv4(),
-      category: "Cardio",
-      length: 23,
+      category: "Strength",
+      length: "16 min",
       contentUrl:
         "https://elasticbeanstalk-us-east-2-325970805780.s3.us-east-2.amazonaws.com/ollie_workout_vid.mp4",
-      courseImg:
-        "https://elasticbeanstalk-us-east-2-325970805780.s3.us-east-2.amazonaws.com/richard_simmons_course_img.png",
-
-      category: "Cardio",
+      contentImg:
+        "https://elasticbeanstalk-us-east-2-325970805780.s3.us-east-2.amazonaws.com/dwayne_johnson_course_img.jpg",
       courseName: `${courseName}`,
       created: new Date().toISOString(),
-      description: `Now I said this would be fun, I did not say it would be easy!`,
-      equipment: ["Yoga Mat"],
+      title: "The Smackdown",
+      description: `Bringing things down to reality. Pain is real --but gains are better`,
+      equipment: ["Heavy Dumbbells", "Heavy Wieghts"],
       instructor: `${instructor}`,
       intensity: 6,
       lessonNumber: `${lessonNumber}`,
       outfitTopId: uuidv4(),
-      outfitTopName: "Urban Unique Tank Top",
+      outfitTopName: "XXXXXL StretchFit T",
       outfitTopImgUrl: "https://fabletics.com",
       outfitBottomId: uuidv4(),
-      outfitBottomName: "Urban Unique Stretch Yoga's",
+      outfitBottomName: "Green Hulk Pants",
       outfitBottomImgUrl: "https://fabletics.com",
       selfGuidedLesson: false,
     },
