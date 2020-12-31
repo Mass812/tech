@@ -10,7 +10,6 @@ import {
   TouchableOpacity,
   ScrollViewComponent,
 } from 'react-native';
-import LessonCard from '../Components/LessonCard';
 import {useQuery} from 'urql';
 import {useNavigation} from '@react-navigation/native';
 import Mega from '../Components/Mega';

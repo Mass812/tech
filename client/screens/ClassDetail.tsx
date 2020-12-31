@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {
   View,
   ScrollView,
@@ -12,6 +12,11 @@ import {useQuery} from 'urql';
 import ProgramCard from '../Components/ProgramCard';
 import CourseOverview from '../Components/CourseOverview';
 import InstructionalLessonCard from '../Components/InstructionalLessonCard';
+import {NavigationParamContext} from '../Context/NavagationParamConext'
+
+
+
+
 
 const findCourse = `
 query ($courseName: String!) {
@@ -27,18 +32,11 @@ query ($courseName: String!) {
       courseImg
       equipment
       targets
-      courseRelation {
-        contentUrl
-        title
-        id
-        length
-        contentImg
-        equipment
 
-      }
     }
   }
 `;
+
 
 interface ClassDetailProps {
   courseName: string;
@@ -75,25 +73,42 @@ type Params = {courseName: string};
 const ClassDetail: React.FC<ClassDetailProps> = () => {
   const route = useRoute<ParamList>();
   const nav = useNavigation();
-  let courseName = route.params.courseName;
 
+
+  let courseName = route.params.courseName;
+  
   const [result, reexecuteQuery] = useQuery({
     query: findCourse,
     variables: {courseName},
   });
+
+
+
 
   let {data, fetching, error} = result;
 
   if (fetching) return <Text>Loading...</Text>;
   if (error) return <Text>Oh no... {error.message}</Text>;
 
-  const sendToLesson = async (
+  const sendToLesson =  (
     e: EventTarget,
     id: string,
     courseName: string,
   ) => {
   
-    nav.navigate('ClassDetail', {courseName});
+  //  nav.navigate('ProgramDetail', {courseName});
+  };
+  const sendToProgram =  (
+    e: EventTarget,
+    id: string,
+    courseName: string,
+  ) => {
+
+    nav.navigate('Programs', {
+      screen: 'ProgramDetail',
+      params: { courseName },
+    });
+
   };
 
   const renderItem = ({item}: {item: ClassDetailProps}) => {
@@ -137,7 +152,7 @@ const ClassDetail: React.FC<ClassDetailProps> = () => {
         img={data.course.img}
         created={data.course.created}
         displayProgramLink={true}
-        onPress={() => nav.navigate('ProgramDetail', {courseName})}
+        onPress={(e: EventTarget) => sendToProgram(e, data.course.id, data.course.courseName)}
       />
 
     </ScrollView>
@@ -154,3 +169,5 @@ const styles = StyleSheet.create({
   },
 });
 export default ClassDetail;
+
+ 

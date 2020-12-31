@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   ScrollView,
@@ -12,6 +12,10 @@ import {useQuery} from 'urql';
 import ProgramCard from '../Components/ProgramCard';
 import CourseOverview from '../Components/CourseOverview';
 import InstructionalLessonCard from '../Components/InstructionalLessonCard';
+import {NavigationParamContext} from '../Context/NavagationParamConext'
+import { paramReducer } from './ClassDetail';
+
+
 
 const findCourse = `
 query ($courseName: String!) {
@@ -70,12 +74,17 @@ type ParamList = {
   params: Params;
 };
 
+
 type Params = {courseName: string};
 
 const ProgramDetail: React.FC<ProgramDetailProps> = () => {
+
   const [showThis, setShowThis] = useState<any>('');
   const route = useRoute<ParamList>();
   const nav = useNavigation();
+
+
+
   let courseName = route.params.courseName;
 
   const [result, reexecuteQuery] = useQuery({
@@ -96,6 +105,8 @@ const ProgramDetail: React.FC<ProgramDetailProps> = () => {
 
   const renderItem = ({item}: {item: ProgramDetailProps}) => {
     return (
+    
+
       <InstructionalLessonCard
         key={item.id}
         img={item.contentImg}
@@ -145,6 +156,7 @@ const ProgramDetail: React.FC<ProgramDetailProps> = () => {
         horizontal={true}
       />
     </ScrollView>
+   
   );
 };
 

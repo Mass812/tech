@@ -35,7 +35,7 @@ const client = createClient({
 
 type HomeStackParams = {
   Home: undefined
-  ClassDetail: { courseId: string };
+  ClassDetail: { courseName: string };
 
 }
 
@@ -74,7 +74,7 @@ const HomeStackRoutes =()=>{
       
       options= {
         ({navigation})=>({
-          title: 'Lesson',
+          title: 'Class',
          
         })
       }/>
@@ -118,7 +118,7 @@ const MeditationStackRoutes =()=>{
       
       name="MeditationPlayer" 
       component={MeditationPlayer} 
-     // options={{headerShown: false}}
+      options={{headerShown: true}}
 
       />
     </MeditationStack.Navigator>

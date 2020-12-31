@@ -1,18 +1,33 @@
 import * as React from 'react'
-import { View, StyleSheet, Text, } from 'react-native';
+import { View, StyleSheet, Text, Dimensions} from 'react-native';
+  
   
    
-   
-interface CarouselProps {   }
+interface CarouselProps { 
+  w: number
+
+  }
 
 
 
-const Carousel : React.FC <CarouselProps> = ( ) => {
+
+
+const Carousel : React.FC <CarouselProps> = ( {w}) => {
+
+
+
+
+
+
 
         return (
 
         <View style={styles.container}>
-          <Text style={styles.title}>this is the Carousel component</Text>
+          <View style={styles.miniBox}>
+
+          <Text style={styles.bar}> o o o </Text>
+          </View>
+          <View></View>
         </View>
 
 )}
@@ -22,13 +37,23 @@ const Carousel : React.FC <CarouselProps> = ( ) => {
 
  const styles = StyleSheet.create({
 container: {
-flex:1,
-alignItems: 'center',
-justifyContent: 'center',
+position: 'absolute',
+backgroundColor: 'grey',
+padding: 10,
+width: 175,
+height: 45,
+zIndex: 0,
 },
-title: {
-fontSize: 20,
-color: 'green',
-}
+bar: {
+fontSize: 30,
+color: 'white',
+zIndex: 2,
+},
+miniBox: {
+position: 'absolute',  
+width: 20,
+height: 65,
+zIndex: 1,
+},
 })
 export default Carousel;

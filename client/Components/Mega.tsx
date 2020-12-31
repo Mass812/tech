@@ -1,6 +1,8 @@
+import { CardStyleInterpolators } from '@react-navigation/stack';
 import * as React from 'react';
 import {View, StyleSheet, Dimensions, Text, Image} from 'react-native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
+
 
 interface MegaProps {}
 
@@ -48,6 +50,7 @@ const Mega: React.FC<MegaProps> = () => {
       <TouchableOpacity style={styles.button}>
         <Text style={styles.buttonText}>{n.buttonText}</Text>
       </TouchableOpacity>
+    
     </View>
   ));
 
