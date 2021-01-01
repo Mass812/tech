@@ -96,16 +96,18 @@ const ProgramDetail: React.FC<ProgramDetailProps> = () => {
   if (fetching) return <Text>Loading...</Text>;
   if (error) return <Text>Oh no... {error.message}</Text>;
 
+
+
   const onPress = () => {
     console.log('hit the card');
     setShowThis(data.course);
   };
+
+
   console.log('desired state attribute: ', showThis);
 
   const renderItem = ({item}: {item: ProgramDetailProps}) => {
     return (
-    
-
       <InstructionalLessonCard
         key={item.id}
         img={item.contentImg}
@@ -113,7 +115,7 @@ const ProgramDetail: React.FC<ProgramDetailProps> = () => {
         onPress={onPress}
         additionalInfo={item.equipment}
         length={item.length}
-        wideDimension={false}
+        wideDimension={true}
         id={item.id}
       />
     );

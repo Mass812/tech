@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     alignItems: 'center',
     zIndex: 3,
-    margin: 20,
+    margin: 25,
   
   },
   detailGroup: {
@@ -224,7 +224,8 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     zIndex: 5,
-   // marginBottom: 50
+    marginBottom: 50,
+    top: -70
 
   },
   playButton: {
@@ -235,7 +236,7 @@ const styles = StyleSheet.create({
    
   },
   backButton: {
-  
+   // top: -50,
     height: 100,
     width: 100,
  
