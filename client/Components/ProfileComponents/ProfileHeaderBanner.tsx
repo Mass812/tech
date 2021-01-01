@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faUserCog} from '@fortawesome/free-solid-svg-icons';
+import {faCog} from '@fortawesome/free-solid-svg-icons';
 
 
 
@@ -12,7 +12,7 @@ const ProfileHeaderBanner: React.FC<ProfileHeaderBannerProps> = () => {
     <View style={styles.parent}>
         <View style={styles.userEditBar}>
             <View >
-                <FontAwesomeIcon icon={faUserCog} size={22} color={'grey'}/>
+                <FontAwesomeIcon icon={faCog} size={22} color={'grey'}/>
             </View>
             <View>
 

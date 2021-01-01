@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faClock, faRunning, faTrophy} from '@fortawesome/free-solid-svg-icons';
+import {faClock, faDumbbell, faBolt} from '@fortawesome/free-solid-svg-icons';
 
 interface AcheivementProps {
   subject?: string;
@@ -33,7 +33,7 @@ const Acheivement: React.FC<AcheivementProps> = () => {
 {/*      2    */}
         <View style={styles.iconColumn}>
         <View style={styles.iconHalo}>
-          <FontAwesomeIcon icon={faRunning} size={30} color={'#0896a3'}/>
+          <FontAwesomeIcon icon={faDumbbell} size={30} color={'#0896a3'}/>
             </View>
           <Text style={styles.detailTitle}>Time</Text>
           <View>
@@ -43,7 +43,7 @@ const Acheivement: React.FC<AcheivementProps> = () => {
 {/*      3    */}
         <View style={styles.iconColumn}>
         <View style={styles.iconHalo}>
-          <FontAwesomeIcon icon={faTrophy} size={30} color={'#0896a3'}/>
+          <FontAwesomeIcon icon={faBolt} size={30} color={'#0896a3'}/>
             </View>
           <Text style={styles.detailTitle}>Time</Text>
           <View>

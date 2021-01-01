@@ -4,6 +4,8 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
   import {useQuery} from 'urql'
 import ProgramCard from '../Components/ProgramCard'
 import {useNavigation, useRoute} from '@react-navigation/native';
+import LoadingScreen from './Loading';
+import ErrorScreen from './ErrorScreen';
 
   const getMeditations = `
     query {
@@ -45,15 +47,11 @@ let {data, fetching, error} = result;
 
 if (fetching)
 return (
-  <View style={styles.main}>
-    <Text>Loading...</Text>
-  </View>
+<LoadingScreen/>
 );
 if (error)
 return (
-  <View style={styles.main}>
-    <Text>Oh, No...{error.message}</Text>
-  </View>
+  <ErrorScreen error={error.message}/>
 );
 
 const renderItem = ({item}: {item: MeditationProps}) => {

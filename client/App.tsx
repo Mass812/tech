@@ -21,7 +21,7 @@ import {AuthContext} from './Context/authContext'
 import MeditationPlayer from './screens/MeditationPlayer'
 import {hideBottomNavigatorContext} from './Context/hideBottomNavigatorContext'
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faPlayCircle} from '@fortawesome/free-solid-svg-icons';
+import {faHome, faCalendar, faDumbbell, faBalanceScale, faUserCircle} from '@fortawesome/free-solid-svg-icons';
 
 
 
@@ -37,11 +37,17 @@ const client = createClient({
 type HomeStackParams = {
   Home: undefined
   ClassDetail: { courseName: string };
-  MeditationPlayer: {contentUrl: string, 
-                      contentImg: string
-                      length: number
-  instructor: string
-  description: string
+  MeditationPlayer: {
+
+    contentUrl: string, 
+                      
+    contentImg: string
+                      
+    length: number
+                      
+    instructor: string
+                      
+    description: string
                     }
 }
 
@@ -65,9 +71,13 @@ const Root = createStackNavigator()
 
 
 const HomeStackRoutes =()=>{
+
+
   return(
 
-    <HomeStack.Navigator >
+    <HomeStack.Navigator 
+    
+    >
       <HomeStack.Screen 
       name="Home" 
       component={Home} 
@@ -153,11 +163,36 @@ const BottomNavigatorScreens =()=>{
     
 
       <Bottom.Navigator  >
-        <Bottom.Screen name='Home' component={HomeStackRoutes}/>
-        <Bottom.Screen name='Programs' component={ProgramStackRoutes}/>
-        <Bottom.Screen name='Workouts' component={Workouts}/>
-        <Bottom.Screen name='Meditation' component={MeditationStackRoutes}/>
-        <Bottom.Screen name='Profile' component={Profile}/>
+        <Bottom.Screen name='Home' component={HomeStackRoutes}
+        options={{
+          tabBarLabel: 'Home',
+          tabBarIcon: () =>  <FontAwesomeIcon icon={faHome} size={26} color={'grey'}/>
+        }}
+        />
+        <Bottom.Screen name='Programs' component={ProgramStackRoutes}
+         options={{
+          tabBarLabel: 'Programs',
+          tabBarIcon: () =>  <FontAwesomeIcon icon={faCalendar} size={26} color={'grey'}/>
+        }}
+        />
+        <Bottom.Screen name='Workouts' component={Workouts}
+         options={{
+          tabBarLabel: 'Workouts',
+          tabBarIcon: () =>  <FontAwesomeIcon icon={faDumbbell} size={26} color={'grey'}/>
+        }}
+        />
+        <Bottom.Screen name='Meditation' component={MeditationStackRoutes}
+         options={{
+          tabBarLabel: 'Meditations',
+          tabBarIcon: () =>  <FontAwesomeIcon icon={faBalanceScale} size={26} color={'grey'}/>
+        }}
+        />
+        <Bottom.Screen name='Profile' component={Profile}
+         options={{
+          tabBarLabel: 'Profile',
+          tabBarIcon: () =>  <FontAwesomeIcon icon={faUserCircle} size={26} color={'grey'}/>
+        }}
+        />
       </Bottom.Navigator>
    
 

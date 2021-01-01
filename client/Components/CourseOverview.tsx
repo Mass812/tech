@@ -84,7 +84,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
-    //alignItems: 'center',
     justifyContent: 'flex-start',
     textAlign: 'left',
   },
@@ -105,9 +104,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: 40,
     textAlign: 'left',
-
     borderBottomWidth: 2,
-
     borderColor: 'darkgrey',
     justifyContent: 'flex-start',
     alignItems: 'center',
@@ -117,23 +114,18 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     color: 'grey',
     minWidth: 120
-   // flex: .4
   },
   tableItemValue: {
-   // flex: .6,
     color: 'black',
   },
   button:{
-    //alignItems: 'center',
-    backgroundColor: 'aqua',
+    backgroundColor: '#83c0c9',
     padding: 4,
     borderRadius: 5,
-  
-
   },
   buttonText: {
-    color: 'slategrey', 
-    fontWeight: "700",
+    color: '#0896a3', 
+    fontWeight: "400",
     alignSelf: 'center',
   
   }

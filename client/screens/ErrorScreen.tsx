@@ -1,14 +1,27 @@
-import * as React from 'react'
+import React, {useEffect} from 'react'
 import { View, StyleSheet, Image, Text} from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import {faSpinner} from '@fortawesome/free-solid-svg-icons';
+import {faDizzy} from '@fortawesome/free-solid-svg-icons';
+import { useNavigation } from '@react-navigation/native';
 
   
-   
+   interface ErrorProps {
+       error?: string
+   }
    
 
 
-const LoadingScreen : React.FC = ( ) => {
+const ErrorScreen : React.FC <ErrorProps>= ({error} ) => {
+
+    const nav = useNavigation()
+
+    useEffect(()=>{
+        setTimeout(() => {
+            nav.goBack()
+        }, 2500);
+
+
+    },[])
 
         return (
 
@@ -19,13 +32,14 @@ const LoadingScreen : React.FC = ( ) => {
           <View style={styles.spinnerRow} >
 
           <FontAwesomeIcon 
-          icon={faSpinner}  
+          icon={faDizzy}  
           size={20} 
           color={'teal'}  
-          
           />
-          <Text style={styles.text}>Loading Now</Text>
+          <Text style={styles.text}>Sorry, there was an error.</Text>
+          <Text style={styles.text}>Redirecting</Text>
           </View>
+          <Text>{error? error : ''}</Text>
         </View>
 
 )}
@@ -48,4 +62,4 @@ text: {
   marginLeft: 7
 }
 })
-export default LoadingScreen;
+export default ErrorScreen;

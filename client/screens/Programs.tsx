@@ -16,6 +16,8 @@ import Mega from '../Components/Mega';
 import {ScrollView} from 'react-native-gesture-handler';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import ProgramCard from '../Components/ProgramCard';
+import LoadingScreen from './Loading';
+import ErrorScreen from './ErrorScreen';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -61,14 +63,12 @@ const Programs: React.FC<ProgramsProps> = () => {
   if (fetching)
     return (
       <View style={styles.main}>
-        <Text>Loading...</Text>
+        <LoadingScreen />
       </View>
     );
   if (error)
     return (
-      <View style={styles.main}>
-        <Text>Oh, No...{error.message}</Text>
-      </View>
+      <ErrorScreen error={error.message}/>
     );
 
   const sendToLesson = async (e: EventTarget, courseName: string) => {

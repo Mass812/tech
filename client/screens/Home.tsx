@@ -17,6 +17,8 @@ import Mega from '../Components/Mega';
 import {ScrollView} from 'react-native-gesture-handler';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import InstructionalLessonCard from '../Components/InstructionalLessonCard';
+import LoadingScreen from './Loading';
+import ErrorScreen from './ErrorScreen';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -48,6 +50,7 @@ interface AllCoursesProps {
   courseImg: string;
   length: string;
   category: string;
+  error: string
 }
 
 interface HomeProps {}
@@ -61,9 +64,9 @@ const Home: React.FC<HomeProps> = () => {
   });
 
   let {data, fetching, error} = result;
-
-  if (fetching) return <Text>Loading...</Text>;
-  if (error) return <Text>Oh no... {error.message}</Text>;
+ 
+  if (fetching) return <LoadingScreen/>
+  if (error) return <ErrorScreen error={error.message}/>
 
   const sendToLesson = async (
     e: EventTarget,

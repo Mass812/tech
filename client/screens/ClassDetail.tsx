@@ -12,6 +12,8 @@ import {useQuery} from 'urql';
 import ProgramCard from '../Components/ProgramCard';
 import CourseOverview from '../Components/CourseOverview';
 import InstructionalLessonCard from '../Components/InstructionalLessonCard';
+import LoadingScreen from './Loading';
+import ErrorScreen from './ErrorScreen';
 
 
 
@@ -86,8 +88,8 @@ const ClassDetail: React.FC<ClassDetailProps> = () => {
 
   let {data, fetching, error} = result;
 
-  if (fetching) return <Text>Loading...</Text>;
-  if (error) return <Text>Oh no... {error.message}</Text>;
+  if (fetching) return <LoadingScreen/>
+  if (error) return <ErrorScreen error={error.message}/>
 
   const sendToLesson =  (
     e: EventTarget,
