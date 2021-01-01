@@ -19,8 +19,9 @@ import Profile from './screens/Profile';
 import SignIn from './screens/SignIn'
 import {AuthContext} from './Context/authContext'
 import MeditationPlayer from './screens/MeditationPlayer'
-
-
+import {hideBottomNavigatorContext} from './Context/hideBottomNavigatorContext'
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {faPlayCircle} from '@fortawesome/free-solid-svg-icons';
 
 
 
@@ -36,7 +37,12 @@ const client = createClient({
 type HomeStackParams = {
   Home: undefined
   ClassDetail: { courseName: string };
-
+  MeditationPlayer: {contentUrl: string, 
+                      contentImg: string
+                      length: number
+  instructor: string
+  description: string
+                    }
 }
 
 type ProgramStackParams ={
@@ -46,13 +52,13 @@ type ProgramStackParams ={
 
 type MeditationStackParams = {
   Meditation: undefined
-  MeditationPlayer: {contentUrl: string}
+
 }
 
 const HomeStack = createStackNavigator<HomeStackParams>();
 const ProgramStack = createStackNavigator<ProgramStackParams>()
 const MeditationStack = createStackNavigator<MeditationStackParams>()
-const HomeAndTabStack = createStackNavigator()
+const Root = createStackNavigator()
 
 
 
@@ -114,13 +120,21 @@ const MeditationStackRoutes =()=>{
       component={Meditation} 
       options={{headerShown: false}}
      />
-      <MeditationStack.Screen 
+      {/* <MeditationStack.Screen 
       
       name="MeditationPlayer" 
       component={MeditationPlayer} 
-      options={{headerShown: true}}
+      options={
+      
+       
+        ({navigation})=>({
+          tabBarVisible: false,
+          headerShown: false,
+        })
+      }
+    
 
-      />
+      /> */}
     </MeditationStack.Navigator>
  
   )
@@ -135,14 +149,17 @@ const MeditationStackRoutes =()=>{
 const Bottom = createBottomTabNavigator()
 
 const BottomNavigatorScreens =()=>{
-  return (      
-      <Bottom.Navigator >
+  return (   
+    
+
+      <Bottom.Navigator  >
         <Bottom.Screen name='Home' component={HomeStackRoutes}/>
         <Bottom.Screen name='Programs' component={ProgramStackRoutes}/>
         <Bottom.Screen name='Workouts' component={Workouts}/>
         <Bottom.Screen name='Meditation' component={MeditationStackRoutes}/>
         <Bottom.Screen name='Profile' component={Profile}/>
       </Bottom.Navigator>
+   
 
   )
 }
@@ -172,16 +189,22 @@ function App() {
   return (
     <UrqlProvider value={client}>
      <AuthContext.Provider value={{userToken: 'Matt Wellman'}}>
+
     <NavigationContainer >
-      {userToken !== '' ? (<HomeAndTabStack.Navigator headerMode="none">
-        <HomeAndTabStack.Screen name="SignedOut" component={BottomNavigatorScreens} />
-      </HomeAndTabStack.Navigator>) : (
-      <HomeAndTabStack.Navigator headerMode="none">
-        <HomeAndTabStack.Screen name="SignedIn" component={BottomNavigatorScreens} />
-      </HomeAndTabStack.Navigator>)
+      {userToken !== '' ? (
+      <Root.Navigator  mode="modal" headerMode="none">
+        <Root.Screen name="SignedOut" component={BottomNavigatorScreens} />
+      {/* <Root.Screen name="MeditationPlayer" component={MeditationPlayer} /> */}
+      </Root.Navigator>
+      ) : (
+      <Root.Navigator headerMode="none">
+        <Root.Screen name="SignedIn" component={BottomNavigatorScreens} />
+        <Root.Screen name="MeditationPlayer" component={MeditationPlayer} />
+      </Root.Navigator>
+      )
 }
     </NavigationContainer>
-
+  
      </AuthContext.Provider>
     
     </UrqlProvider>

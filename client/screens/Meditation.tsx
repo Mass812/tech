@@ -1,18 +1,20 @@
-import { NavigationContainer } from '@react-navigation/native';
 import  React from 'react'
 import { View, StyleSheet, Text, FlatList, SafeAreaView } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
   import {useQuery} from 'urql'
 import ProgramCard from '../Components/ProgramCard'
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
   const getMeditations = `
     query {
       meditations {
         contentUrl
         contentImg
+        instructor
+        category
         length
         title
+        description
        id
       }
     }
@@ -20,18 +22,21 @@ import {useNavigation} from '@react-navigation/native';
    
    
 interface MeditationProps {  
+  category: string
   contentUrl: string
   contentImg: string
+  description: string
+  id: string
+  instructor: string
   length: string
   title: string
-  id: string
   
 }
  
 
 
 
-const Meditation : React.FC <MeditationProps> = ( {title, contentUrl, contentImg, length} ) => {
+const Meditation : React.FC <MeditationProps> = ( { length} ) => {
 
 const [result, reexecuteQuery] = useQuery({ query: getMeditations})
 const nav = useNavigation()
@@ -52,20 +57,31 @@ return (
 );
 
 const renderItem = ({item}: {item: MeditationProps}) => {
+
   return(
-    <TouchableOpacity onPress={()=> nav.navigate('MeditationPlayer', {contentUrl: item.contentUrl})}>
+    <TouchableOpacity 
+    // onPress={()=> nav.navigate('Root', {'MeditationPlayer', params: {contentUrl: item.contentUrl, contentImg: item.contentImg}})}>
+    onPress={()=> nav.navigate('MeditationPlayer', {         
+      contentUrl: item.contentUrl,
+      contentImg: item.contentImg,
+      instructor: item.instructor,
+      category: item.category,
+      length: item.length,
+      title: item.title,
+      description: item.description,
+     id : item.id,
+     })}>
 
       <ProgramCard 
               photo={item.contentImg}
               title = {item.title}
-              bulletPoints={`${length}`}
+              bulletPoints={`${item.instructor} * ${item.length}`}
               button={false}
               id={item.id}
-  
+
               />
     </TouchableOpacity>
-            
-
+          
   )}
 
         return (

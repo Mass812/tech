@@ -151,12 +151,15 @@ const Query = gql`
   }
 
   type Meditation {
-    title: String
-    length: String
-    contentUrl: String
+    category: String
+    instructor: String
     contentImg: String
-    subTitle: String
+    contentUrl: String
     id: String
+    length: String
+    subTitle: String
+    title: String
+    description: String
   }
 
   type InstructorProfile {

@@ -12,7 +12,6 @@ import {useQuery} from 'urql';
 import ProgramCard from '../Components/ProgramCard';
 import CourseOverview from '../Components/CourseOverview';
 import InstructionalLessonCard from '../Components/InstructionalLessonCard';
-import {NavigationParamContext} from '../Context/NavagationParamConext'
 
 
 
