@@ -1,25 +1,17 @@
 import React, {useState} from 'react';
-import {
-  View,
-  StyleSheet,
-  Dimensions,
-  FlatList,
-
-} from 'react-native';
+import {View, StyleSheet, Dimensions, FlatList} from 'react-native';
 
 import {useQuery} from 'urql';
 import {useNavigation} from '@react-navigation/native';
 import Mega from '../Components/Mega';
 import {ScrollView} from 'react-native-gesture-handler';
-import InstructionalLessonCard from '../Components/UiCards/InstructionalLessonCard'
+import InstructionalLessonCard from '../Components/UiCards/InstructionalLessonCard';
 import LoadingScreen from './Loading';
 import ErrorScreen from './ErrorScreen';
 import Meditation from './Meditation';
-import MeditationComponent from '../Components/MeditationComponent/MeditationComponent'
+import MeditationComponent from '../Components/MeditationComponent/MeditationComponent';
 import InstructorProfileThumb from '../Components/UiCards/InstructorProfileThumb';
 import RowSectionHeader from '../Components/ReusableComponents/RowSectionHeader';
-
-
 
 const PopularQuery = `
 query {
@@ -91,7 +83,6 @@ const Home: React.FC<HomeProps> = () => {
     weekNumber: string,
     lessonNumber: string,
   ) => {
- 
     nav.navigate('ClassDetail', {
       courseName,
       instructor,
@@ -127,8 +118,6 @@ const Home: React.FC<HomeProps> = () => {
 
   return (
     <ScrollView>
-      
-
       <View style={styles.main}>
         <Mega />
       </View>

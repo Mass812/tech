@@ -1,29 +1,24 @@
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import React, {useRef} from 'react';
 import {View, StyleSheet, Dimensions, Text, Image} from 'react-native';
-import {FlatList, ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
+import {
+  FlatList,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native-gesture-handler';
 
-
-
-
-
-interface MegaProps {
-
-
-}
+interface MegaProps {}
 
 interface FlatListProps {
-  photoArray: MegaProps[]
+  photoArray: MegaProps[];
 }
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
 const Mega: React.FC<MegaProps> = () => {
-
-const nav = useNavigation()
-const itemSelected = useRef<HTMLElement>(null)
-
+  const nav = useNavigation();
+  const itemSelected = useRef<HTMLElement>(null);
 
   let photoOne = require('./Assets/fitness_mega_1.jpeg');
   let photoTwo = require('./Assets/fitness_mega_2.jpg');
@@ -38,7 +33,6 @@ const itemSelected = useRef<HTMLElement>(null)
       id: 1,
       title: 'HIIT & Strength',
       buttonText: 'View Program',
-     
     },
     {
       photo: photoThree,
@@ -66,21 +60,19 @@ const itemSelected = useRef<HTMLElement>(null)
     },
   ];
 
-
-
-
   let displayPhotos = photoArray.map((n) => (
-    <View style={styles.imageParent} key={n.id} >
+    <View style={styles.imageParent} key={n.id}>
       <Image style={styles.image} source={n.photo} />
       <Text style={styles.instructor}>{n.instructor}</Text>
       <Text style={styles.title}>{n.title}</Text>
       <Text style={styles.bulletPoints}>{n.bulletPoints}</Text>
-      <TouchableOpacity style={styles.button}
-      onPress= {( ) =>{  nav.navigate('ProgramDetail', {courseName: n.title})}}
-      >
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          nav.navigate('ProgramDetail', {courseName: n.title});
+        }}>
         <Text style={styles.buttonText}>{n.buttonText}</Text>
       </TouchableOpacity>
-    
     </View>
   ));
 
@@ -88,10 +80,9 @@ const itemSelected = useRef<HTMLElement>(null)
     <ScrollView
       horizontal={true}
       decelerationRate={0}
-      snapToInterval={width} 
+      snapToInterval={width}
       snapToAlignment={'center'}>
       {displayPhotos}
-
     </ScrollView>
   );
 };

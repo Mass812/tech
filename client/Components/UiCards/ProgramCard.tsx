@@ -25,7 +25,7 @@ interface ProgramCardProps {
 
 const ProgramCard: React.FC<ProgramCardProps> = ({
   button,
-  displayAsCard =true,
+  displayAsCard = true,
   onPress,
   photo,
   instructor,
@@ -35,9 +35,23 @@ const ProgramCard: React.FC<ProgramCardProps> = ({
   id,
 }) => {
   return (
-    <View style={displayAsCard ? styles.imageParentCardType : styles.imageParentNonCardType} key={id}>
-      <Image style={displayAsCard ? styles.imageCardType : styles.imageNonCardType} source={{uri: photo}} />
-      <View style={displayAsCard ? styles.detailsLayoutCardType : styles.detailsLayoutNonCardType}>
+    <View
+      style={
+        displayAsCard
+          ? styles.imageParentCardType
+          : styles.imageParentNonCardType
+      }
+      key={id}>
+      <Image
+        style={displayAsCard ? styles.imageCardType : styles.imageNonCardType}
+        source={{uri: photo}}
+      />
+      <View
+        style={
+          displayAsCard
+            ? styles.detailsLayoutCardType
+            : styles.detailsLayoutNonCardType
+        }>
         <Text style={styles.instructor}>{instructor}</Text>
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.bulletPoints}>{bulletPoints}</Text>
@@ -52,8 +66,6 @@ const ProgramCard: React.FC<ProgramCardProps> = ({
 };
 
 const styles = StyleSheet.create({
-
-
   imageParentNonCardType: {
     display: 'flex',
     flexDirection: 'row',
@@ -88,47 +100,41 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
 
-
-
-
-
   imageParentCardType: {
     display: 'flex',
     flexDirection: 'row',
     height: 200,
-  //  width: width,
-     width:  '100%',
-     maxWidth: width-30,
+    //  width: width,
+    width: '100%',
+    maxWidth: width - 30,
     borderWidth: 0,
     justifyContent: 'center',
     alignItems: 'center',
     alignContent: 'center',
     textAlign: 'center',
     marginBottom: 20,
-     margin: 'auto',
+    margin: 'auto',
     backgroundColor: 'black',
     alignSelf: 'center',
     borderRadius: 10,
 
     opacity: 0.95,
-   
   },
   imageCardType: {
     position: 'absolute',
     height: 200,
     width: '100%',
-    maxWidth: width-30,
+    maxWidth: width - 30,
     zIndex: -1,
     borderRadius: 10,
     borderWidth: 0,
-    opacity: .77
-
+    opacity: 0.77,
   },
   detailsLayoutCardType: {
-   // height: '50%',
+    // height: '50%',
     display: 'flex',
     flexDirection: 'column',
-   // alignSelf: 'flex-end',
+    // alignSelf: 'flex-end',
   },
   instructor: {
     fontSize: 15,

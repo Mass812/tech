@@ -56,15 +56,13 @@ type RootParams = {
     instructor: string;
     title: string;
   };
-  RootHome:{
-
-  };
+  RootHome: {};
   MeditationPlayer: {
     courseName: string;
     instructor: string;
     lessonNumber: string;
     weekNumber: string;
-  }
+  };
 };
 
 const HomeStack = createStackNavigator<HomeStackParams>();

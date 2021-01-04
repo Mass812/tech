@@ -66,10 +66,7 @@ const Programs: React.FC<ProgramsProps> = () => {
         <LoadingScreen />
       </View>
     );
-  if (error)
-    return (
-      <ErrorScreen error={error.message}/>
-    );
+  if (error) return <ErrorScreen error={error.message} />;
 
   const sendToLesson = async (e: EventTarget, courseName: string) => {
     nav.navigate('ProgramDetail', {courseName});

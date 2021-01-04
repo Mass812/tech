@@ -19,7 +19,7 @@ const InstructorProfileThumb: React.FC<InstructorProfileThumbProps> = ({
 
         <View style={styles.cardDetailsParent}>
           <Text style={styles.title}>{name}</Text>
-          <Text style={styles.subTitle} >dahdah... </Text>
+          <Text style={styles.subTitle}>dahdah... </Text>
         </View>
 
         <View style={styles.buttonParent}>
@@ -33,12 +33,12 @@ const InstructorProfileThumb: React.FC<InstructorProfileThumbProps> = ({
 const styles = StyleSheet.create({
   parent: {
     // height: 180,
-  
+
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     margin: 12,
-    marginLeft: 15
+    marginLeft: 15,
   },
   card: {
     flex: 1,
@@ -46,50 +46,45 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     display: 'flex',
     flexDirection: 'column',
-   // width: '100%',
+    // width: '100%',
     height: '100%',
     borderWidth: 1,
     borderRightColor: 'grey',
     borderRadius: 14,
-     width: 160,
-   
+    width: 160,
   },
   imgParent: {
     height: 100,
     width: 100,
     marginTop: 25,
-    
-   
-
   },
   img: {
-    
     height: 100,
     width: 100,
     borderRadius: 50,
     overflow: 'hidden',
-    resizeMode: 'cover'
+    resizeMode: 'cover',
   },
   cardDetailsParent: {
-      margin: 15,
-      justifyContent: 'center'
+    margin: 15,
+    justifyContent: 'center',
   },
   buttonParent: {
-      margin: 5,
-      backgroundColor: '#fefee3',
-      padding: 10,
-      borderRadius: 20
+    margin: 5,
+    backgroundColor: '#fefee3',
+    padding: 10,
+    borderRadius: 20,
   },
   buttonText: {},
 
   title: {
     fontSize: 18,
     color: 'black',
-    textAlign: 'center'
+    textAlign: 'center',
   },
-  subTitle:{
-      textAlign: 'center',
-      color: 'darkgrey'
-  }
+  subTitle: {
+    textAlign: 'center',
+    color: 'darkgrey',
+  },
 });
 export default InstructorProfileThumb;

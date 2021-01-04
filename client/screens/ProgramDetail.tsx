@@ -15,9 +15,6 @@ import InstructionalLessonCard from '../Components/UiCards/InstructionalLessonCa
 import LoadingScreen from './Loading';
 import ErrorScreen from './ErrorScreen';
 
-
-
-
 const findCourse = `
 query ($courseName: String!) {
     course(courseName: $courseName){
@@ -75,16 +72,12 @@ type ParamList = {
   params: Params;
 };
 
-
 type Params = {courseName: string};
 
 const ProgramDetail: React.FC<ProgramDetailProps> = () => {
-
   const [showThis, setShowThis] = useState<any>('');
   const route = useRoute<ParamList>();
   const nav = useNavigation();
-
-
 
   let courseName = route.params.courseName;
 
@@ -95,16 +88,13 @@ const ProgramDetail: React.FC<ProgramDetailProps> = () => {
 
   let {data, fetching, error} = result;
 
-  if (fetching) return <LoadingScreen/>;
-  if (error) return <ErrorScreen error={error.message}/>
-
-
+  if (fetching) return <LoadingScreen />;
+  if (error) return <ErrorScreen error={error.message} />;
 
   const onPress = () => {
     console.log('hit the card');
     setShowThis(data.course);
   };
-
 
   console.log('desired state attribute: ', showThis);
 
@@ -143,13 +133,12 @@ const ProgramDetail: React.FC<ProgramDetailProps> = () => {
         length={data.course.length}
         targets={data.course.targets}
         courseName={data.course.courseName}
-       // id={data.course.id}
+        // id={data.course.id}
         lectureCount={data.course.lectureCount}
         description={data.course.description}
         category={data.course.category}
         img={data.course.img}
         created={data.course.created}
-       
       />
 
       <Text style={{margin: 12, fontSize: 23}}>Program BreakDown</Text>
@@ -160,7 +149,6 @@ const ProgramDetail: React.FC<ProgramDetailProps> = () => {
         horizontal={true}
       />
     </ScrollView>
-   
   );
 };
 

@@ -30,9 +30,6 @@ const InstructorLessonCard: React.FC<InstructionalLessonCardProps> = ({
   category,
   wideDimension,
 }) => {
-  
-  
-
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={wideDimension ? styles.parentWide : styles.parent}>
@@ -58,11 +55,8 @@ const InstructorLessonCard: React.FC<InstructionalLessonCardProps> = ({
             <View style={styles.fourthRow}>
               <Text style={styles.leftDetail}>{length}</Text>
               <View style={styles.additionalInfo}>
-                <Text>
-
-                {additionalInfo}
-                </Text>
-                </View>
+                <Text>{additionalInfo}</Text>
+              </View>
             </View>
           </View>
         </View>
@@ -100,7 +94,7 @@ const styles = StyleSheet.create({
   },
 
   topCardRow: {
-    backgroundColor: 'black'
+    backgroundColor: 'black',
   },
   tabIcon: {
     position: 'absolute',
@@ -156,7 +150,7 @@ const styles = StyleSheet.create({
     minWidth: '100%',
     height: 220,
     borderRadius: 8,
-    opacity: .96
+    opacity: 0.96,
   },
   title: {
     fontSize: 19,

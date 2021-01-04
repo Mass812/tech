@@ -1,12 +1,12 @@
-const AWS = require("aws-sdk");
-AWS.config.update({ region: "us-east-2" });
+const AWS = require("aws-sdk")
+AWS.config.update({ region: "us-east-2" })
 
-const db = new AWS.DynamoDB.DocumentClient();
+const db = new AWS.DynamoDB.DocumentClient()
 
 //  TODO password creation salting JWT for Sign on, Context through app
 
 module.exports = async () => {
-  let userEmail = "matt@gmail.com";
+  let userEmail = "matt@gmail.com"
 
   const Params = {
     TableName: "App_Table",
@@ -22,13 +22,13 @@ module.exports = async () => {
       selfGuidedWorkouts: 0,
       courseGuided: 0,
     },
-  };
+  }
 
   try {
-    const data = await db.put(Params).promise();
-    console.log(data);
-    return data;
+    const data = await db.put(Params).promise()
+    console.log(data)
+    return data
   } catch (err) {
-    console.log("Oops there was an err creating this user ", err);
+    console.log("Oops there was an err creating this user ", err)
   }
-};
+}

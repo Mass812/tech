@@ -14,9 +14,8 @@ interface CourseOverviewProps {
   img: string;
   equipment: string[];
   targets: string;
-  displayProgramLink?: boolean
-  onPress?: (event: React.SyntheticEvent) => void 
-
+  displayProgramLink?: boolean;
+  onPress?: (event: React.SyntheticEvent) => void;
 }
 
 const CourseOverview: React.FC<CourseOverviewProps> = ({
@@ -31,12 +30,16 @@ const CourseOverview: React.FC<CourseOverviewProps> = ({
   equipment,
   onPress,
   courseName,
-  displayProgramLink = false
+  displayProgramLink = false,
 }) => {
   return (
     <ScrollView>
       <View style={styles.container}>
-      {displayProgramLink ? <Text style={styles.title}>About this Class</Text> : <Text style={styles.title}>About this Program</Text>}
+        {displayProgramLink ? (
+          <Text style={styles.title}>About this Class</Text>
+        ) : (
+          <Text style={styles.title}>About this Program</Text>
+        )}
         <Text style={styles.description}>{description}</Text>
 
         <View style={{marginBottom: 15}}>
@@ -49,7 +52,14 @@ const CourseOverview: React.FC<CourseOverviewProps> = ({
           <Text style={styles.title}>Details</Text>
         </View>
         <TableItem itemTitle={'trainer'} itemValue={instructor} />
-       {displayProgramLink ?  <TableItem itemButton={true} itemTitle={'programs'} itemValue={courseName} onPress={onPress} />: null}
+        {displayProgramLink ? (
+          <TableItem
+            itemButton={true}
+            itemTitle={'programs'}
+            itemValue={courseName}
+            onPress={onPress}
+          />
+        ) : null}
         <TableItem itemTitle={'course length'} itemValue={length} />
         <TableItem itemTitle={'targets'} itemValue={targets} />
         <TableItem itemTitle={'category'} itemValue={category} />
@@ -62,20 +72,28 @@ const CourseOverview: React.FC<CourseOverviewProps> = ({
 interface TableItemProps {
   itemTitle: string;
   itemValue?: string;
-  itemButton?: boolean
+  itemButton?: boolean;
 
-  onPress?: (event: React.SyntheticEvent) => void 
-
+  onPress?: (event: React.SyntheticEvent) => void;
 }
 
-const TableItem: React.FC<TableItemProps> = ({itemTitle, itemValue, itemButton = false, onPress}) => {
+const TableItem: React.FC<TableItemProps> = ({
+  itemTitle,
+  itemValue,
+  itemButton = false,
+  onPress,
+}) => {
   return (
     <View style={styles.tableItemView}>
       <Text style={styles.tableItemName}>{itemTitle}: </Text>
-      
-      {itemButton ? <TouchableOpacity style={styles.button} onPress = {onPress}>
-        <Text style={styles.buttonText}>{itemValue}</Text></TouchableOpacity> : 
-      <Text style={styles.tableItemValue}>{itemValue} </Text>}
+
+      {itemButton ? (
+        <TouchableOpacity style={styles.button} onPress={onPress}>
+          <Text style={styles.buttonText}>{itemValue}</Text>
+        </TouchableOpacity>
+      ) : (
+        <Text style={styles.tableItemValue}>{itemValue} </Text>
+      )}
     </View>
   );
 };
@@ -113,21 +131,20 @@ const styles = StyleSheet.create({
   tableItemName: {
     marginLeft: 5,
     color: 'grey',
-    minWidth: 120
+    minWidth: 120,
   },
   tableItemValue: {
     color: 'black',
   },
-  button:{
+  button: {
     backgroundColor: '#83c0c9',
     padding: 4,
     borderRadius: 5,
   },
   buttonText: {
-    color: '#0896a3', 
-    fontWeight: "400",
+    color: '#0896a3',
+    fontWeight: '400',
     alignSelf: 'center',
-  
-  }
+  },
 });
 export default CourseOverview;
