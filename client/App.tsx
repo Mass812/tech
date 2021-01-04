@@ -4,15 +4,15 @@ import {createClient, Provider as UrqlProvider} from 'urql';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator, HeaderTitle} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Home from './screens/Home';
-import ClassDetail from './screens/ClassDetail';
-import Programs from './screens/Programs';
-import ProgramDetail from './screens/ProgramDetail';
-import Workouts from './screens/Workouts';
-import Meditation from './screens/Meditation';
-import Profile from './screens/Profile';
+import Home from './Screens/Home';
+import ClassDetail from './Screens/ClassDetail';
+import Programs from './Screens/Programs';
+import ProgramDetail from './Screens/ProgramDetail';
+import Workouts from './Screens/Workouts';
+import Meditation from './Screens/Meditation';
+import Profile from './Screens/Profile';
 import {AuthContext} from './Context/authContext';
-import MeditationPlayer from './screens/MeditationPlayer';
+import MeditationPlayer from './Screens/MeditationPlayer';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {
   faHome,
@@ -21,8 +21,8 @@ import {
   faBalanceScale,
   faUserCircle,
 } from '@fortawesome/free-solid-svg-icons';
-import Video from './screens/VideoScreen';
-import LessonPlayer from './screens/LessonPlayer';
+
+import LessonPlayer from './Screens/LessonPlayer';
 
 const client = createClient({
   url: 'http://localhost:4321/graphql',

@@ -1,16 +1,15 @@
-const AWS = require("aws-sdk");
-const { v4: uuidv4 } = require("uuid");
-AWS.config.update({ region: "us-east-2" });
+const AWS = require("aws-sdk")
+const { v4: uuidv4 } = require("uuid")
+AWS.config.update({ region: "us-east-2" })
 
-const db = new AWS.DynamoDB.DocumentClient();
+const db = new AWS.DynamoDB.DocumentClient()
 
 module.exports = async () => {
-  
-  let instructor = "Ashley Wilkins";
-  let courseName = 'Pure Burn'
+  let instructor = "Ashley Wilkins"
+  let courseName = "Pure Burn"
   let baseLink = process.env.REACT_APP_S3
-  let contentUrl =  'focus_energy_1.mp4'
-  let img = 'rosannagh_macLennan_workout.jpg'
+  let contentUrl = "focus_energy_1.mp4"
+  let img = "rosannagh_macLennan_workout.jpg"
 
   const Params = {
     TableName: "App_Table",
@@ -31,10 +30,12 @@ module.exports = async () => {
       intensity: 7,
       outfitTopId: uuidv4(),
       outfitTopName: "Basic Perfmance Top",
-      outfitTopImgUrl: "https://fabletics-us-cdn.justfab.com/media/images/products/LS2146119-0001/LS2146119-0001-2_327x491.jpg",
+      outfitTopImgUrl:
+        "https://fabletics-us-cdn.justfab.com/media/images/products/LS2146119-0001/LS2146119-0001-2_327x491.jpg",
       outfitBottomId: uuidv4(),
       outfitBottomName: "Panther Yogas",
-      outfitBottomImgUrl: "https://fabletics-us-cdn.justfab.com/media/images/products/LG2040267-9765/LG2040267-9765-2_327x491.jpg",
+      outfitBottomImgUrl:
+        "https://fabletics-us-cdn.justfab.com/media/images/products/LG2040267-9765/LG2040267-9765-2_327x491.jpg",
       selfGuidedLesson: true,
       targetArmsValue: 9,
       targetBackValue: 3,
@@ -43,16 +44,15 @@ module.exports = async () => {
       targetLegsValue: 2,
       courseRelation: [`changeThistoFirstClass`],
       popularity: 0,
-      selfGuided: 'selfGuided'
-
+      selfGuided: "selfGuided",
     },
-  };
+  }
 
   try {
-    const data = db.put(Params).promise();
-    console.log(data);
-    return data;
+    const data = db.put(Params).promise()
+    console.log(data)
+    return data
   } catch (err) {
-    console.log("Oops there was an err ", err);
+    console.log("Oops there was an err ", err)
   }
-};
+}

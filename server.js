@@ -1,8 +1,8 @@
-require("dotenv").config();
-const express = require("express");
-const { ApolloServer, gql } = require("apollo-server-express");
+require("dotenv").config()
+const express = require("express")
+const { ApolloServer, gql } = require("apollo-server-express")
 
-const AWS = require("aws-sdk");
+const AWS = require("aws-sdk")
 
 AWS.config.update({
   region: "us-east-2",
@@ -10,40 +10,41 @@ AWS.config.update({
     accessKeyId: process.env.REACT_APP_DDB_ACCESS,
     secretAccessKey: process.env.REACT_APP_DDB_SUPER,
   },
-});
+})
 
-const db = new AWS.DynamoDB.DocumentClient();
+const db = new AWS.DynamoDB.DocumentClient()
 
 //spread resolvers later if needed
-const fs = require("fs");
-const path = require("path");
-const { merge } = require("lodash");
+const fs = require("fs")
+const path = require("path")
+const { merge } = require("lodash")
 
+//ACCESS PATTERNS
 //db query calls
-const getUserWorkoutsByCategory = require("./DynamoDB_Request_Functions/Query_Requests/getUserWorkoutsByCategory_ddb");
-const getUserProfile = require("./DynamoDB_Request_Functions/Query_Requests/getUserProfile_ddb");
-const getCoursesByName = require("./DynamoDB_Request_Functions/Query_Requests/getCoursesByName_ddb");
-const getAllCourses = require("./DynamoDB_Request_Functions/Query_Requests/getAllCourses_ddb");
-const getCoursesForCategory = require("./DynamoDB_Request_Functions/Query_Requests/getCoursesForCategory_ddb");
-const getAllLessonsOfACourse_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getAllLessonsOfACourse_ddb");
-const getAllMeditations_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getAllMeditations_ddb");
-const getPopularLessons_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getPopularLessons_ddb");
-const getPopularMeditations_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getPopularMeditations_ddb");
-const getPopularSelfGuided_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getPopularSelfGuided_ddb");
-const getPopularCourses_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getPopularCourses_ddb");
+const getUserWorkoutsByCategory = require("./DynamoDB_Request_Functions/Query_Requests/getUserWorkoutsByCategory_ddb")
+const getUserProfile = require("./DynamoDB_Request_Functions/Query_Requests/getUserProfile_ddb")
+const getCoursesByName = require("./DynamoDB_Request_Functions/Query_Requests/getCoursesByName_ddb")
+const getAllCourses = require("./DynamoDB_Request_Functions/Query_Requests/getAllCourses_ddb")
+const getCoursesForCategory = require("./DynamoDB_Request_Functions/Query_Requests/getCoursesForCategory_ddb")
+const getAllLessonsOfACourse_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getAllLessonsOfACourse_ddb")
+const getAllMeditations_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getAllMeditations_ddb")
+const getPopularLessons_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getPopularLessons_ddb")
+const getPopularMeditations_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getPopularMeditations_ddb")
+const getPopularSelfGuided_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getPopularSelfGuided_ddb")
+const getPopularCourses_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getPopularCourses_ddb")
 
 //db mutation calls
-const createUser = require("./DynamoDB_Request_Functions/Mutation_Requests/createUser_ddb");
-const createCourse = require("./DynamoDB_Request_Functions/Mutation_Requests/createCourse_ddb");
-const createWorkout = require("./DynamoDB_Request_Functions/Mutation_Requests/createWorkout_ddb");
-const updateUserProfile = require("./DynamoDB_Request_Functions/Mutation_Requests/updateUser_ddb");
-const createLesson = require("./DynamoDB_Request_Functions/Mutation_Requests/createCourseLesson_ddb");
-const createInstructorProfile = require("./DynamoDB_Request_Functions/Mutation_Requests/createInstructorProfile_ddb");
-const createCourseCompletionDoc_ddb = require("./DynamoDB_Request_Functions/Mutation_Requests/createCourseCompletionDoc_ddb");
-const createIndependentLesson_ddb = require("./DynamoDB_Request_Functions/Mutation_Requests/createIndependentLesson_ddb");
-const createMeditation_ddb = require("./DynamoDB_Request_Functions/Mutation_Requests/createMeditation_ddb");
-const getSpecificCourseLesson_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getSpecificCourseLesson_ddb");
-const getLessonsOfCourses_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getLessonsOfCourses_ddb");
+const createUser = require("./DynamoDB_Request_Functions/Mutation_Requests/createUser_ddb")
+const createCourse = require("./DynamoDB_Request_Functions/Mutation_Requests/createCourse_ddb")
+const createWorkout = require("./DynamoDB_Request_Functions/Mutation_Requests/createWorkout_ddb")
+const updateUserProfile = require("./DynamoDB_Request_Functions/Mutation_Requests/updateUser_ddb")
+const createLesson = require("./DynamoDB_Request_Functions/Mutation_Requests/createCourseLesson_ddb")
+const createInstructorProfile = require("./DynamoDB_Request_Functions/Mutation_Requests/createInstructorProfile_ddb")
+const createCourseCompletionDoc_ddb = require("./DynamoDB_Request_Functions/Mutation_Requests/createCourseCompletionDoc_ddb")
+const createIndependentLesson_ddb = require("./DynamoDB_Request_Functions/Mutation_Requests/createIndependentLesson_ddb")
+const createMeditation_ddb = require("./DynamoDB_Request_Functions/Mutation_Requests/createMeditation_ddb")
+const getSpecificCourseLesson_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getSpecificCourseLesson_ddb")
+const getLessonsOfCourses_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getLessonsOfCourses_ddb")
 
 const Query = gql`
   type Query {
@@ -213,7 +214,7 @@ const Query = gql`
     length: String!
     currentStudentCount: Int!
   }
-`;
+`
 
 const Mutation = gql`
   type Mutation {
@@ -232,7 +233,7 @@ const Mutation = gql`
     attribute: String!
     value: String!
   }
-`;
+`
 
 //add later
 //read the current directory and load types and resolvers automatically
@@ -249,88 +250,88 @@ const Mutation = gql`
 let resolvers = {
   Query: {
     user: async (_, args) => {
-      return getUserProfile(args);
+      return getUserProfile(args)
     },
 
     course: async (_, args) => {
-      return getCoursesByName(args);
+      return getCoursesByName(args)
     },
     courses: async () => {
-      return getAllCourses();
+      return getAllCourses()
     },
 
     coursesByCategory: async (_, args) => {
-      return getCoursesForCategory(args);
+      return getCoursesForCategory(args)
     },
     userWorkoutsByCategory: async (_, args) => {
-      return getUserWorkoutsByCategory(args);
+      return getUserWorkoutsByCategory(args)
     },
 
     workouts: async (_, args) => {
-      return getUserWorkoutsByCategory(args);
+      return getUserWorkoutsByCategory(args)
     },
     lesson: async (_, args) => {
-      return getSpecificCourseLesson_ddb(args);
+      return getSpecificCourseLesson_ddb(args)
     },
     lessons: async (_, args) => {
-      return getAllLessonsOfACourse_ddb(args);
+      return getAllLessonsOfACourse_ddb(args)
     },
     meditations: async () => {
-      return getAllMeditations_ddb();
+      return getAllMeditations_ddb()
     },
     popularCourses: async () => {
-      return getPopularCourses_ddb();
+      return getPopularCourses_ddb()
     },
     popularLessons: async () => {
-      return getPopularLessons_ddb();
+      return getPopularLessons_ddb()
     },
     popularMeditations: async () => {
-      return getPopularMeditations_ddb();
+      return getPopularMeditations_ddb()
     },
     popularSelfGuided: async () => {
-      return getPopularSelfGuided_ddb();
+      return getPopularSelfGuided_ddb()
     },
   },
 
   Mutation: {
     createUser: async () => {
-      return createUser();
+      return createUser()
     },
     createCourseCompletionDoc: async () => {
-      return createCourseCompletionDoc_ddb();
+      return createCourseCompletionDoc_ddb()
     },
     createInstructorProfile: async () => {
-      return createInstructorProfile();
+      return createInstructorProfile()
     },
     updateUser: async (_, args) => {
-      return updateUserProfile(args);
+      return updateUserProfile(args)
     },
     createCourse: async () => {
-      return createCourse();
+      return createCourse()
     },
 
     createLesson: async () => {
-      return createLesson();
+      return createLesson()
     },
     createIndependentLesson: async () => {
-      let data = createIndependentLesson_ddb();
+      let data = createIndependentLesson_ddb()
     },
     createWorkout: async () => {
-      return createWorkout();
+      return createWorkout()
     },
     createMeditation: async () => {
-      return createMeditation_ddb();
-      return data;
+      return createMeditation_ddb()
+      return data
     },
   },
   Course: {
     courseRelation: (parent, args) => {
-      return getLessonsOfCourses_ddb(parent);
+      return getLessonsOfCourses_ddb(parent)
     },
   },
-};
+}
 
-const typeDefs = [Query, Mutation];
+const typeDefs = [Query, Mutation]
 
 const server = new ApolloServer({
   typeDefs,
@@ -338,14 +339,14 @@ const server = new ApolloServer({
   playground: {
     endpoint: "/graphql",
   },
-});
+})
 
-const app = express();
-server.applyMiddleware({ app });
+const app = express()
+server.applyMiddleware({ app })
 
-const PORT = 4321;
+const PORT = 4321
 app.listen(PORT, () =>
   console.log(
     `🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`
   )
-);
+)

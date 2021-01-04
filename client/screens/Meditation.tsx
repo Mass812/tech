@@ -1,8 +1,8 @@
-import  React from 'react'
-import { View, StyleSheet, SafeAreaView } from 'react-native';
-import MeditationComponent from '../Components/MeditationComponent/MeditationComponent'
+import React from 'react';
+import {View, StyleSheet, SafeAreaView} from 'react-native';
+import MeditationComponent from '../Components/MeditationComponent/MeditationComponent';
 
-  const Meditations = `
+const Meditations = `
     query {
       meditations {
         contentUrl
@@ -16,39 +16,39 @@ import MeditationComponent from '../Components/MeditationComponent/MeditationCom
       }
     }
   `;
-interface MeditationProps {  
-  category?: string
-  contentUrl?: string
-  contentImg?: string
-  description?: string
-  id?: string
-  instructor?: string
-  title?: string
-  horizontal?: boolean
-  queryValue?: string
-  length?: string
-  dataProps?: string
+interface MeditationProps {
+  category?: string;
+  contentUrl?: string;
+  contentImg?: string;
+  description?: string;
+  id?: string;
+  instructor?: string;
+  title?: string;
+  horizontal?: boolean;
+  queryValue?: string;
+  length?: string;
+  dataProps?: string;
 }
 
-const Meditation : React.FC <MeditationProps> = (  { horizontal = false} ) => {
-        return (
-        <SafeAreaView >
-         <View style={styles.container} >
-         <MeditationComponent
+const Meditation: React.FC<MeditationProps> = ({horizontal = false}) => {
+  return (
+    <SafeAreaView>
+      <View style={styles.container}>
+        <MeditationComponent
           dataProps={'meditations'}
           horizontal={false}
           queryValue={Meditations}
         />
-         </View>
-        </SafeAreaView>
+      </View>
+    </SafeAreaView>
+  );
+};
 
-)}
-
- const styles = StyleSheet.create({
-container: {
-// flex:1,
-// alignItems: 'center',
-// justifyContent: 'center',
-}
- })
+const styles = StyleSheet.create({
+  container: {
+    // flex:1,
+    // alignItems: 'center',
+    // justifyContent: 'center',
+  },
+});
 export default Meditation;

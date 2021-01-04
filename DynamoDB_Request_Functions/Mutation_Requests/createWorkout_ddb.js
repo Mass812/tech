@@ -1,10 +1,10 @@
-const AWS = require("aws-sdk");
-AWS.config.update({ region: "us-east-2" });
+const AWS = require("aws-sdk")
+AWS.config.update({ region: "us-east-2" })
 
-const db = new AWS.DynamoDB.DocumentClient();
+const db = new AWS.DynamoDB.DocumentClient()
 
 module.exports = async () => {
-  let userEmail = "matt@gmail.com";
+  let userEmail = "matt@gmail.com"
   const Params = {
     TableName: "App_Table",
     Item: {
@@ -20,13 +20,13 @@ module.exports = async () => {
       intensity: 8,
       bodyWeight: 173,
     },
-  };
+  }
 
   try {
-    const data = db.put(Params).promise();
-    console.log(data);
-    return data;
+    const data = db.put(Params).promise()
+    console.log(data)
+    return data
   } catch (err) {
-    console.log("Oops there was an err ", err);
+    console.log("Oops there was an err ", err)
   }
-};
+}
