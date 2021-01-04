@@ -12,15 +12,15 @@ https://mattwellman.dev
 ### Tech Stack
 
 
-* [DynamoDB] - HTML enhanced for web apps!
-* [AWS S3 Bucket] - HTML enhanced for web apps!
+* [DynamoDB] - Database
+* [AWS S3 Bucket] - photo / video storage 
 * [Node] - Node Package Manager
-* [Apollo Server] -Header Meta tag injector for spa.
-* [GraphQL] - Animation
-* [React Native] - Router
-* [React-Native-Navigation v5] - icons for presentation
-* [Typescript] - icons for presentation
-* [URQL] - icons for presentation
+* [Apollo Server] - server instance for graphwl
+* [GraphQL] - querying interface
+* [React Native] - Library
+* [React-Native-Navigation v5] - navigation
+* [Typescript] - javascript more strictly typed
+* [URQL] - client side graphql interface
 
 
 ### Installation
