@@ -25,8 +25,9 @@ module.exports = async () => {
       subTitle: `${subTitle}`,
       length: "3:23",
       contentUrl: `${url}`,
-      contentImg: `${img}`
-
+      contentImg: `${img}`,
+      popularity: 5,
+      meditation: 'meditation'
     },
   };
 

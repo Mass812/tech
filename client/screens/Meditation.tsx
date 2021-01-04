@@ -1,13 +1,13 @@
 import  React from 'react'
-import { View, StyleSheet, Text, FlatList, SafeAreaView } from 'react-native';
+import { View, StyleSheet, Text, FlatList, SafeAreaView, Dimensions } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
   import {useQuery} from 'urql'
-import ProgramCard from '../Components/ProgramCard'
+import ProgramCard from '../Components/UiCards/ProgramCard'
 import {useNavigation, useRoute} from '@react-navigation/native';
 import LoadingScreen from './Loading';
 import ErrorScreen from './ErrorScreen';
 
-  const getMeditations = `
+  const Meditations = `
     query {
       meditations {
         contentUrl
@@ -24,23 +24,41 @@ import ErrorScreen from './ErrorScreen';
    
    
 interface MeditationProps {  
-  category: string
-  contentUrl: string
-  contentImg: string
-  description: string
-  id: string
-  instructor: string
-  length: string
-  title: string
-  
+  category?: string
+  contentUrl?: string
+  contentImg?: string
+  description?: string
+  id?: string
+  instructor?: string
+  title?: string
+  horizontal?: boolean
+  queryValue?: string
+  length?: string
+  dataProps?: string
 }
  
+interface FlatListProps {
+  category?: string
+  contentUrl?: string
+  contentImg?: string
+  description?: string
+  id: string
+  instructor?: string
+  title: string
+  horizontal?: boolean
+  queryValue?: string
+  length?: string
+  dataProps?: string
+}
+
+let width = Dimensions.get('screen').width
+
+
+const Meditation : React.FC <MeditationProps> = (  { horizontal = false, queryValue = Meditations, dataProps = 'meditations'} ) => {
 
 
 
-const Meditation : React.FC <MeditationProps> = ( { length} ) => {
-
-const [result, reexecuteQuery] = useQuery({ query: getMeditations})
+const [result, reexecuteQuery] = useQuery({ query: queryValue})
 const nav = useNavigation()
 
 let {data, fetching, error} = result;
@@ -57,9 +75,10 @@ return (
 const renderItem = ({item}: {item: MeditationProps}) => {
 
   return(
+    <View  style={horizontal ?  styles.listNotWide : styles.listWide} key={item.id}>
     <TouchableOpacity 
-    // onPress={()=> nav.navigate('Root', {'MeditationPlayer', params: {contentUrl: item.contentUrl, contentImg: item.contentImg}})}>
-    onPress={()=> nav.navigate('MeditationPlayer', {         
+
+onPress={()=> nav.navigate('MeditationPlayer', {         
       contentUrl: item.contentUrl,
       contentImg: item.contentImg,
       instructor: item.instructor,
@@ -67,31 +86,33 @@ const renderItem = ({item}: {item: MeditationProps}) => {
       length: item.length,
       title: item.title,
       description: item.description,
-     id : item.id,
+      id : item.id,
      })}>
-
+    
       <ProgramCard 
               photo={item.contentImg}
-              title = {item.title}
+              title = {item.title }
               bulletPoints={`${item.instructor} * ${item.length}`}
               button={false}
               id={item.id}
-
+              displayAsCard={true}
               />
     </TouchableOpacity>
+    </View>
           
   )}
-
+  
         return (
 
         <SafeAreaView >
-          
-          <FlatList
-          data={data.meditations}
+         <View style={styles.main} >
+          <FlatList <FlatListProps>
+          data={data[dataProps]}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
-          horizontal={false}
+          horizontal={horizontal}
         />
+         </View>
         </SafeAreaView>
 
 )}
@@ -103,13 +124,23 @@ alignItems: 'center',
 justifyContent: 'center',
 },
 main: {
-flex:1,
+  display: 'flex',
+padding: 10,
 alignItems: 'center',
-justifyContent: 'center',
+justifyContent: 'space-between',
 },
-title: {
+
+listNotWide: {
+  margin: 5,
 fontSize: 20,
 color: 'green',
+width: 300
+},
+listWide: {
+  margin: 5,
+fontSize: 20,
+color: 'green',
+width: width - 30
 }
 })
 export default Meditation;

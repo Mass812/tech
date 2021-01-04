@@ -5,11 +5,11 @@ import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 interface CourseOverviewProps {
   courseName: string;
   instructor: string;
-  id: string;
+  id?: string;
   description: string;
-  lectureCount: string;
+  lectureCount?: string;
   length: string;
-  created: string;
+  created?: string;
   category: string;
   img: string;
   equipment: string[];

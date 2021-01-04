@@ -17,6 +17,11 @@ const getAllCourses = require("./DynamoDB_Request_Functions/Query_Requests/getAl
 const getCoursesForCategory = require("./DynamoDB_Request_Functions/Query_Requests/getCoursesForCategory_ddb");
 const getAllLessonsOfACourse_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getAllLessonsOfACourse_ddb");
 const getAllMeditations_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getAllMeditations_ddb");
+const getPopularLessons_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getPopularLessons_ddb");
+const getPopularMeditations_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getPopularMeditations_ddb");
+const getPopularSelfGuided_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getPopularSelfGuided_ddb");
+const getPopularCourses_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getPopularCourses_ddb");
+
 
 //db mutation calls
 const createUser = require("./DynamoDB_Request_Functions/Mutation_Requests/createUser_ddb");
@@ -26,24 +31,26 @@ const updateUserProfile = require("./DynamoDB_Request_Functions/Mutation_Request
 const createLesson = require("./DynamoDB_Request_Functions/Mutation_Requests/createCourseLesson_ddb");
 const createInstructorProfile = require("./DynamoDB_Request_Functions/Mutation_Requests/createInstructorProfile_ddb");
 const createCourseCompletionDoc_ddb = require("./DynamoDB_Request_Functions/Mutation_Requests/createCourseCompletionDoc_ddb");
+const createIndependentLesson_ddb = require("./DynamoDB_Request_Functions/Mutation_Requests/createIndependentLesson_ddb");
 const createMeditation_ddb = require("./DynamoDB_Request_Functions/Mutation_Requests/createMeditation_ddb");
+const getSpecificCourseLesson_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getSpecificCourseLesson_ddb");
 
-// Construct a schema, using GraphQL schema language
+
 const Query = gql`
   type Query {
     user(email: String!): User
     lessons(instructor: String!, courseName: String!): [Lesson]
-    lesson(
-      instructor: String!
-      courseName: String!
-      lessonNumber: String!
-    ): Lesson
+    lesson(instructor: String! courseName: String! lessonNumber: String! weekNumber: String!): Lesson
     course(courseName: String!): Course
     courses: [Course]
     coursesByCategory(category: String!): [Course]
     meditations: [Meditation]
     userWorkoutsByCategory(email: String!, category: String!): [Workout]
     workouts(category: String!, email: String!): [Workout]!
+    popularCourses: [Course]
+    popularLessons:[Lesson]
+    popularMeditations:[Meditation]
+    popularSelfGuided:[Lesson]
   }
 
   type User {
@@ -56,7 +63,7 @@ const Query = gql`
   }
 
   type WeekReport {
-    weekNumber: Int
+    weekodYear: Int
     streak: Int
     weeklyInDependentWorkouts: Int
     weeklyGuidedWorkouts: Int
@@ -132,7 +139,7 @@ const Query = gql`
     category: String
     length: String
     contentUrl: String
-    contentImg: String
+    img: String
     courseName: String
     created: String
     title: String
@@ -141,6 +148,7 @@ const Query = gql`
     instructor: String
     intensity: Int
     lessonNumber: String
+    weekNumber: String
     outfitTopId: String
     outfitTopName: String
     outfitTopImgUrl: String
@@ -148,6 +156,9 @@ const Query = gql`
     outfitBottomName: String
     outfitBottomImgUrl: String
     selfGuidedLesson: Boolean
+    courseRelation: Course
+    lesson: String
+    popularity: String
   }
 
   type Meditation {
@@ -160,6 +171,8 @@ const Query = gql`
     subTitle: String
     title: String
     description: String
+    meditation: String
+    popularity: String
   }
 
   type InstructorProfile {
@@ -194,6 +207,7 @@ const Mutation = gql`
     updateUser(email: String!, attribute: String!, value: String!): User
     createCourse: Course!
     createLesson: Lesson!
+    createIndependentLesson: Lesson!
     createInstructorProfile: InstructorProfile
     createWorkout: Workout!
     createCourseCompletionDoc: CourseCompletionDoc
@@ -248,17 +262,35 @@ let resolvers = {
       return data;
     },
     lesson: async (_, args) => {
-      let data = getSpecificCourseLesson_ddb(args);
+   
+      let data = await getSpecificCourseLesson_ddb(args);
+
       return data;
     },
     lessons: async (_, args) => {
-      let data = getAllLessonsOfACourse_ddb(args);
+      let data = await getAllLessonsOfACourse_ddb(args);
       return data;
     },
     meditations: async ()=>{
       let data = getAllMeditations_ddb()
       return data
-    }
+    },
+    popularCourses: async ()=>{
+      let data = getPopularCourses_ddb()
+      return data
+    },
+    popularLessons: async ()=>{
+      let data = getPopularLessons_ddb()
+      return data
+    },
+    popularMeditations: async ()=>{
+      let data = getPopularMeditations_ddb()
+      return data
+    },
+    popularSelfGuided: async ()=>{
+      let data = getPopularSelfGuided_ddb()
+      return data
+    },
   },
 
   Mutation: {
@@ -288,6 +320,10 @@ let resolvers = {
       let data = await createLesson();
       return data;
     },
+    createIndependentLesson: async () => {
+      let data = createIndependentLesson_ddb();
+      return data;
+    },
     createWorkout: async () => {
       let data = await createWorkout();
       return data;
@@ -307,7 +343,7 @@ let resolvers = {
         KeyConditionExpression: `pk = :pk and begins_with(sk, :sk)`,
         ExpressionAttributeValues: {
           ":pk": `instructor#${instructor}`,
-          ":sk": `courseName#${courseName}#lesson`,
+          ":sk": `courseName#${courseName}#weekNumber`,
         },
       };
 
@@ -321,6 +357,7 @@ let resolvers = {
       }
     },
   },
+ 
 };
 
 const typeDefs = [Query, Mutation];

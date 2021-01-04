@@ -12,7 +12,7 @@ module.exports = async (args) => {
     KeyConditionExpression: "pk = :pk and begins_with(sk, :sk)",
     ExpressionAttributeValues: {
       ":pk": `instructor#${instructor}`,
-      ":sk": `courseName#${courseName}#lesson#`,
+      ":sk": `courseName#${courseName}#weekNumber`,
     },
   };
 

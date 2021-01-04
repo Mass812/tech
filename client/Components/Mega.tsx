@@ -1,18 +1,34 @@
-import { CardStyleInterpolators } from '@react-navigation/stack';
-import * as React from 'react';
+import { useNavigation } from '@react-navigation/native';
+import React, {useRef} from 'react';
 import {View, StyleSheet, Dimensions, Text, Image} from 'react-native';
-import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
+import {FlatList, ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 
 
-interface MegaProps {}
+
+
+
+interface MegaProps {
+
+
+}
+
+interface FlatListProps {
+  photoArray: MegaProps[]
+}
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
 const Mega: React.FC<MegaProps> = () => {
+
+const nav = useNavigation()
+const itemSelected = useRef<HTMLElement>(null)
+
+
   let photoOne = require('./Assets/fitness_mega_1.jpeg');
   let photoTwo = require('./Assets/fitness_mega_2.jpg');
-  let photoThree = require('./Assets/fitness_mega_3.png');
+  let photoThree = require('./Assets/fitness_mega_4.jpg');
+  let photoFour = require('./Assets/upper_body_blast_program.jpg');
 
   let photoArray = [
     {
@@ -22,32 +38,46 @@ const Mega: React.FC<MegaProps> = () => {
       id: 1,
       title: 'HIIT & Strength',
       buttonText: 'View Program',
+     
+    },
+    {
+      photo: photoThree,
+      instructor: 'Rachele Lyle',
+      bulletPoints: '1 Week ∑ 3 Classes',
+      id: 2,
+      title: 'Part Time Pilates',
+      buttonText: 'View Progam',
     },
     {
       photo: photoTwo,
       instructor: 'Myranny Gupta',
       bulletPoints: 'Relieve Stress & Tension',
-      id: 2,
-      title: 'Focus Energy',
-      buttonText: 'Join Now',
+      id: 3,
+      title: 'Cardio Tactics',
+      buttonText: 'View Progam',
     },
     {
-      photo: photoThree,
-      instructor: 'Rachele Lyle',
-      bulletPoints: 'Meditative Moments',
-      id: 3,
-      title: 'Find Peace',
-      buttonText: 'Try Meditation',
+      photo: photoFour,
+      instructor: 'Jermey Forge',
+      bulletPoints: 'Never needing more than 40lbs to get big',
+      id: 4,
+      title: 'Body Blast',
+      buttonText: 'View Progam',
     },
   ];
 
-  let displayPhotos = photoArray.map((n, idx) => (
-    <View style={styles.imageParent} key={n.id}>
+
+
+
+  let displayPhotos = photoArray.map((n) => (
+    <View style={styles.imageParent} key={n.id} >
       <Image style={styles.image} source={n.photo} />
       <Text style={styles.instructor}>{n.instructor}</Text>
       <Text style={styles.title}>{n.title}</Text>
       <Text style={styles.bulletPoints}>{n.bulletPoints}</Text>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button}
+      onPress= {( ) =>{  nav.navigate('ProgramDetail', {courseName: n.title})}}
+      >
         <Text style={styles.buttonText}>{n.buttonText}</Text>
       </TouchableOpacity>
     
@@ -58,9 +88,10 @@ const Mega: React.FC<MegaProps> = () => {
     <ScrollView
       horizontal={true}
       decelerationRate={0}
-      snapToInterval={width} //your element width
+      snapToInterval={width} 
       snapToAlignment={'center'}>
       {displayPhotos}
+
     </ScrollView>
   );
 };

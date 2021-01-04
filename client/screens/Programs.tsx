@@ -15,7 +15,7 @@ import {useNavigation} from '@react-navigation/native';
 import Mega from '../Components/Mega';
 import {ScrollView} from 'react-native-gesture-handler';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import ProgramCard from '../Components/ProgramCard';
+import ProgramCard from '../Components/UiCards/ProgramCard';
 import LoadingScreen from './Loading';
 import ErrorScreen from './ErrorScreen';
 

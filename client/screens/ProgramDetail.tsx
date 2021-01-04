@@ -9,9 +9,9 @@ import {
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {useQuery} from 'urql';
-import ProgramCard from '../Components/ProgramCard';
-import CourseOverview from '../Components/CourseOverview';
-import InstructionalLessonCard from '../Components/InstructionalLessonCard';
+import ProgramCard from '../Components/UiCards/ProgramCard';
+import CourseOverview from '../Components/UiCards/CourseOverview';
+import InstructionalLessonCard from '../Components/UiCards/InstructionalLessonCard';
 import LoadingScreen from './Loading';
 import ErrorScreen from './ErrorScreen';
 
@@ -37,7 +37,7 @@ query ($courseName: String!) {
         title
         id
         length
-        contentImg
+        img
         equipment
 
       }
@@ -58,7 +58,7 @@ interface ProgramDetailProps {
   category: string;
   equipment: string[];
   courseRelation: CourseRelation;
-  contentImg: string;
+  img: string;
   contentUrl: string;
   title: string;
   additionalInfo: string[];
@@ -112,7 +112,7 @@ const ProgramDetail: React.FC<ProgramDetailProps> = () => {
     return (
       <InstructionalLessonCard
         key={item.id}
-        img={item.contentImg}
+        img={item.img}
         title={item.title}
         onPress={onPress}
         additionalInfo={item.equipment}
@@ -135,6 +135,7 @@ const ProgramDetail: React.FC<ProgramDetailProps> = () => {
         bulletPoints={`${data.course.lectureCount} Programes *  ${data.course.length}`}
         //TODO Link This to  All Course Videos Componet
         onPress={() => nav.navigate('Home')}
+        displayAsCard={false}
       />
       <CourseOverview
         equipment={data.course.equipment}
@@ -142,7 +143,7 @@ const ProgramDetail: React.FC<ProgramDetailProps> = () => {
         length={data.course.length}
         targets={data.course.targets}
         courseName={data.course.courseName}
-        id={data.course.id}
+       // id={data.course.id}
         lectureCount={data.course.lectureCount}
         description={data.course.description}
         category={data.course.category}

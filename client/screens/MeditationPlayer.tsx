@@ -13,7 +13,6 @@ interface MeditationPlayerProps {
   key: string;
   name: string;
   params: Params;
-
 }
 
 type Params = {
@@ -58,13 +57,14 @@ const MeditationPlayer: React.FC<MeditationPlayerProps> = () => {
 
        
     <View style={styles.container}>
+      
      
       <View style={styles.headerBlock}>
          
         <View style={styles.detailGroup}>
         <TouchableOpacity
             style={styles.backButton}
-            onPress={() => nav.navigate('Meditation')}>
+            onPress={() => nav.goBack()}>
             <FontAwesomeIcon icon={faArrowCircleLeft} color={'darkgrey'} size={28} />
           </TouchableOpacity>
           <Text style={styles.headerText1}> {instructor} </Text>
@@ -129,8 +129,8 @@ const MeditationPlayer: React.FC<MeditationPlayerProps> = () => {
 
 const styles = StyleSheet.create({
   container: {
-    height: height,
-    zIndex: 3,
+    height: '100%',
+    width: '100%',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
     resizeMode: 'stretch',
     zIndex: 0,
     
-    opacity: .7
+    opacity: .96
   },
   headerBlock: {
     display: 'flex',
@@ -215,6 +215,7 @@ const styles = StyleSheet.create({
   detailGroup: {
     display: 'flex',
     flexDirection: 'column',
+ 
     zIndex: 3,
   },
   playButtonRow: {
@@ -236,9 +237,10 @@ const styles = StyleSheet.create({
    
   },
   backButton: {
-   // top: -50,
+    
     height: 100,
     width: 100,
+  
  
 
     

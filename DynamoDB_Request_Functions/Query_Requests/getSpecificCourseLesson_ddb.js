@@ -4,25 +4,26 @@ AWS.config.update({ region: "us-east-2" });
 const db = new AWS.DynamoDB.DocumentClient();
 
 module.exports = async (args) => {
-  let { courseName, instructor, lessonNumber } = args;
+  let { courseName, instructor, lessonNumber, weekNumber } = args;
 
-  console.log(courseName, instructor, lessonNumber);
+  console.log('inside _ddb: ',courseName, instructor, lessonNumber);
 
-  let courseNameTrimmed = courseName.split(" ").join("");
-  let instructorTrimmed = instructor.split(" ").join("");
+    let pk = `instructor#${instructor}`
+    let sk =  `courseName#${courseName}#weekNumber#${weekNumber}#lesson#${lessonNumber}`
+    console.log('pk: ', pk, 'sk: ', sk)
 
   const Params = {
     TableName: "App_Table",
     Key: {
-      pk: `instructor#${instructorTrimmed}`,
-      sk: `courseName#${courseNameTrimmed}#lesson#${lessonNumber}`,
+      pk: pk,
+      sk: sk
     },
   };
-
   try {
     const data = await db.get(Params).promise();
-    console.log(data.Item);
-    return data.Item;
+   
+    console.log(data);
+     return data.Item;
   } catch (err) {
     console.log("Oops there was an err ", err);
   }

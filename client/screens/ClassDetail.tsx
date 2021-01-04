@@ -9,31 +9,28 @@ import {
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {useQuery} from 'urql';
-import ProgramCard from '../Components/ProgramCard';
-import CourseOverview from '../Components/CourseOverview';
-import InstructionalLessonCard from '../Components/InstructionalLessonCard';
+import ProgramCard from '../Components/UiCards/ProgramCard'
+import CourseOverview from '../Components/UiCards/CourseOverview';
+import InstructionalLessonCard from '../Components/UiCards/InstructionalLessonCard';
 import LoadingScreen from './Loading';
 import ErrorScreen from './ErrorScreen';
 
-
-
-
-
-const findCourse = `
-query ($courseName: String!) {
-    course(courseName: $courseName){
+//courseName, instructor, lessonNumber, weekNumber
+const findPopular = `
+query ($courseName: String!, $instructor: String!, $lessonNumber: String!, $weekNumber: String!) {
+    lesson(courseName: $courseName, instructor: $instructor, lessonNumber: $lessonNumber, weekNumber: $weekNumber){
       courseName
       instructor
       id
       description
-      lectureCount
+      lessonNumber
       length
       created
       category
-      courseImg
+      img
       equipment
-      targets
-
+      weekNumber
+      title
     }
   }
 `;
@@ -42,20 +39,21 @@ query ($courseName: String!) {
 interface ClassDetailProps {
   courseName: string;
   instructor: string;
-  targets: string;
+ // targets: string;
   id: string;
-  courseImg: string;
   description: string;
-  lectureCount: string;
+  lessonNumber: string;
   length: string;
   created: string;
   category: string;
   equipment: string[];
-  courseRelation: CourseRelation;
-  contentImg: string;
+  //courseRelation: CourseRelation;
+  img: string;
   contentUrl: string;
   title: string;
   additionalInfo: string[];
+  weekNumber: string
+  lectureNumber: string
 }
 
 type CourseRelation = {
@@ -64,12 +62,18 @@ type CourseRelation = {
 
 type ParamList = {
   courseName: string;
+  weekNumber: string
+  lessonNumber: string,
+  instructor: string,
   key: string;
   name: string;
   params: Params;
+ 
 };
 
-type Params = {courseName: string};
+type Params = {courseName: string,  weekNumber: string
+  lessonNumber: string,
+  instructor: string,};
 
 const ClassDetail: React.FC<ClassDetailProps> = () => {
   const route = useRoute<ParamList>();
@@ -77,10 +81,13 @@ const ClassDetail: React.FC<ClassDetailProps> = () => {
 
 
   let courseName = route.params.courseName;
-  
+  let weekNumber = route.params.weekNumber;
+  let lessonNumber = route.params.lessonNumber;
+  let instructor = route.params.instructor;
+  console.log('in ClassDetail: ', instructor, courseName, weekNumber, lessonNumber)
   const [result, reexecuteQuery] = useQuery({
-    query: findCourse,
-    variables: {courseName},
+    query: findPopular,
+    variables: {courseName, instructor, lessonNumber, weekNumber},
   });
 
 
@@ -97,7 +104,7 @@ const ClassDetail: React.FC<ClassDetailProps> = () => {
     courseName: string,
   ) => {
   
-  //  nav.navigate('ProgramDetail', {courseName});
+  //  nav.navigate('ClassDetail', {courseName});
   };
   const sendToProgram =  (
     e: EventTarget,
@@ -111,49 +118,40 @@ const ClassDetail: React.FC<ClassDetailProps> = () => {
     });
 
   };
-
-  const renderItem = ({item}: {item: ClassDetailProps}) => {
-    return (
-      <InstructionalLessonCard
-        key={item.id}
-        img={item.contentImg}
-        title={item.title}
-        onPress={(e: EventTarget) => sendToLesson(e, item.id, item.courseName)}
-        additionalInfo={item.equipment}
-        length={item.length}
-        wideDimension={false}
-        id={item.id}
-      />
-    );
-  };
+console.log('ClassDetail Component: ', data.lesson)
 
   return (
     <ScrollView style={styles.container}>
       <ProgramCard
         button={true}
         buttonText={'Start Class'}
-        id={data.course.id}
-        instructor={data.course.instructor}
-        photo={data.course.courseImg}
-        title={data.course.courseName}
-        bulletPoints={`${data.course.lectureCount} Classes *  ${data.course.length}`}
+       // id={data.lesson.id}
+        instructor={data.lesson.instructor}
+        photo={data.lesson.img}
+        title={data.lesson.title}
+        bulletPoints={`Lesson ${data.lesson.lessonNumber}  *  ${data.lesson.length}`}
+        displayAsCard={false}
         //TODO Link This to  All Course Videos Componet
-        onPress={() => console.log('send me to video lesson')}
+        onPress={() =>{ 
+     //     nav.navigate('LessonPlayer', {contentUrl: data.lesson.contentUrl})
+        console.log('navigating later')
+        }}
       />
+
       <CourseOverview
-        equipment={data.course.equipment}
-        instructor={data.course.instructor}
-        length={data.course.length}
-        targets={data.course.targets}
-        courseName={data.course.courseName}
-        id={data.course.id}
-        lectureCount={data.course.lectureCount}
-        description={data.course.description}
-        category={data.course.category}
-        img={data.course.img}
-        created={data.course.created}
+        equipment={data.lesson.equipment}
+        instructor={data.lesson.instructor}
+        length={data.lesson.length}
+        targets={data.lesson.targets}
+        courseName={data.lesson.courseName}
+       // id={data.lesson.id}
+      //  lectureCount={data.lesson.lectureCount}
+        description={data.lesson.description}
+        category={data.lesson.category}
+        img={data.lesson.img}
+        created={data.lesson.created}
         displayProgramLink={true}
-        onPress={(e: EventTarget) => sendToProgram(e, data.course.id, data.course.courseName)}
+        onPress={(e: EventTarget) => sendToProgram(e, data.lesson.id, data.lesson.courseName)}
       />
 
     </ScrollView>

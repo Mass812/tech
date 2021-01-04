@@ -30,17 +30,8 @@ const InstructorLessonCard: React.FC<InstructionalLessonCardProps> = ({
   category,
   wideDimension,
 }) => {
-  let displayAdditionalInfo = additionalInfo?.map((n: any, idx) =>
-    idx < additionalInfo.length - 1 ? (
-      <Text key={idx} style={styles.rightDetail}>
-        {n},
-      </Text>
-    ) : (
-      <Text key={idx} style={styles.rightDetail}>
-        {n}
-      </Text>
-    ),
-  );
+  
+  
 
   return (
     <TouchableWithoutFeedback onPress={onPress}>
@@ -66,7 +57,12 @@ const InstructorLessonCard: React.FC<InstructionalLessonCardProps> = ({
             </View>
             <View style={styles.fourthRow}>
               <Text style={styles.leftDetail}>{length}</Text>
-              <View style={styles.additionalInfo}>{displayAdditionalInfo}</View>
+              <View style={styles.additionalInfo}>
+                <Text>
+
+                {additionalInfo}
+                </Text>
+                </View>
             </View>
           </View>
         </View>
@@ -97,7 +93,6 @@ const styles = StyleSheet.create({
   card: {
     borderColor: 'grey',
     display: 'flex',
-    // height: 300,
     backgroundColor: 'white',
     shadowOffset: {width: 9, height: 2},
     shadowColor: 'grey',
@@ -105,7 +100,7 @@ const styles = StyleSheet.create({
   },
 
   topCardRow: {
-    // height: 220,
+    backgroundColor: 'black'
   },
   tabIcon: {
     position: 'absolute',
@@ -132,15 +127,9 @@ const styles = StyleSheet.create({
     textAlign: 'left',
   },
   thirdRow: {
-    // display: 'flex',
-
-    // alignSelf: 'left',
-    //justifyContent: 'left',
     borderBottomWidth: 1,
     borderColor: 'grey',
     borderStyle: 'solid',
-
-    //width: 250,
   },
   fourthRow: {
     display: 'flex',
@@ -163,11 +152,11 @@ const styles = StyleSheet.create({
     color: 'black',
     fontWeight: '200',
   },
-
   image: {
     minWidth: '100%',
     height: 220,
     borderRadius: 8,
+    opacity: .96
   },
   title: {
     fontSize: 19,
@@ -179,14 +168,12 @@ const styles = StyleSheet.create({
   leftDetail: {
     color: 'black',
     marginLeft: 2,
-
     fontWeight: '300',
     fontSize: 14,
   },
   rightDetail: {
     color: 'black',
     marginRight: 2,
-
     fontWeight: '300',
     fontSize: 14,
   },
