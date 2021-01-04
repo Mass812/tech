@@ -4,7 +4,11 @@ import Video from 'react-native-video';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faPlayCircle, faPauseCircle, faArrowCircleLeft} from '@fortawesome/free-solid-svg-icons';
+import {
+  faPlayCircle,
+  faPauseCircle,
+  faArrowCircleLeft,
+} from '@fortawesome/free-solid-svg-icons';
 
 let width = Dimensions.get('screen').width;
 let height = Dimensions.get('screen').height;
@@ -17,11 +21,11 @@ interface MeditationPlayerProps {
 
 type Params = {
   contentImg: string;
-   contentUrl: string;
-  length: number
-  instructor: string
-  description: string
-  title: string
+  contentUrl: string;
+  length: number;
+  instructor: string;
+  description: string;
+  title: string;
 };
 interface playbackShape {
   currentTime: number;
@@ -33,13 +37,13 @@ const MeditationPlayer: React.FC<MeditationPlayerProps> = () => {
   let player = useRef<HTMLInputElement>('player');
   const nav = useNavigation();
   const route = useRoute<MeditationPlayerProps>();
-  let { 
+  let {
     title,
     contentImg,
     contentUrl,
-   length,
-   instructor,
-   description,
+    length,
+    instructor,
+    description,
   } = route.params;
   const [isBuffering, setIsBuffering] = useState(false);
   const [errrorMessage, setErrorMessage] = useState('');
@@ -53,76 +57,84 @@ const MeditationPlayer: React.FC<MeditationPlayerProps> = () => {
   console.log('PROGRESS DATA: ==> ', progressData);
 
   return (
-      <View>
+    <View>
+      <View style={styles.container}>
+        <View style={styles.headerBlock}>
+          <View style={styles.detailGroup}>
+            <TouchableOpacity
+              style={styles.backButton}
+              onPress={() => nav.goBack()}>
+              <FontAwesomeIcon
+                icon={faArrowCircleLeft}
+                color={'darkgrey'}
+                size={28}
+              />
+            </TouchableOpacity>
+            <Text style={styles.headerText1}> {instructor} </Text>
+            <Text style={styles.title}> {title}</Text>
+            <Text style={styles.textTime}> {length} </Text>
+            <Text style={styles.headerText2}> {description}</Text>
+          </View>
 
-       
-    <View style={styles.container}>
-      
-     
-      <View style={styles.headerBlock}>
-         
-        <View style={styles.detailGroup}>
-        <TouchableOpacity
-            style={styles.backButton}
-            onPress={() => nav.goBack()}>
-            <FontAwesomeIcon icon={faArrowCircleLeft} color={'darkgrey'} size={28} />
-          </TouchableOpacity>
-          <Text style={styles.headerText1}> {instructor} </Text>
-          <Text style={styles.title}> {title}</Text>
-          <Text style={styles.textTime}> {length} </Text>
-          <Text style={styles.headerText2}> {description}</Text>
-        </View>
+          <View style={styles.playButtonRow}>
+            <TouchableOpacity
+              style={styles.playButton}
+              onPress={() => setPause(!pause)}>
+              {!pause ? (
+                <FontAwesomeIcon
+                  icon={faPauseCircle}
+                  color={'white'}
+                  size={52}
+                />
+              ) : (
+                <FontAwesomeIcon
+                  icon={faPlayCircle}
+                  color={'white'}
+                  size={52}
+                />
+              )}
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.headerText1}>
+            {progressData.currentTime.toFixed(0)} of{' '}
+            {progressData.playableDuration.toFixed(0)} seconds
+          </Text>
 
-        <View style={styles.playButtonRow}>
-          <TouchableOpacity
-            style={styles.playButton}
-            onPress={() => setPause(!pause)}>
-            {!pause ? (
-              <FontAwesomeIcon icon={faPauseCircle} color={'white'} size={52} />
-            ) : (
-              <FontAwesomeIcon icon={faPlayCircle} color={'white'} size={52} />
-            )}
-          </TouchableOpacity>
+          <View style={styles.trackbarParent}>
+            <View
+              style={{
+                position: 'absolute',
+                left: 0,
+                width:
+                  ((0 + progressData.currentTime) /
+                    progressData.playableDuration) *
+                  100,
+                height: 6,
+              }}></View>
+          </View>
         </View>
-          <Text style={styles.headerText1}>{progressData.currentTime.toFixed(0)} of {progressData.playableDuration.toFixed(0)} seconds</Text>
+        <Image
+          source={{
+            uri: contentImg,
+          }}
+          style={styles.image}
+        />
 
-        <View style={styles.trackbarParent}>
-          <View
-            style={{
-              position: 'absolute',
-              left: 0,
-              width:
-                ((0 + progressData.currentTime) /
-                  progressData.playableDuration) *
-                100,
-              height: 6,
-            }}></View>
-        </View>
+        <Video
+          source={{
+            uri: contentUrl,
+          }}
+          onLoad={() => setIsBuffering(false)}
+          onEnd={() => nav.goBack()}
+          onBuffer={() => setIsBuffering(true)} // Callback when remote video is buffering
+          onError={() => console.log('error')} // Callback when video cannot be loaded
+          style={styles.video}
+          paused={pause}
+          fullscreen={true}
+          fullscreenOrientation={'portrait'}
+          onProgress={(currentTime: any) => setProgressData({...currentTime})}
+        />
       </View>
-      <Image
-        source={{
-          uri:
-            contentImg
-        }}
-        style={styles.image}
-      />
-
-      <Video
-        source={{
-          uri:
-            contentUrl,
-        }}
-        onLoad={() => setIsBuffering(false)}
-        onEnd={() => nav.goBack()}
-        onBuffer={() => setIsBuffering(true)} // Callback when remote video is buffering
-        onError={()=>console.log('error')} // Callback when video cannot be loaded
-        style={styles.video}
-        paused={pause}
-        fullscreen={true}
-        fullscreenOrientation={'portrait'}
-        onProgress={(currentTime: any) => setProgressData({...currentTime})}
-      />
-    </View>
     </View>
   );
 };
@@ -137,20 +149,17 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     textAlign: 'center',
     backgroundColor: 'black',
-  
- 
   },
   trackbarParent: {
     width: '100%',
     height: 5,
     backgroundColor: 'white',
     position: 'absolute',
-    bottom: 20
+    bottom: 20,
   },
   trackbar: {
     color: 'blue',
   },
-
 
   title: {
     fontSize: 28,
@@ -159,8 +168,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     textShadowColor: 'black',
     textShadowRadius: 5,
-    margin: 7
-
+    margin: 7,
   },
   headerText1: {
     fontSize: 16,
@@ -168,7 +176,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: '500',
     textShadowColor: 'black',
-    textShadowRadius: 5
+    textShadowRadius: 5,
   },
   headerText2: {
     fontSize: 18,
@@ -177,7 +185,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     textShadowColor: 'black',
     textShadowRadius: 5,
-    marginTop: 50
+    marginTop: 50,
   },
   textTime: {
     fontSize: 18,
@@ -186,7 +194,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     textShadowColor: 'black',
     textShadowRadius: 5,
-    marginBottom: 12
+    marginBottom: 12,
   },
   video: {
     width: 0,
@@ -198,24 +206,23 @@ const styles = StyleSheet.create({
     width: '100%',
     resizeMode: 'stretch',
     zIndex: 0,
-    
-    opacity: .96
+
+    opacity: 0.96,
   },
   headerBlock: {
     display: 'flex',
     flexDirection: 'column',
- 
+
     minHeight: height,
     justifyContent: 'space-evenly',
     alignItems: 'center',
     zIndex: 3,
     margin: 25,
-  
   },
   detailGroup: {
     display: 'flex',
     flexDirection: 'column',
- 
+
     zIndex: 3,
   },
   playButtonRow: {
@@ -226,26 +233,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     zIndex: 5,
     marginBottom: 50,
-    top: -70
-
+    top: -70,
   },
   playButton: {
     height: 60,
     width: 40,
     zIndex: 5,
-    
-   
   },
   backButton: {
-    
     height: 100,
     width: 100,
-  
- 
-
-    
-   
-
   },
 });
 export default MeditationPlayer;

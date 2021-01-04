@@ -36,14 +36,7 @@ type HomeStackParams = {
     lessonNumber: string;
     weekNumber: string;
   };
-  MeditationPlayer: {
-    contentUrl: string;
-    contentImg: string;
-    length: number;
-    instructor: string;
-    title: string;
-    description: string;
-  };
+  
 };
 
 type ProgramStackParams = {
@@ -55,11 +48,22 @@ type MeditationStackParams = {
   Meditation: undefined;
 };
 
+type RootParams = {
+  LessonPlayer: {
+    contentUrl: string;
+    weekNumber: string;
+    lessonNumber: string;
+    courseName: string;
+    instructor: string;
+    title: string;
+  };
+}
+
 const HomeStack = createStackNavigator<HomeStackParams>();
 const ProgramStack = createStackNavigator<ProgramStackParams>();
 const MeditationStack = createStackNavigator<MeditationStackParams>();
 const Bottom = createBottomTabNavigator();
-const Root = createStackNavigator();
+const Root = createStackNavigator<RootParams>();
 
 const HomeStackRoutes = () => {
   return (
