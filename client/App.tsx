@@ -36,7 +36,6 @@ type HomeStackParams = {
     lessonNumber: string;
     weekNumber: string;
   };
-  
 };
 
 type ProgramStackParams = {
@@ -57,7 +56,16 @@ type RootParams = {
     instructor: string;
     title: string;
   };
-}
+  RootHome:{
+
+  };
+  MeditationPlayer: {
+    courseName: string;
+    instructor: string;
+    lessonNumber: string;
+    weekNumber: string;
+  }
+};
 
 const HomeStack = createStackNavigator<HomeStackParams>();
 const ProgramStack = createStackNavigator<ProgramStackParams>();
@@ -177,7 +185,7 @@ function App() {
         <NavigationContainer>
           <Root.Navigator mode="modal">
             <Root.Screen
-              name="SignedIn"
+              name="RootHome"
               component={BottomNavigatorScreens}
               options={{headerShown: false}}
             />

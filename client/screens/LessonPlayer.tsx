@@ -11,7 +11,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 let width = Dimensions.get('screen').width;
-let height = Dimensions.get('screen').height;
+let height = Dimensions.get('window').height;
 
 interface LessonPlayerProps {
   key: string;
@@ -21,11 +21,11 @@ interface LessonPlayerProps {
 
 type Params = {
   contentUrl: string;
-    weekNumber: string;
-    lessonNumber: string;
-    courseName: string;
-    instructor: string;
-    title: string;
+  weekNumber: string;
+  lessonNumber: string;
+  courseName: string;
+  instructor: string;
+  title: string;
 };
 interface playbackShape {
   currentTime: number;
@@ -37,13 +37,7 @@ const LessonPlayer: React.FC<LessonPlayerProps> = () => {
   let player = useRef<HTMLInputElement>('player');
   const nav = useNavigation();
   const route = useRoute<LessonPlayerProps>();
-  let {
-    title,
-    contentUrl,
-    instructor,
-    weekNumber,
-    lessonNumber,
-  } = route.params;
+  let {title, contentUrl, instructor, weekNumber, lessonNumber} = route.params;
   const [isBuffering, setIsBuffering] = useState(false);
   const [errrorMessage, setErrorMessage] = useState('');
   const [progressData, setProgressData] = useState<playbackShape>({
@@ -52,16 +46,15 @@ const LessonPlayer: React.FC<LessonPlayerProps> = () => {
     seekableDuration: 888,
   });
   const [pause, setPause] = useState(false);
-console.log('lesson player url: ', contentUrl)
+  console.log('lesson player url: ', contentUrl);
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>this is the LessonPlayer component</Text>
       <Video
         source={{
           uri: contentUrl,
         }}
         onLoad={() => setIsBuffering(false)}
-        onEnd={() => nav.goBack()}
+        //    onEnd={() => nav.goBack()}
         onBuffer={() => setIsBuffering(true)} // Callback when remote video is buffering
         onError={() => console.log('error')} // Callback when video cannot be loaded
         style={styles.video}
@@ -76,22 +69,20 @@ console.log('lesson player url: ', contentUrl)
 
 const styles = StyleSheet.create({
   container: {
-   // flex: 1,
-    
+    display: 'flex',
+    flexDirection: 'column',
     height: height,
+    minHeight: 800,
     width: width,
+    justifyContent: 'flex-start',
   },
   title: {
     fontSize: 20,
     color: 'green',
   },
   video: {
-    height: 800,
+    height: 380,
     width: width,
-    position: 'absolute',
-    top: 0,
-    left: 0,
- 
   },
 });
 export default LessonPlayer;

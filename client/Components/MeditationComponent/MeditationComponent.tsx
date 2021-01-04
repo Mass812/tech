@@ -62,8 +62,8 @@ return (
 const renderItem = ({item}: {item: MeditationProps}) => {
 
   return(
-    <View  style={horizontal ?  styles.listNotWide : styles.listWide} key={item.id}>
-    <TouchableOpacity key={item.id}
+    <View  style={horizontal ?  styles.listNotWide : styles.listWide} >
+    <TouchableOpacity 
 
 onPress={()=> nav.navigate('MeditationPlayer', {         
       contentUrl: item.contentUrl,

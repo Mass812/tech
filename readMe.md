@@ -15,7 +15,7 @@ https://mattwellman.dev
 * [DynamoDB] - Database
 * [AWS S3 Bucket] - photo / video storage 
 * [Node] - Node Package Manager
-* [Apollo Server] - server instance for graphwl
+* [Apollo Server] - server instance for graphQl
 * [GraphQL] - querying interface
 * [React Native] - Library
 * [React-Native-Navigation v5] - navigation
