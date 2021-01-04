@@ -15,12 +15,13 @@ import InstructionalLessonCard from '../Components/UiCards/InstructionalLessonCa
 import LoadingScreen from './Loading';
 import ErrorScreen from './ErrorScreen';
 import Meditation from './Meditation';
+import MeditationComponent from '../Components/MeditationComponent/MeditationComponent'
 import InstructorProfileThumb from '../Components/UiCards/InstructorProfileThumb';
 import RowSectionHeader from '../Components/ReusableComponents/RowSectionHeader';
 
 
 
-const CoursesQuery = `
+const PopularQuery = `
 query {
   popularLessons{
     id
@@ -72,10 +73,9 @@ interface HomeProps {}
 
 const Home: React.FC<HomeProps> = () => {
   const nav = useNavigation();
-  const buttonRef = React.useRef<HTMLButtonElement>(null);
-  const [display, setDisplay] = useState<string>();
+
   const [result, reexecuteQuery] = useQuery({
-    query: CoursesQuery,
+    query: PopularQuery,
   });
 
   let {data, fetching, error} = result;
@@ -91,7 +91,7 @@ const Home: React.FC<HomeProps> = () => {
     weekNumber: string,
     lessonNumber: string,
   ) => {
-    setDisplay('Clicked Id =' + courseName);
+ 
     nav.navigate('ClassDetail', {
       courseName,
       instructor,
@@ -142,14 +142,15 @@ const Home: React.FC<HomeProps> = () => {
           keyExtractor={(item) => item.id}
           horizontal={true}
         />
+
         <RowSectionHeader text={`Popular Meditations`} />
-        <Meditation
+        <MeditationComponent
           dataProps={'popularMeditations'}
           horizontal={true}
-          queryValue={CoursesQuery}
+          queryValue={PopularQuery}
         />
-        <RowSectionHeader text={`Meet our instructors`} />
 
+        <RowSectionHeader text={`Meet our instructors`} />
         <InstructorProfileThumb
           name={'Matt Wellman'}
           img={

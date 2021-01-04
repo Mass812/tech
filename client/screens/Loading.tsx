@@ -3,26 +3,18 @@ import { View, StyleSheet, Image, Text} from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {faSpinner} from '@fortawesome/free-solid-svg-icons';
 
-  
-   
-   
-
-
+ 
 const LoadingScreen : React.FC = ( ) => {
 
         return (
 
         <View style={styles.container}>
           <Image source={require('../Components/Assets/fabletics_256_256.png')} style={styles.image}/>
-          
-          
           <View style={styles.spinnerRow} >
-
           <FontAwesomeIcon 
           icon={faSpinner}  
           size={20} 
           color={'teal'}  
-          
           />
           <Text style={styles.text}>Loading Now</Text>
           </View>

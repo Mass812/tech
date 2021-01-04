@@ -1,17 +1,28 @@
 
 //      Access Points
-// Done
-//     _create user profile 
+
+// User Side Related
+//     
 //     _get specific user 
-//     _get courses 
-//     _get course by category 
+//     _get all courses 
+//     _get all courses of a certain category 
 //     _get courses by instructor 
 //     _get all user workouts 
 //     _get all user workouts by category 
-// ToDo access points
-//     delete user workout
-//     delete user and all documents from db
+// Data Side Related
+//     get popular classes
+//     get all classes
+//     get classes of a specific program
+//     get popular meditations
+//     get all meditations
+//     get a specific class
 //     
+//     
+
+
+
+
+
 
 
 
@@ -37,83 +48,3 @@ user_workout_course_relation          pk              courseRelation
 App_Table Entities
 ++++++++++++++++
 --
-TabkeName: 'App_Table'
-Type: create a user,
-File: createUser.js
-pk: 'user_email',
-sk: "profile"
-attributes: {
-      pk: "stefanie@gmail.com",
-      sk: "profile",
-      firstName: "Stefanie",
-      lastName: "Raisor",
-      email: "Stefanie@gmail.com",
-      courses: ["Abdominal Transformation Workout"],
-      created: new Date().toISOString(),
-      phone: 5022420232,
-      settings: {
-        darkMode: false,
-        billingPreferences: {
-          paymentMethod: {
-            bankName: "L&N Credit Union",
-            accountNumber: 9876543210,
-            routingNumber: 546382193738,
-          },
-        },
-        billingAddress: {
-          street: '5227 Coronodo Pkwy',
-          city: 'Cape Coral',
-          state: 'FL',
-          zipCode: 47129
-        },
-        
-      }
-
-}
-
---
-TabkeName: 'App_Table'
-Type: create a user workout
-File: createWorkout_ddb.js
-pk: 'user_email'
-sk: "workoutFocus_timestamp"
-attributes: {
- pk: "ashton@gmail.com",
-      sk: "aerobic" + "_" + new Date().toISOString(),
-      email: "ashton@gmail.com",
-      category: "aerobic",
-      courseDirected: false,
-      courseRelation: "none",
-      exercise: "Cycling",
-      timestamp: new Date().toISOString(),
-      duration: 54,
-      sets: 0,
-      reps: 0,
-      weightLbValue: 0,
-}
-
-
---
-TabkeName: 'App_Table'
-Type: create a course,
-File: createCourse.js,
-pk: 'course_name'
-sk: "course"
-attributes: {
-      pk: "course",
-      sk: "Leg Defining Transformation Workout",
-      courseName: "Leg Defining Transformation Workout",
-      category: "Lower Body",
-      courseFocus: "Legs",
-      instructor: "Dwayne Johnson",
-      created: new Date().toISOString(),
-      lectureCount: 36,
-      description: `Create sculpted thighs and calves with the class that Kevin Hart couldn't do. 
-      `,
-      cost: "41.00",
-      saleCost: "19.99",
-      onSale: false,
-      length: "45 hours",
-      currentStudentCount: 1,
-      otherCourses: [] //maybe in future, not constituted
-}
