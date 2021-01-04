@@ -1,9 +1,19 @@
+require("dotenv").config();
 const express = require("express");
 const { ApolloServer, gql } = require("apollo-server-express");
+
 const AWS = require("aws-sdk");
-AWS.config.update({ region: "us-east-2" });
+
+AWS.config.update({
+  region: "us-east-2",
+  credentials: {
+    accessKeyId: process.env.REACT_APP_DDB_ACCESS,
+    secretAccessKey: process.env.REACT_APP_DDB_SUPER,
+  },
+});
+
 const db = new AWS.DynamoDB.DocumentClient();
-require('dotenv').config();
+
 //spread resolvers later if needed
 const fs = require("fs");
 const path = require("path");
@@ -22,7 +32,6 @@ const getPopularMeditations_ddb = require("./DynamoDB_Request_Functions/Query_Re
 const getPopularSelfGuided_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getPopularSelfGuided_ddb");
 const getPopularCourses_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getPopularCourses_ddb");
 
-
 //db mutation calls
 const createUser = require("./DynamoDB_Request_Functions/Mutation_Requests/createUser_ddb");
 const createCourse = require("./DynamoDB_Request_Functions/Mutation_Requests/createCourse_ddb");
@@ -34,13 +43,18 @@ const createCourseCompletionDoc_ddb = require("./DynamoDB_Request_Functions/Muta
 const createIndependentLesson_ddb = require("./DynamoDB_Request_Functions/Mutation_Requests/createIndependentLesson_ddb");
 const createMeditation_ddb = require("./DynamoDB_Request_Functions/Mutation_Requests/createMeditation_ddb");
 const getSpecificCourseLesson_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getSpecificCourseLesson_ddb");
-
+const getLessonsOfCourses_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getLessonsOfCourses_ddb");
 
 const Query = gql`
   type Query {
     user(email: String!): User
     lessons(instructor: String!, courseName: String!): [Lesson]
-    lesson(instructor: String! courseName: String! lessonNumber: String! weekNumber: String!): Lesson
+    lesson(
+      instructor: String!
+      courseName: String!
+      lessonNumber: String!
+      weekNumber: String!
+    ): Lesson
     course(courseName: String!): Course
     courses: [Course]
     coursesByCategory(category: String!): [Course]
@@ -48,9 +62,9 @@ const Query = gql`
     userWorkoutsByCategory(email: String!, category: String!): [Workout]
     workouts(category: String!, email: String!): [Workout]!
     popularCourses: [Course]
-    popularLessons:[Lesson]
-    popularMeditations:[Meditation]
-    popularSelfGuided:[Lesson]
+    popularLessons: [Lesson]
+    popularMeditations: [Meditation]
+    popularSelfGuided: [Lesson]
   }
 
   type User {
@@ -235,129 +249,85 @@ const Mutation = gql`
 let resolvers = {
   Query: {
     user: async (_, args) => {
-      let data = await getUserProfile(args);
-      return data;
+      return getUserProfile(args);
     },
 
     course: async (_, args) => {
-      let data = await getCoursesByName(args);
-      return data;
+      return getCoursesByName(args);
     },
     courses: async () => {
-      let data = await getAllCourses();
-      return data;
+      return getAllCourses();
     },
 
     coursesByCategory: async (_, args) => {
-      let data = await getCoursesForCategory(args);
-      return data;
+      return getCoursesForCategory(args);
     },
     userWorkoutsByCategory: async (_, args) => {
-      let data = await getUserWorkoutsByCategory(args);
-      return data;
+      return getUserWorkoutsByCategory(args);
     },
 
     workouts: async (_, args) => {
-      let data = await getUserWorkoutsByCategory(args);
-      return data;
+      return getUserWorkoutsByCategory(args);
     },
     lesson: async (_, args) => {
-   
-      let data = await getSpecificCourseLesson_ddb(args);
-
-      return data;
+      return getSpecificCourseLesson_ddb(args);
     },
     lessons: async (_, args) => {
-      let data = await getAllLessonsOfACourse_ddb(args);
-      return data;
+      return getAllLessonsOfACourse_ddb(args);
     },
-    meditations: async ()=>{
-      let data = getAllMeditations_ddb()
-      return data
+    meditations: async () => {
+      return getAllMeditations_ddb();
     },
-    popularCourses: async ()=>{
-      let data = getPopularCourses_ddb()
-      return data
+    popularCourses: async () => {
+      return getPopularCourses_ddb();
     },
-    popularLessons: async ()=>{
-      let data = getPopularLessons_ddb()
-      return data
+    popularLessons: async () => {
+      return getPopularLessons_ddb();
     },
-    popularMeditations: async ()=>{
-      let data = getPopularMeditations_ddb()
-      return data
+    popularMeditations: async () => {
+      return getPopularMeditations_ddb();
     },
-    popularSelfGuided: async ()=>{
-      let data = getPopularSelfGuided_ddb()
-      return data
+    popularSelfGuided: async () => {
+      return getPopularSelfGuided_ddb();
     },
   },
 
   Mutation: {
     createUser: async () => {
-      let data = await createUser();
-      return data;
+      return createUser();
     },
     createCourseCompletionDoc: async () => {
-      let data = await createCourseCompletionDoc_ddb();
-      return data;
+      return createCourseCompletionDoc_ddb();
     },
     createInstructorProfile: async () => {
-      let data = await createInstructorProfile();
-      return data;
+      return createInstructorProfile();
     },
     updateUser: async (_, args) => {
-      let data = await updateUserProfile(args);
-
-      return data;
+      return updateUserProfile(args);
     },
     createCourse: async () => {
-      let data = await createCourse();
-      return data;
+      return createCourse();
     },
 
     createLesson: async () => {
-      let data = await createLesson();
-      return data;
+      return createLesson();
     },
     createIndependentLesson: async () => {
       let data = createIndependentLesson_ddb();
-      return data;
     },
     createWorkout: async () => {
-      let data = await createWorkout();
+      return createWorkout();
+    },
+    createMeditation: async () => {
+      return createMeditation_ddb();
       return data;
     },
-    createMeditation: async ()=>{
-      let data = await createMeditation_ddb()
-      return data
-    }
   },
-
   Course: {
-    courseRelation: async (parent, args) => {
-      let { instructor, courseName } = parent;
-      console.log("", instructor);
-      let Params = {
-        TableName: "App_Table",
-        KeyConditionExpression: `pk = :pk and begins_with(sk, :sk)`,
-        ExpressionAttributeValues: {
-          ":pk": `instructor#${instructor}`,
-          ":sk": `courseName#${courseName}#weekNumber`,
-        },
-      };
-
-      try {
-        let data = await db.query(Params).promise();
-        console.log(data.Items);
-
-        return data.Items;
-      } catch (err) {
-        console.log("error", err);
-      }
+    courseRelation: (parent, args) => {
+      return getLessonsOfCourses_ddb(parent);
     },
   },
- 
 };
 
 const typeDefs = [Query, Mutation];
