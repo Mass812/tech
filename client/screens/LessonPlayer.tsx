@@ -4,6 +4,8 @@ import Video from 'react-native-video';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import PlayingNext from '../Components/VideoComponents/PlayingNext';
+import TitleBannerUnderVideo from '../Components/VideoComponents/TitleBannerUnderVideo';
+import VideoControls from '../Components/VideoComponents/VideoControls';
 
 let width = Dimensions.get('screen').width;
 let height = Dimensions.get('window').height;
@@ -72,6 +74,13 @@ const LessonPlayer: React.FC<LessonPlayerProps> = () => {
           onProgress={(currentTime: any) => setProgressData({...currentTime})}
           resizeMode={'cover'}
         />
+        <TitleBannerUnderVideo
+          width={width}
+          title={title}
+          length={'length'}
+          playAction={() => setPause(!pause)}
+        />
+        <VideoControls />
       </View>
 
       <ScrollView>
