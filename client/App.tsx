@@ -30,17 +30,17 @@ const client = createClient({
 
 type HomeStackParams = {
   Home: undefined;
-  ClassDetail: {
-    courseName: string;
-    instructor: string;
-    lessonNumber: string;
-    weekNumber: string;
-  };
 };
 
 type ProgramStackParams = {
   Programs: undefined;
   ProgramDetail: {
+    courseName: string;
+    instructor: string;
+    lessonNumber: string;
+    weekNumber: string;
+  };
+  ClassDetail: {
     courseName: string;
     instructor: string;
     lessonNumber: string;
@@ -84,13 +84,13 @@ const HomeStackRoutes = () => {
         component={Home}
         options={{headerShown: false}}
       />
-      <HomeStack.Screen
+      {/* <HomeStack.Screen
         name="ClassDetail"
         component={ClassDetail}
         options={({navigation}) => ({
           title: 'Class',
         })}
-      />
+      /> */}
     </HomeStack.Navigator>
   );
 };
@@ -107,6 +107,13 @@ const ProgramStackRoutes = () => {
         name="ProgramDetail"
         component={ProgramDetail}
         // options={{headerShown: false}}
+      />
+      <ProgramStack.Screen
+        name="ClassDetail"
+        component={ClassDetail}
+        options={({navigation}) => ({
+          title: 'Class',
+        })}
       />
     </ProgramStack.Navigator>
   );

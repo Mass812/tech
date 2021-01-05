@@ -36,7 +36,10 @@ query ($courseName: String!) {
         length
         img
         equipment
-
+        weekNumber
+        lessonNumber
+        courseName
+        instructor
       }
     }
   }
@@ -59,6 +62,8 @@ interface ProgramDetailProps {
   contentUrl: string;
   title: string;
   additionalInfo: string[];
+  weekNumber: string;
+  lessonNumber: string;
 }
 
 type CourseRelation = {
@@ -100,23 +105,20 @@ const ProgramDetail: React.FC<ProgramDetailProps> = () => {
   if (fetching) return <LoadingScreen />;
   if (error) return <ErrorScreen error={error.message} />;
 
-  // const onPress = (
-  //   e: EventTarget,
-  //   courseName: string,
-  //   instructor: string,
-  //   weekNumber: string,
-  //   lessonNumber: string,
-  // ) => {
-  //   nav.navigate('Home', {
-  //     screen: 'ClassDetail',
-  //     params: {
-  //       courseName,
-  //       instructor,
-  //       weekNumber,
-  //       lessonNumber,
-  //     },
-  //   });
-  // };
+  const onPress = (
+    e: EventTarget,
+    courseName: string,
+    instructor: string,
+    weekNumber: string,
+    lessonNumber: string,
+  ) => {
+    nav.navigate('ClassDetail', {
+      courseName,
+      instructor,
+      weekNumber,
+      lessonNumber,
+    });
+  };
 
   console.log('desired state attribute: ', showThis);
 
@@ -130,16 +132,16 @@ const ProgramDetail: React.FC<ProgramDetailProps> = () => {
         length={item.length}
         wideDimension={true}
         id={item.id}
-        onPress={() => console.log('uh Oh')}
-        // onPress={(e: EventTarget) =>
-        //   onPress(
-        //     e,
-        //     item.courseName,
-        //     item.instructor,
-        //     item.weekNumber,
-        //     item.lessonNumber,
-        //   )
-        // }
+        //   onPress={() => console.log('uh Oh')}
+        onPress={(e: EventTarget) =>
+          onPress(
+            e,
+            item.courseName,
+            item.instructor,
+            item.weekNumber,
+            item.lessonNumber,
+          )
+        }
       />
     );
   };

@@ -101,10 +101,7 @@ const ClassDetail: React.FC<ClassDetailProps> = () => {
   if (error) return <ErrorScreen error={error.message} />;
 
   const sendToProgram = (e: EventTarget, id: string, courseName: string) => {
-    nav.navigate('Programs', {
-      screen: 'ProgramDetail',
-      params: {courseName},
-    });
+    nav.navigate('ProgramDetail', {courseName});
   };
 
   console.log('ClassDetail Component: ', data.lesson);
