@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     borderColor: 'lightgrey',
     backgroundColor: 'rgba(198,227,231, .03)',
     marginLeft: 10,
-    width: 300,
+    width: 290,
   },
   parentWide: {
     //  padding: 10,
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     borderColor: 'lightgrey',
     backgroundColor: 'rgba(198,227,231, .03)',
     marginLeft: 10,
-    width: 330,
+    width: 350,
   },
   card: {
     borderColor: 'grey',

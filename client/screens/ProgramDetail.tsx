@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   ScrollView,
@@ -67,12 +67,21 @@ type CourseRelation = {
 
 type ParamList = {
   courseName: string;
+
   key: string;
   name: string;
   params: Params;
 };
 
 type Params = {courseName: string};
+
+interface LessonProps extends ProgramDetailProps {
+  e: EventTarget;
+  courseName: string;
+  instructor: string;
+  weekNumber: string;
+  lessonNumber: string;
+}
 
 const ProgramDetail: React.FC<ProgramDetailProps> = () => {
   const [showThis, setShowThis] = useState<any>('');
@@ -91,24 +100,46 @@ const ProgramDetail: React.FC<ProgramDetailProps> = () => {
   if (fetching) return <LoadingScreen />;
   if (error) return <ErrorScreen error={error.message} />;
 
-  const onPress = () => {
-    console.log('hit the card');
-    setShowThis(data.course);
-  };
+  // const onPress = (
+  //   e: EventTarget,
+  //   courseName: string,
+  //   instructor: string,
+  //   weekNumber: string,
+  //   lessonNumber: string,
+  // ) => {
+  //   nav.navigate('Home', {
+  //     screen: 'ClassDetail',
+  //     params: {
+  //       courseName,
+  //       instructor,
+  //       weekNumber,
+  //       lessonNumber,
+  //     },
+  //   });
+  // };
 
   console.log('desired state attribute: ', showThis);
 
-  const renderItem = ({item}: {item: ProgramDetailProps}) => {
+  const renderItem = ({item}: {item: LessonProps}) => {
     return (
       <InstructionalLessonCard
         key={item.id}
         img={item.img}
         title={item.title}
-        onPress={onPress}
         additionalInfo={item.equipment}
         length={item.length}
         wideDimension={true}
         id={item.id}
+        onPress={() => console.log('uh Oh')}
+        // onPress={(e: EventTarget) =>
+        //   onPress(
+        //     e,
+        //     item.courseName,
+        //     item.instructor,
+        //     item.weekNumber,
+        //     item.lessonNumber,
+        //   )
+        // }
       />
     );
   };
@@ -142,7 +173,7 @@ const ProgramDetail: React.FC<ProgramDetailProps> = () => {
       />
 
       <Text style={{margin: 12, fontSize: 23}}>Program BreakDown</Text>
-      <FlatList
+      <FlatList<LessonProps>
         data={data.course.courseRelation}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}

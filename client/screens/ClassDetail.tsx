@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   ScrollView,
@@ -80,10 +80,7 @@ const ClassDetail: React.FC<ClassDetailProps> = () => {
   const route = useRoute<ParamList>();
   const nav = useNavigation();
 
-  let courseName = route.params.courseName;
-  let weekNumber = route.params.weekNumber;
-  let lessonNumber = route.params.lessonNumber;
-  let instructor = route.params.instructor;
+  let {courseName, weekNumber, lessonNumber, instructor} = route.params;
 
   console.log(
     'in ClassDetail: ',
@@ -109,6 +106,7 @@ const ClassDetail: React.FC<ClassDetailProps> = () => {
       params: {courseName},
     });
   };
+
   console.log('ClassDetail Component: ', data.lesson);
 
   return (

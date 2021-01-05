@@ -31,7 +31,7 @@ const getAllMeditations_ddb = require("./DynamoDB_Request_Functions/Query_Reques
 const getPopularLessons_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getPopularLessons_ddb")
 const getPopularMeditations_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getPopularMeditations_ddb")
 const getPopularSelfGuided_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getPopularSelfGuided_ddb")
-const getPopularCourses_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getPopularCourses_ddb")
+//const getPopularCourses_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getPopularCourses_ddb")
 
 //db mutation calls
 const createUser = require("./DynamoDB_Request_Functions/Mutation_Requests/createUser_ddb")
@@ -280,7 +280,8 @@ let resolvers = {
       return getAllMeditations_ddb()
     },
     popularCourses: async () => {
-      return getPopularCourses_ddb()
+      //  return getPopularCourses_ddb()
+      console.log("popCourses hit")
     },
     popularLessons: async () => {
       return getPopularLessons_ddb()

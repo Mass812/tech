@@ -27,6 +27,7 @@ type Params = {
   courseName: string;
   instructor: string;
   title: string;
+  length?: string;
 };
 interface playbackShape {
   currentTime: number;
@@ -38,7 +39,16 @@ const LessonPlayer: React.FC<LessonPlayerProps> = () => {
   let player = useRef<HTMLInputElement>('player');
   const nav = useNavigation();
   const route = useRoute<LessonPlayerProps>();
-  let {title, contentUrl, instructor, weekNumber, lessonNumber} = route.params;
+
+  let {
+    title,
+    contentUrl,
+    instructor,
+    weekNumber,
+    lessonNumber,
+    length,
+  } = route.params;
+
   const [isBuffering, setIsBuffering] = useState(false);
   const [errrorMessage, setErrorMessage] = useState('');
   const [progressData, setProgressData] = useState<playbackShape>({
@@ -58,7 +68,7 @@ const LessonPlayer: React.FC<LessonPlayerProps> = () => {
             uri: contentUrl,
           }}
           onLoad={() => setIsBuffering(false)}
-          //    onEnd={() => nav.goBack()}
+          onEnd={() => nav.goBack()}
           onBuffer={() => setIsBuffering(true)} // Callback when remote video is buffering
           onError={() => console.log('error')} // Callback when video cannot be loaded
           style={styles.videoPortrait}
@@ -86,10 +96,10 @@ const LessonPlayer: React.FC<LessonPlayerProps> = () => {
               justifyContent: 'space-between',
             }}>
             <Text style={{fontSize: 23, marginTop: 10, color: 'green'}}>
-              Lesson Name Here
+              {title}
             </Text>
             <View style={{display: 'flex', flexDirection: 'row'}}>
-              <Text style={{fontSize: 16, color: 'grey'}}>Length Here</Text>
+              <Text style={{fontSize: 16, color: 'grey'}}>{length}</Text>
               <Text style={{fontSize: 18, alignSelf: 'center'}}> •</Text>
               <Text style={{fontSize: 16, color: 'grey'}}>Target Here</Text>
             </View>
@@ -101,7 +111,9 @@ const LessonPlayer: React.FC<LessonPlayerProps> = () => {
               paddingTop: 25,
               justifyContent: 'flex-start',
             }}>
-            <FontAwesomeIcon icon={faPlayCircle} size={30} />
+            <TouchableOpacity onPress={() => nav.goBack()}>
+              <FontAwesomeIcon icon={faPlayCircle} size={30} />
+            </TouchableOpacity>
           </View>
         </View>
       </View>

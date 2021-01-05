@@ -85,6 +85,7 @@ const Meditation: React.FC<MeditationProps> = ({
       </View>
     );
   };
+
   return (
     <SafeAreaView>
       <View style={styles.main}>

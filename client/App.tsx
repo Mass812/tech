@@ -40,7 +40,12 @@ type HomeStackParams = {
 
 type ProgramStackParams = {
   Programs: undefined;
-  ProgramDetail: {courseName: string};
+  ProgramDetail: {
+    courseName: string;
+    instructor: string;
+    lessonNumber: string;
+    weekNumber: string;
+  };
 };
 
 type MeditationStackParams = {

@@ -14,9 +14,8 @@ module.exports = async () => {
   const Params = {
     TableName: "App_Table",
     Item: {
-      pk: `instructor#${instructor}`,
-      sk: `courseName#${courseName}`,
-      courseName: courseName,
+      pk: `selfGuided`,
+      sk: `bodyPartFocus`,
       id: uuidv4(),
       category: "HIIT",
       length: "20 min",
@@ -24,32 +23,16 @@ module.exports = async () => {
       img: `${baseLink}/${img}`,
       created: new Date().toISOString(),
       title: courseName,
-      description: "Teenty minutes of pure burn.",
       equipment: ["Yoga Mat", "Light Dumbbells"],
       instructor: `${instructor}`,
-      intensity: 7,
-      outfitTopId: uuidv4(),
-      outfitTopName: "Basic Perfmance Top",
-      outfitTopImgUrl:
-        "https://fabletics-us-cdn.justfab.com/media/images/products/LS2146119-0001/LS2146119-0001-2_327x491.jpg",
-      outfitBottomId: uuidv4(),
-      outfitBottomName: "Panther Yogas",
-      outfitBottomImgUrl:
-        "https://fabletics-us-cdn.justfab.com/media/images/products/LG2040267-9765/LG2040267-9765-2_327x491.jpg",
+      popularity: 3,
       selfGuidedLesson: true,
-      targetArmsValue: 9,
-      targetBackValue: 3,
-      targetAbstValues: 4,
-      targetChestValue: 6,
-      targetLegsValue: 2,
-      courseRelation: [`changeThistoFirstClass`],
-      popularity: 0,
       selfGuided: "selfGuided",
     },
   }
 
   try {
-    const data = db.put(Params).promise()
+    const data = await db.put(Params).promise()
     console.log(data)
     return data
   } catch (err) {

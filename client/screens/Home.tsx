@@ -8,7 +8,6 @@ import {ScrollView} from 'react-native-gesture-handler';
 import InstructionalLessonCard from '../Components/UiCards/InstructionalLessonCard';
 import LoadingScreen from './Loading';
 import ErrorScreen from './ErrorScreen';
-import Meditation from './Meditation';
 import MeditationComponent from '../Components/MeditationComponent/MeditationComponent';
 import InstructorProfileThumb from '../Components/UiCards/InstructorProfileThumb';
 import RowSectionHeader from '../Components/ReusableComponents/RowSectionHeader';
@@ -34,6 +33,7 @@ query {
     equipment
     img
     title
+    contentUrl
   }
   popularMeditations{
     contentImg
@@ -45,8 +45,7 @@ query {
   }
 }
 `;
-
-interface AllCoursesProps {
+interface PopularLessonsProps {
   courseName: string;
   instructor: string;
   lectureCount: string;
@@ -59,6 +58,16 @@ interface AllCoursesProps {
   weekNumber: string;
   lessonNumber: string;
   title: string;
+  equipemnt: string[];
+}
+
+interface PopularSelfGuided {
+  contentUrl: string;
+  title: string;
+  length: string;
+  id: string;
+  instructor: string;
+  img: string;
 }
 
 interface HomeProps {}
@@ -77,7 +86,6 @@ const Home: React.FC<HomeProps> = () => {
 
   const sendToLesson = async (
     e: EventTarget,
-
     courseName: string,
     instructor: string,
     weekNumber: string,
@@ -91,9 +99,24 @@ const Home: React.FC<HomeProps> = () => {
     });
   };
 
-  console.log('homescreen data', data);
+  const sendToLessonPlayer = async (
+    e: EventTarget,
+    contentUrl: string,
+    instructor: string,
+    length: string,
+    id: string,
+    title: string,
+  ) => {
+    nav.navigate('LessonPlayer', {
+      contentUrl,
+      instructor,
+      id,
+      length,
+      title,
+    });
+  };
 
-  const renderItem = ({item}: {item: AllCoursesProps}) => {
+  const renderPopular = ({item}: {item: PopularLessonsProps}) => {
     return (
       <InstructionalLessonCard
         onPress={(e: EventTarget) =>
@@ -111,7 +134,29 @@ const Home: React.FC<HomeProps> = () => {
         additionalInfo={[`${item.weekNumber} ${item.lessonNumber}`]}
         length={item.length}
         wideDimension={false}
-        category={item.category}
+      />
+    );
+  };
+
+  const renderSelfGuided = ({item}: {item: PopularSelfGuided}) => {
+    return (
+      <InstructionalLessonCard
+        onPress={(e: EventTarget) =>
+          sendToLessonPlayer(
+            e,
+            item.contentUrl,
+            item.instructor,
+            item.length,
+            item.id,
+            item.title,
+          )
+        }
+        superscriptTitle={item.instructor}
+        img={item.img}
+        title={item.title}
+        //  additionalInfo={[`${item.weekNumber} ${item.lessonNumber}`]}
+        length={item.length}
+        wideDimension={true}
       />
     );
   };
@@ -124,29 +169,35 @@ const Home: React.FC<HomeProps> = () => {
 
       <RowSectionHeader text={`Popular Classes`} />
 
-      <View style={styles.bottom}>
-        <FlatList
-          data={data.popularLessons}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-          horizontal={true}
-        />
+      <FlatList
+        data={data.popularLessons}
+        renderItem={renderPopular}
+        keyExtractor={(item) => item.id}
+        horizontal={true}
+      />
 
-        <RowSectionHeader text={`Popular Meditations`} />
-        <MeditationComponent
-          dataProps={'popularMeditations'}
-          horizontal={true}
-          queryValue={PopularQuery}
-        />
+      <RowSectionHeader text={`Popular Self Guided`} />
+      <FlatList
+        data={data.popularSelfGuided}
+        renderItem={renderSelfGuided}
+        keyExtractor={(item) => item.id}
+        horizontal={true}
+      />
 
-        <RowSectionHeader text={`Meet our instructors`} />
-        <InstructorProfileThumb
-          name={'Matt Wellman'}
-          img={
-            'https://elasticbeanstalk-us-east-2-325970805780.s3.us-east-2.amazonaws.com/fitness_mega_4.jpg'
-          }
-        />
-      </View>
+      <RowSectionHeader text={`Popular Meditations`} />
+      <MeditationComponent
+        dataProps={'popularMeditations'}
+        horizontal={true}
+        queryValue={PopularQuery}
+      />
+
+      <RowSectionHeader text={`Meet our instructors`} />
+      <InstructorProfileThumb
+        name={'Matt Wellman'}
+        img={
+          'https://elasticbeanstalk-us-east-2-325970805780.s3.us-east-2.amazonaws.com/fitness_mega_4.jpg'
+        }
+      />
     </ScrollView>
   );
 };
