@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
   parent: {
     //  padding: 10,
     borderWidth: 1,
-    borderRadius: 9,
+    borderRadius: 20,
     borderColor: 'lightgrey',
     backgroundColor: 'rgba(198,227,231, .03)',
     marginLeft: 10,
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   parentWide: {
     //  padding: 10,
     borderWidth: 1,
-    borderRadius: 9,
+    borderRadius: 20,
     borderColor: 'lightgrey',
     backgroundColor: 'rgba(198,227,231, .03)',
     marginLeft: 10,
@@ -91,10 +91,12 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 9, height: 2},
     shadowColor: 'grey',
     shadowRadius: 12,
+    borderRadius: 20,
   },
 
   topCardRow: {
     backgroundColor: 'black',
+    borderRadius: 20,
   },
   tabIcon: {
     position: 'absolute',
@@ -149,8 +151,10 @@ const styles = StyleSheet.create({
   image: {
     minWidth: '100%',
     height: 220,
-    borderRadius: 8,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
     opacity: 0.96,
+    overflow: 'hidden',
   },
   title: {
     fontSize: 19,

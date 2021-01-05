@@ -72,7 +72,6 @@ type CourseRelation = {
 
 type ParamList = {
   courseName: string;
-
   key: string;
   name: string;
   params: Params;
