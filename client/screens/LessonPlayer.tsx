@@ -3,12 +3,6 @@ import {View, StyleSheet, Text, Dimensions} from 'react-native';
 import Video from 'react-native-video';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {
-  faPlayCircle,
-  faPauseCircle,
-  faArrowCircleLeft,
-} from '@fortawesome/free-solid-svg-icons';
 import PlayingNext from '../Components/VideoComponents/PlayingNext';
 
 let width = Dimensions.get('screen').width;
@@ -78,44 +72,6 @@ const LessonPlayer: React.FC<LessonPlayerProps> = () => {
           onProgress={(currentTime: any) => setProgressData({...currentTime})}
           resizeMode={'cover'}
         />
-        <View
-          style={{
-            // display: 'flex',
-            flexDirection: 'row',
-            padding: 14,
-            alignContent: 'center',
-            // minWidth: '100%',
-            width: width,
-            height: 100,
-          }}>
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              width: '90%',
-              justifyContent: 'space-between',
-            }}>
-            <Text style={{fontSize: 23, marginTop: 10, color: 'green'}}>
-              {title}
-            </Text>
-            <View style={{display: 'flex', flexDirection: 'row'}}>
-              <Text style={{fontSize: 16, color: 'grey'}}>{length}</Text>
-              <Text style={{fontSize: 18, alignSelf: 'center'}}> •</Text>
-              <Text style={{fontSize: 16, color: 'grey'}}>Target Here</Text>
-            </View>
-          </View>
-
-          <View
-            style={{
-              display: 'flex',
-              paddingTop: 25,
-              justifyContent: 'flex-start',
-            }}>
-            <TouchableOpacity onPress={() => nav.goBack()}>
-              <FontAwesomeIcon icon={faPlayCircle} size={30} />
-            </TouchableOpacity>
-          </View>
-        </View>
       </View>
 
       <ScrollView>

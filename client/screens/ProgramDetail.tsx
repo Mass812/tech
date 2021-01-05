@@ -179,6 +179,12 @@ const ProgramDetail: React.FC<ProgramDetailProps> = () => {
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         horizontal={true}
+        snapToAlignment={'center'}
+        snapToInterval={360}
+        decelerationRate={'fast'}
+        scrollEventThrottle={8}
+        showsHorizontalScrollIndicator={false}
+        disableIntervalMomentum={true}
       />
     </ScrollView>
   );

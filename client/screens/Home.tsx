@@ -168,12 +168,18 @@ const Home: React.FC<HomeProps> = () => {
       </View>
 
       <RowSectionHeader text={`Popular Classes`} />
-
+      {/*          290, 350                 */}
       <FlatList
         data={data.popularLessons}
         renderItem={renderPopular}
         keyExtractor={(item) => item.id}
         horizontal={true}
+        snapToAlignment={'center'}
+        snapToInterval={300}
+        decelerationRate={'fast'}
+        scrollEventThrottle={8}
+        showsHorizontalScrollIndicator={false}
+        disableIntervalMomentum={true}
       />
 
       <RowSectionHeader text={`Popular Self Guided`} />
@@ -182,6 +188,12 @@ const Home: React.FC<HomeProps> = () => {
         renderItem={renderSelfGuided}
         keyExtractor={(item) => item.id}
         horizontal={true}
+        snapToAlignment={'center'}
+        snapToInterval={360}
+        decelerationRate={'fast'}
+        scrollEventThrottle={8}
+        showsHorizontalScrollIndicator={false}
+        disableIntervalMomentum={true}
       />
 
       <RowSectionHeader text={`Popular Meditations`} />

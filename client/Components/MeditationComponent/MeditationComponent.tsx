@@ -94,6 +94,12 @@ const Meditation: React.FC<MeditationProps> = ({
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
           horizontal={horizontal}
+          snapToAlignment={'center'}
+          snapToInterval={300}
+          decelerationRate={'fast'}
+          scrollEventThrottle={8}
+          showsHorizontalScrollIndicator={false}
+          disableIntervalMomentum={true}
         />
       </View>
     </SafeAreaView>
