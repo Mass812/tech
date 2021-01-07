@@ -90,15 +90,13 @@ const Programs: React.FC<ProgramsProps> = () => {
   };
 
   return (
-    <ScrollView>
-      <View style={styles.main}>
-        <FlatList
-          data={data.courses}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-        />
-      </View>
-    </ScrollView>
+    <View style={styles.main}>
+      <FlatList
+        data={data.courses}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+      />
+    </View>
   );
 };
 

@@ -30,6 +30,7 @@ const InitialState: iComponentState = {
   currentSlideTime: '0',
   totalPlayerTimeAsString: '0',
   screenOrientation: '',
+  renderedVideoTapped: false,
 };
 interface iComponentState {
   loading: boolean;
@@ -43,6 +44,7 @@ interface iComponentState {
   currentSlideTime: string;
   totalPlayerTimeAsString: string;
   screenOrientation: string;
+  renderedVideoTapped: boolean;
 }
 type Action =
   | {type: 'LOADING'; payload: boolean}
@@ -55,9 +57,10 @@ type Action =
   | {type: 'TOTAL_PLAYER_TIME_AS_STRING'; payload: string}
   | {type: 'BUFFERING'; payload: boolean}
   | {type: 'CURRENT_SLIDE_TIME'; payload: string}
-  | {type: 'SCREEN_ORIENTATION'; payload: string};
+  | {type: 'SCREEN_ORIENTATION'; payload: string}
+  | {type: 'RENDERED_VIDEO_TAPPED'; payload: boolean};
 
-const videoReducer = (
+export const videoReducer = (
   state = InitialState,
   action: Action,
 ): iComponentState => {
@@ -82,6 +85,8 @@ const videoReducer = (
       return {...state, currentPlayerTimeAsString: action.payload};
     case 'TOTAL_PLAYER_TIME_AS_STRING':
       return {...state, totalPlayerTimeAsString: action.payload};
+    case 'RENDERED_VIDEO_TAPPED':
+      return {...state, renderedVideoTapped: action.payload};
     case 'BUFFERING':
       return {...state, buffering: action.payload};
     default:
@@ -127,6 +132,7 @@ const LessonPlayer: React.FC<LessonPlayerProps> = () => {
       currentSlideTime,
       totalPlayerTimeAsString,
       screenOrientation,
+      renderedVideoTapped,
     },
     dispatch,
   ] = useReducer(videoReducer, InitialState);
@@ -208,7 +214,26 @@ const LessonPlayer: React.FC<LessonPlayerProps> = () => {
       });
     }
   };
-  console.log('playableDuration ====> ', playableDuration);
+
+  const handleRenderedVideoTapped = () => {
+    let videoScreenTapped = !renderedVideoTapped;
+
+    dispatch({
+      type: 'RENDERED_VIDEO_TAPPED',
+      payload: videoScreenTapped,
+    });
+  };
+
+  const handleClose = () => {
+    console.log('hit handleClose');
+    nav.goBack();
+  };
+
+  const hamdleExpand = () => {
+    // side view screen
+  };
+
+  console.log('renderedVideoTapped ====> ', renderedVideoTapped);
   console.log('totalPlayerTimeAsString ====> ', totalPlayerTimeAsString);
   return (
     <View style={styles.container}>
@@ -225,7 +250,7 @@ const LessonPlayer: React.FC<LessonPlayerProps> = () => {
           style={styles.videoPortrait}
           paused={paused}
           fullscreen={false}
-          // fullscreenOrientation={'portrait'}
+          fullscreenOrientation={'portrait'}
           ref={(video) => (videoRef.current = video)}
           onProgress={(currentTime: any) => onProgress(currentTime)}
           progressUpdateInterval={250}
@@ -239,6 +264,7 @@ const LessonPlayer: React.FC<LessonPlayerProps> = () => {
 
           // onSeek={(payload) => videoRef.seek(payload.currentTime)}
         />
+
         <View style={styles.sliderParent}>
           <Slider
             value={currentTime}
@@ -261,7 +287,13 @@ const LessonPlayer: React.FC<LessonPlayerProps> = () => {
           </Text>
         </View>
 
-        <VideoControls />
+        <VideoControls
+          onPressClose={handleClose}
+          onPressPause={handlePause}
+          onPressFullScreen={() => 'push on new full screen modal'}
+          onPressOutOfFocus={handleRenderedVideoTapped}
+          videoScreenTapped={renderedVideoTapped}
+        />
       </View>
       <TitleBannerUnderVideo
         width={width}
@@ -335,3 +367,9 @@ const styles = StyleSheet.create({
   },
 });
 export default LessonPlayer;
+
+{
+  /* <View style={styles.pause}>
+<FontAwesomeIcon icon={faPause} size={55} color={'black'} />
+</View> */
+}
