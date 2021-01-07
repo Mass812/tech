@@ -59,7 +59,9 @@ const Meditation: React.FC<MeditationProps> = ({
 
   const renderItem = ({item}: {item: MeditationProps}) => {
     return (
-      <View style={horizontal ? styles.listNotWide : styles.listWide}>
+      <View
+        style={horizontal ? styles.listNotWide : styles.listWide}
+        key={item.id}>
         <TouchableOpacity
           onPress={() =>
             nav.navigate('MeditationPlayer', {

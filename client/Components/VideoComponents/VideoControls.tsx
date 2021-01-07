@@ -1,16 +1,7 @@
 import * as React from 'react';
 import {View, StyleSheet, Dimensions} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {
-  faPlayCircle,
-  faPauseCircle,
-  faArrowCircleLeft,
-  faSkullCrossbones,
-  faCube,
-  faCross,
-  faTimesCircle,
-  faExpandAlt,
-} from '@fortawesome/free-solid-svg-icons';
+import {faTimesCircle, faExpandAlt} from '@fortawesome/free-solid-svg-icons';
 
 const width = Dimensions.get('screen').width;
 

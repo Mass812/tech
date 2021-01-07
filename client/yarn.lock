@@ -1174,6 +1174,11 @@
   "resolved" "https://registry.npmjs.org/@react-native-community/masked-view/-/masked-view-0.1.10.tgz"
   "version" "0.1.10"
 
+"@react-native-community/slider@^3.0.3":
+  "integrity" "sha512-8IeHfDwJ9/CTUwFs6x90VlobV3BfuPgNLjTgC6dRZovfCWigaZwVNIFFJnHBakK3pW2xErAPwhdvNR4JeNoYbw=="
+  "resolved" "https://registry.npmjs.org/@react-native-community/slider/-/slider-3.0.3.tgz"
+  "version" "3.0.3"
+
 "@react-navigation/bottom-tabs@^5.11.2":
   "integrity" "sha512-7+hH00N9Ze74VcX8uYWVyXFXZ0Fwid+lG+SSLtmnJjk1Y6oIQpQ17EPqKO0UZlKKjhsvMlAnL5fdgFtoqnSjcA=="
   "resolved" "https://registry.npmjs.org/@react-navigation/bottom-tabs/-/bottom-tabs-5.11.2.tgz"
@@ -2303,7 +2308,7 @@
   "resolved" "https://registry.npmjs.org/core-js-pure/-/core-js-pure-3.8.1.tgz"
   "version" "3.8.1"
 
-"core-js@^2.2.2", "core-js@^2.4.1", "core-js@2":
+"core-js@^2.2.2", "core-js@^2.4.1":
   "integrity" "sha512-Kb2wC0fvsWfQrgk8HU5lW6U/Lcs8+9aaYcy4ZFc6DDlo4nZ7n70dEgE5rtR0oG6ufKDUnrwfWL1mXR5ljDatrQ=="
   "resolved" "https://registry.npmjs.org/core-js/-/core-js-2.6.12.tgz"
   "version" "2.6.12"
@@ -5947,7 +5952,7 @@
     "paths-js" "^0.4.10"
     "point-in-polygon" "^1.0.1"
 
-"react-native-gesture-handler@^1.9.0", "react-native-gesture-handler@^1.x.x", "react-native-gesture-handler@>= 1.0.0":
+"react-native-gesture-handler@^1.9.0", "react-native-gesture-handler@>= 1.0.0":
   "integrity" "sha512-fkkNeWDBzDdwDxDcxtYbrb9T1g0PLgT1AxBs2iO/p7uEbDbC6mIoL/NzuOnKNEBHcd0lpLoJuNmIfdmucEON5g=="
   "resolved" "https://registry.npmjs.org/react-native-gesture-handler/-/react-native-gesture-handler-1.9.0.tgz"
   "version" "1.9.0"
@@ -5974,14 +5979,12 @@
     "react-lifecycles-compat" "2.0.0"
     "tslib" "1.9.3"
 
-"react-native-reanimated-slider@^1.0.6":
-  "integrity" "sha512-hE9BRrF7rSxsYBro+U8+pXt8OtfU2BBawghr6zpPHfDN+JthMqB/oJS+qPkHEUDthH6ERYQwybWBRc3G2nOLrw=="
-  "resolved" "https://registry.npmjs.org/react-native-reanimated-slider/-/react-native-reanimated-slider-1.0.6.tgz"
-  "version" "1.0.6"
-  dependencies:
-    "core-js" "2"
+"react-native-orientation-locker@^1.2.0":
+  "integrity" "sha512-lnwp9Jbt1m/0Gfw9a5Mrwj/APNSuYkVdJEgBKRyQgOshDrKRv5dxpD0P786AgIEjnEbjyrNOS6GQvBdqPYSxsg=="
+  "resolved" "https://registry.npmjs.org/react-native-orientation-locker/-/react-native-orientation-locker-1.2.0.tgz"
+  "version" "1.2.0"
 
-"react-native-reanimated@^1.13.2", "react-native-reanimated@^1.x.x":
+"react-native-reanimated@^1.13.2":
   "integrity" "sha512-O+WhgxSjOIzcVdAAvx+h2DY331Ek1knKlaq+jsNLpC1fhRy9XTdOObovgob/aF2ve9uJfPEawCx8381g/tUJZQ=="
   "resolved" "https://registry.npmjs.org/react-native-reanimated/-/react-native-reanimated-1.13.2.tgz"
   "version" "1.13.2"
