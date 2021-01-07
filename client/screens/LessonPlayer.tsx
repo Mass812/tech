@@ -1,19 +1,17 @@
 import React, {useEffect, useRef, useReducer} from 'react';
 import {View, StyleSheet, Text, Dimensions} from 'react-native';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import {ScrollView} from 'react-native-gesture-handler';
 import Video, {
   OnSeekData,
   OnLoadData,
   OnProgressData,
 } from 'react-native-video';
 import Orientation from 'react-native-orientation-locker';
-
-import {useNavigation, useRoute} from '@react-navigation/native';
-import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
-import PlayingNext from '../Components/VideoComponents/PlayingNext';
 import TitleBannerUnderVideo from '../Components/VideoComponents/TitleBannerUnderVideo';
 import VideoControls from '../Components/VideoComponents/VideoControls';
-import LoadingScreen from './Loading';
 import Slider from '@react-native-community/slider';
+import PlayingNext from '../Components/VideoComponents/PlayingNext';
 
 let width = Dimensions.get('screen').width;
 let height = Dimensions.get('window').height;
@@ -112,7 +110,7 @@ type Params = {
   title: string;
   length?: string;
 };
-interface playbackShape {
+interface iPlaybackShape {
   currentTime: number;
   playableDuration: number;
   seekableDuration: number;
@@ -170,9 +168,8 @@ const LessonPlayer: React.FC<LessonPlayerProps> = () => {
     length,
   } = route.params;
 
-  const handleOnLoad = (current: playbackShape) => {
+  const handleOnLoad = () => {
     dispatch({type: 'LOADING', payload: false});
-
     return;
   };
 
@@ -180,8 +177,6 @@ const LessonPlayer: React.FC<LessonPlayerProps> = () => {
     let p = !paused;
     dispatch({type: 'PAUSED', payload: p});
     dispatch({type: 'SHOW_OPTIONS', payload: p});
-
-    console.log('paused value in vid player', p);
     return;
   };
 
@@ -195,19 +190,23 @@ const LessonPlayer: React.FC<LessonPlayerProps> = () => {
 
   const onSlideStart = () => {};
   const onSlideEnd = () => {};
-
   const handleOnSlide = (payload: iSeek) => {};
 
-  const onProgress = (data: playbackShape) => {
+  const onProgress = (data: iPlaybackShape) => {
     //only way is metadata or db doc params
     if (!loading && !paused) {
-      dispatch({type: 'CURRENT_TIME', payload: data.currentTime});
-      dispatch({type: 'PLAYABLE_DURATION', payload: data.seekableDuration});
+      dispatch({
+        type: 'CURRENT_TIME',
+        payload: data.currentTime,
+      });
+      dispatch({
+        type: 'PLAYABLE_DURATION',
+        payload: data.seekableDuration,
+      });
       dispatch({
         type: 'TOTAL_PLAYER_TIME_AS_STRING',
         payload: getMinutesFromSeconds(playableDuration),
       });
-      let duration = getMinutesFromSeconds(playableDuration);
       dispatch({
         type: 'CURRENT_PLAYER_TIME_AS_STRING',
         payload: getMinutesFromSeconds(currentTime),
@@ -217,7 +216,6 @@ const LessonPlayer: React.FC<LessonPlayerProps> = () => {
 
   const handleRenderedVideoTapped = () => {
     let videoScreenTapped = !renderedVideoTapped;
-
     dispatch({
       type: 'RENDERED_VIDEO_TAPPED',
       payload: videoScreenTapped,
@@ -225,7 +223,6 @@ const LessonPlayer: React.FC<LessonPlayerProps> = () => {
   };
 
   const handleClose = () => {
-    console.log('hit handleClose');
     nav.goBack();
   };
 
@@ -233,8 +230,6 @@ const LessonPlayer: React.FC<LessonPlayerProps> = () => {
     // side view screen
   };
 
-  console.log('renderedVideoTapped ====> ', renderedVideoTapped);
-  console.log('totalPlayerTimeAsString ====> ', totalPlayerTimeAsString);
   return (
     <View style={styles.container}>
       <View style={styles.videoParentPortrait}>
@@ -243,7 +238,7 @@ const LessonPlayer: React.FC<LessonPlayerProps> = () => {
             uri: contentUrl,
           }}
           onLoadStart={() => dispatch({type: 'LOADING', payload: true})}
-          onLoad={(current: any) => handleOnLoad(current)}
+          onLoad={handleOnLoad}
           onEnd={() => nav.goBack()}
           //  onBuffer={() => dispatch({type: 'BUFFERING', payload: true})} // Callback when remote video is buffering
           onError={() => console.log('error')} // Callback when video cannot be loaded
@@ -261,8 +256,6 @@ const LessonPlayer: React.FC<LessonPlayerProps> = () => {
             bufferForPlaybackMs: 3500,
             bufferForPlaybackAfterRebufferMs: 5000,
           }}
-
-          // onSeek={(payload) => videoRef.seek(payload.currentTime)}
         />
 
         <View style={styles.sliderParent}>
@@ -312,35 +305,27 @@ const LessonPlayer: React.FC<LessonPlayerProps> = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    //  flex: 1,
-    // justifyContent: 'center',
-    //  alignContent: 'center',
-  },
+  container: {},
 
   videoParentPortrait: {
     display: 'flex',
     flexDirection: 'column',
-
     width: width,
     justifyContent: 'flex-start',
   },
   videoPortrait: {
     minHeight: 400,
-    // width,
   },
   title: {
     fontSize: 20,
     color: 'green',
   },
-
   playingNextParent: {
     display: 'flex',
     height: height - 400,
   },
   sliderParent: {
     padding: 30,
-    // paddingRight: 18,
     paddingBottom: 0,
     position: 'absolute',
     bottom: 10,
@@ -367,9 +352,3 @@ const styles = StyleSheet.create({
   },
 });
 export default LessonPlayer;
-
-{
-  /* <View style={styles.pause}>
-<FontAwesomeIcon icon={faPause} size={55} color={'black'} />
-</View> */
-}
