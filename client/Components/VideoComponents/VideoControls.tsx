@@ -1,46 +1,74 @@
-import React, {useReducer} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {View, StyleSheet, Dimensions, TouchableOpacity} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {
   faTimesCircle,
   faExpandAlt,
   faPause,
+  faPlay,
 } from '@fortawesome/free-solid-svg-icons';
-
+import {useNavigation, useRoute} from '@react-navigation/native';
+import {LessonPlayerStore} from '../../Screens/LessonPlayer';
+import VideoControlSlider from './VideoControlSlider';
 const width = Dimensions.get('screen').width;
 
-interface VideoControlsProps {
-  onPressPause: () => void;
-  onPressClose: () => void;
-  onPressFullScreen: () => void;
-  onPressOutOfFocus: () => void;
-  videoScreenTapped: boolean;
-}
+interface VideoControlsProps {}
 
-const VideoControls: React.FC<VideoControlsProps> = ({
-  onPressPause,
-  onPressClose,
-  onPressFullScreen,
-  onPressOutOfFocus,
-  videoScreenTapped,
-}) => {
+const VideoControls: React.FC<VideoControlsProps> = ({}) => {
+  let {state, dispatch} = useContext(LessonPlayerStore);
+
+  const nav = useNavigation();
+
+  const handleClose = () => {
+    nav.goBack();
+  };
+
+  const hamdleExpand = () => {
+    // side view screen
+  };
+
+  const handlePause = () => {
+    let playingMode = !state.paused;
+    dispatch({type: 'PAUSED', payload: playingMode});
+    dispatch({type: 'SHOW_OPTIONS', payload: playingMode});
+
+    setTimeout(() => {
+      if (state.paused)
+        return dispatch({
+          type: 'RENDERED_VIDEO_TAPPED',
+          payload: false,
+        });
+    }, 900);
+  };
+
+  const handlePressScreen = () => {
+    let videoScreenTapped = !state.renderedVideoTapped;
+    dispatch({
+      type: 'RENDERED_VIDEO_TAPPED',
+      payload: videoScreenTapped,
+    });
+  };
+
   return (
-    <TouchableOpacity style={styles.parent} onPress={onPressOutOfFocus}>
-      {videoScreenTapped ? (
+    <TouchableOpacity style={styles.parent} onPress={handlePressScreen}>
+      {state.renderedVideoTapped ? (
         <>
           <View style={styles.topIcons}>
-            <TouchableOpacity style={styles.leftIcon} onPress={onPressClose}>
+            <TouchableOpacity style={styles.leftIcon} onPress={handleClose}>
               <FontAwesomeIcon icon={faTimesCircle} size={17} color="black" />
             </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.rightIcon}
-              onPress={onPressFullScreen}>
+            <TouchableOpacity style={styles.rightIcon} onPress={hamdleExpand}>
               <FontAwesomeIcon icon={faExpandAlt} size={17} color="black" />
             </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.middleIcon} onPress={onPressPause}>
-            <FontAwesomeIcon icon={faPause} size={36} color={'black'} />
+          <TouchableOpacity style={styles.middleIcon} onPress={handlePause}>
+            {state.paused ? (
+              <FontAwesomeIcon icon={faPlay} size={36} color={'black'} />
+            ) : (
+              <FontAwesomeIcon icon={faPause} size={36} color={'black'} />
+            )}
           </TouchableOpacity>
+          <VideoControlSlider />
         </>
       ) : null}
     </TouchableOpacity>
