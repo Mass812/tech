@@ -3,14 +3,14 @@ import {View, StyleSheet, Dimensions, FlatList} from 'react-native';
 
 import {useQuery} from 'urql';
 import {useNavigation} from '@react-navigation/native';
-import Mega from '../Components/Mega';
+import Mega from './Mega';
 import {ScrollView} from 'react-native-gesture-handler';
-import InstructionalLessonCard from '../Components/UiCards/InstructionalLessonCard';
-import LoadingScreen from './Loading';
-import ErrorScreen from './ErrorScreen';
-import MeditationComponent from '../Components/MeditationComponent/MeditationComponent';
-import InstructorProfileThumb from '../Components/UiCards/InstructorProfileThumb';
-import RowSectionHeader from '../Components/ReusableComponents/RowSectionHeader';
+import InstructionalLessonCard from '../../ReusableComponents/UiCards/InstructionalLessonCard';
+import LoadingScreen from '../SplashScreens/Loading';
+import ErrorScreen from '../SplashScreens/ErrorScreen';
+import MeditationComponent from '../MeditationScreen/MeditationComponent';
+import InstructorProfileThumb from '../../ReusableComponents/UiCards/InstructorProfileThumb';
+import RowSectionHeader from '../../ReusableComponents/RowSectionHeader';
 
 const PopularQuery = `
 query {
@@ -84,14 +84,14 @@ const Home: React.FC<HomeProps> = () => {
   if (fetching) return <LoadingScreen />;
   if (error) return <ErrorScreen error={error.message} />;
 
-  const sendToLesson = async (
+  const sendToLessonDetail = (
     e: EventTarget,
     courseName: string,
     instructor: string,
     weekNumber: string,
     lessonNumber: string,
   ) => {
-    nav.navigate('ClassDetail', {
+    nav.navigate('LessonDetail', {
       courseName,
       instructor,
       weekNumber,
@@ -99,7 +99,7 @@ const Home: React.FC<HomeProps> = () => {
     });
   };
 
-  const sendToLessonPlayer = async (
+  const sendToVideoScreen = (
     e: EventTarget,
     contentUrl: string,
     instructor: string,
@@ -107,7 +107,7 @@ const Home: React.FC<HomeProps> = () => {
     id: string,
     title: string,
   ) => {
-    nav.navigate('LessonPlayer', {
+    nav.navigate('VideoScreen', {
       contentUrl,
       instructor,
       id,
@@ -120,7 +120,7 @@ const Home: React.FC<HomeProps> = () => {
     return (
       <InstructionalLessonCard
         onPress={(e: EventTarget) =>
-          sendToLesson(
+          sendToLessonDetail(
             e,
             item.courseName,
             item.instructor,
@@ -142,7 +142,7 @@ const Home: React.FC<HomeProps> = () => {
     return (
       <InstructionalLessonCard
         onPress={(e: EventTarget) =>
-          sendToLessonPlayer(
+          sendToVideoScreen(
             e,
             item.contentUrl,
             item.instructor,

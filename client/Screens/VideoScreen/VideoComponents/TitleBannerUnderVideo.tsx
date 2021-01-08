@@ -1,5 +1,3 @@
-import {TextBase} from 'react-native';
-
 import * as React from 'react';
 import {View, StyleSheet, Text, Dimensions} from 'react-native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
@@ -41,7 +39,7 @@ const TitleBannerUnderVideo: React.FC<TitleBannerUnderVideoProps> = ({
           width: '90%',
           justifyContent: 'space-between',
         }}>
-        <Text style={{fontSize: 23, marginTop: 10, color: 'green'}}>
+        <Text style={{fontSize: 23, marginTop: 10, color: 'black'}}>
           {title}
         </Text>
         <View style={{display: 'flex', flexDirection: 'row'}}>

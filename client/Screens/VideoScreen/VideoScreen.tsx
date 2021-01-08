@@ -3,10 +3,11 @@ import {View, StyleSheet, Dimensions} from 'react-native';
 import {useRoute} from '@react-navigation/native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Orientation from 'react-native-orientation-locker';
-import TitleBannerUnderVideo from '../Components/VideoComponents/TitleBannerUnderVideo';
-import VideoControls from '../Components/VideoComponents/VideoControls';
-import PlayingNext from '../Components/VideoComponents/PlayingNext';
-import VideoPlayerPortraitWindow from '../Components/VideoComponents/VIdeoPlayerPortraitWindow';
+import TitleBannerUnderVideo from './VideoComponents/TitleBannerUnderVideo';
+import VideoControls from './VideoComponents/VideoControls';
+import PlayingNext from './UnderVideoDetailComponents/IndependentWorkout/PlayingNext';
+import VideoPlayerPortraitWindow from './VideoComponents/VIdeoPlayerPortraitWindow';
+import PauseOptionCard from './VideoComponents/PauseOptionCard';
 
 let width = Dimensions.get('screen').width;
 let height = Dimensions.get('window').height;
@@ -90,7 +91,7 @@ interface iSeek {
   currentTime: number;
   seekTime: number;
 }
-interface LessonPlayerProps {
+interface LessonScreenProps {
   key: string;
   name: string;
   params: Params;
@@ -111,30 +112,34 @@ interface iPlaybackShape {
   seekableDuration: number;
 }
 
-export const LessonPlayerStore = React.createContext<LessonPlayerProps | any>(
+export const LessonScreenStore = React.createContext<LessonScreenProps | any>(
   InitialState,
 );
 
-const LessonPlayer: React.FC<LessonPlayerProps> = () => {
+const LessonScreen: React.FC<LessonScreenProps> = () => {
   const [state, dispatch] = useReducer(videoReducer, InitialState);
   const videoRedux = React.useMemo(() => ({state, dispatch}), [
     state,
     dispatch,
   ]);
 
-  const handleOrientation = () => {
+  const handleOrientation = (orientation: string) => {
     var initial = Orientation.getInitialOrientation();
-    if (initial == 'PORTRAIT') {
-      console.log('portrait mode orientation');
+    if (initial == 'LANDSCAPE-RIGHT' || 'LANDSCAPE-LEFT') {
+      console.log('screen mode landscape');
+
+      return;
     } else {
       //TODO POP LANDSCAPE SCREEN ON
+      console.log('screen mode portrait');
       return;
     }
   };
 
   useEffect(() => {
     Orientation.addOrientationListener((orientation: string) => {
-      console.log(orientation);
+      // console.log(orientation);
+      handleOrientation(orientation);
     });
     return () => {
       Orientation.removeOrientationListener((orientation: string) => {
@@ -143,7 +148,7 @@ const LessonPlayer: React.FC<LessonPlayerProps> = () => {
     };
   }, []);
 
-  const route = useRoute<LessonPlayerProps>();
+  const route = useRoute<LessonScreenProps>();
   let {
     title,
     contentUrl,
@@ -154,8 +159,7 @@ const LessonPlayer: React.FC<LessonPlayerProps> = () => {
   } = route.params;
 
   return (
-    // <LessonPlayerStore.Provider value={{state, dispatch}}>
-    <LessonPlayerStore.Provider value={videoRedux}>
+    <LessonScreenStore.Provider value={videoRedux}>
       <View style={styles.container}>
         <View style={styles.videoParentPortrait}>
           <VideoPlayerPortraitWindow contentUrl={contentUrl} />
@@ -163,6 +167,7 @@ const LessonPlayer: React.FC<LessonPlayerProps> = () => {
           <VideoControls />
         </View>
 
+        {/*         Get API Key Spotify and Connect */}
         <TitleBannerUnderVideo
           width={width}
           title={title}
@@ -175,8 +180,9 @@ const LessonPlayer: React.FC<LessonPlayerProps> = () => {
             <PlayingNext />
           </View>
         </ScrollView>
+        {state.paused ? <PauseOptionCard /> : null}
       </View>
-    </LessonPlayerStore.Provider>
+    </LessonScreenStore.Provider>
   );
 };
 
@@ -208,7 +214,6 @@ const styles = StyleSheet.create({
     zIndex: 2,
     width: width - 20,
   },
-
   toolbar: {
     marginTop: 30,
     backgroundColor: 'white',
@@ -216,4 +221,4 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
 });
-export default LessonPlayer;
+export default LessonScreen;

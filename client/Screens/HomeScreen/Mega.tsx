@@ -20,10 +20,10 @@ const Mega: React.FC<MegaProps> = () => {
   const nav = useNavigation();
   const itemSelected = useRef<HTMLElement>(null);
 
-  let photoOne = require('./Assets/fitness_mega_1.jpeg');
-  let photoTwo = require('./Assets/fitness_mega_2.jpg');
-  let photoThree = require('./Assets/fitness_mega_4.jpg');
-  let photoFour = require('./Assets/upper_body_blast_program.jpg');
+  let photoOne = require('../../Assets/fitness_mega_1.jpeg');
+  let photoTwo = require('../../Assets/fitness_mega_2.jpg');
+  let photoThree = require('../../Assets/fitness_mega_4.jpg');
+  let photoFour = require('../../Assets/upper_body_blast_program.jpg');
 
   let photoArray = [
     {

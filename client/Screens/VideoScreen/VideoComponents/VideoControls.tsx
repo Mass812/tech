@@ -8,14 +8,14 @@ import {
   faPlay,
 } from '@fortawesome/free-solid-svg-icons';
 import {useNavigation, useRoute} from '@react-navigation/native';
-import {LessonPlayerStore} from '../../Screens/LessonPlayer';
+import {LessonScreenStore} from '../VideoScreen';
 import VideoControlSlider from './VideoControlSlider';
 const width = Dimensions.get('screen').width;
 
 interface VideoControlsProps {}
 
 const VideoControls: React.FC<VideoControlsProps> = ({}) => {
-  let {state, dispatch} = useContext(LessonPlayerStore);
+  let {state, dispatch} = useContext(LessonScreenStore);
 
   const nav = useNavigation();
 

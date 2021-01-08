@@ -1,18 +1,16 @@
 import React, {lazy, useState} from 'react';
-
 import {createClient, Provider as UrqlProvider} from 'urql';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator, HeaderTitle} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Home from './Screens/Home';
-import ClassDetail from './Screens/ClassDetail';
-import Programs from './Screens/Programs';
-import ProgramDetail from './Screens/ProgramDetail';
-import Workouts from './Screens/Workouts';
-import Meditation from './Screens/Meditation';
-import Profile from './Screens/Profile';
-import {AuthContext} from './Context/authContext';
-import MeditationPlayer from './Screens/MeditationPlayer';
+import Home from './Screens/HomeScreen/Home';
+import LessonDetail from './Screens/LessonDetailScreen/LessonDetail';
+import Programs from './Screens/AllPrograms/AllProgramsScreen';
+import ProgramDetail from './Screens/ProgramDetailScreen/ProgramDetail';
+import Workouts from './Screens/Workouts/Workouts';
+import Meditation from './Screens/MeditationScreen/MeditationScreen';
+import Profile from './Screens/ProfileScreen/Profile';
+import MeditationPlayer from './Screens/MeditationScreen/MeditationPlayer/MeditationPlayer';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {
   faHome,
@@ -22,7 +20,7 @@ import {
   faUserCircle,
 } from '@fortawesome/free-solid-svg-icons';
 
-import LessonPlayer from './Screens/LessonPlayer';
+import VideoScreen from './Screens/VideoScreen/VideoScreen';
 
 const client = createClient({
   url: 'http://localhost:4321/graphql',
@@ -40,7 +38,7 @@ type ProgramStackParams = {
     lessonNumber: string;
     weekNumber: string;
   };
-  ClassDetail: {
+  LessonDetail: {
     courseName: string;
     instructor: string;
     lessonNumber: string;
@@ -53,7 +51,7 @@ type MeditationStackParams = {
 };
 
 type RootParams = {
-  LessonPlayer: {
+  VideoScreen: {
     contentUrl: string;
     weekNumber: string;
     lessonNumber: string;
@@ -68,6 +66,7 @@ type RootParams = {
     lessonNumber: string;
     weekNumber: string;
   };
+  PauseOptionCard: {};
 };
 
 const HomeStack = createStackNavigator<HomeStackParams>();
@@ -84,13 +83,6 @@ const HomeStackRoutes = () => {
         component={Home}
         options={{headerShown: false}}
       />
-      {/* <HomeStack.Screen
-        name="ClassDetail"
-        component={ClassDetail}
-        options={({navigation}) => ({
-          title: 'Class',
-        })}
-      /> */}
     </HomeStack.Navigator>
   );
 };
@@ -109,8 +101,8 @@ const ProgramStackRoutes = () => {
         // options={{headerShown: false}}
       />
       <ProgramStack.Screen
-        name="ClassDetail"
-        component={ClassDetail}
+        name="LessonDetail"
+        component={LessonDetail}
         options={({navigation}) => ({
           title: 'Class',
         })}
@@ -188,10 +180,12 @@ const BottomNavigatorScreens = () => {
   );
 };
 
+const AuthContext = React.createContext({userEmail: 'matt@gmail.com'});
+
 function App() {
   return (
     <UrqlProvider value={client}>
-      <AuthContext.Provider value={{userToken: 'Matt Wellman'}}>
+      <AuthContext.Provider value={{userEmail: 'Matt Wellman'}}>
         <NavigationContainer>
           <Root.Navigator mode="modal">
             <Root.Screen
@@ -205,8 +199,8 @@ function App() {
               options={{headerShown: false}}
             />
             <Root.Screen
-              name="LessonPlayer"
-              component={LessonPlayer}
+              name="VideoScreen"
+              component={VideoScreen}
               options={{headerShown: false}}
             />
           </Root.Navigator>

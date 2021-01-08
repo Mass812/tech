@@ -12,12 +12,12 @@ import {
 } from 'react-native';
 import {useQuery} from 'urql';
 import {useNavigation} from '@react-navigation/native';
-import Mega from '../Components/Mega';
+import Mega from '../HomeScreen/Mega';
 import {ScrollView} from 'react-native-gesture-handler';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import ProgramCard from '../Components/UiCards/ProgramCard';
-import LoadingScreen from './Loading';
-import ErrorScreen from './ErrorScreen';
+import ProgramCard from '../../ReusableComponents/UiCards/ProgramCard';
+import LoadingScreen from '../SplashScreens/Loading';
+import ErrorScreen from '../SplashScreens/ErrorScreen';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;

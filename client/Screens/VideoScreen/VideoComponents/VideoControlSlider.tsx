@@ -1,13 +1,13 @@
 import React, {useContext, useEffect} from 'react';
 import {View, StyleSheet, Dimensions, Text} from 'react-native';
 import Slider from '@react-native-community/slider';
-import {LessonPlayerStore} from '../../Screens/LessonPlayer';
+import {LessonScreenStore} from '../VideoScreen';
 const width = Dimensions.get('screen').width;
 
 interface VideoControlSliderProps {}
 
 const VideoControlSlider: React.FC<VideoControlSliderProps> = ({}) => {
-  let {state, dispatch} = useContext(LessonPlayerStore);
+  let {state, dispatch} = useContext(LessonScreenStore);
 
   useEffect(() => {}, [state, dispatch]);
 

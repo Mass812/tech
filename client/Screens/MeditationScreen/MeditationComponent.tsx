@@ -9,10 +9,10 @@ import {
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useQuery} from 'urql';
-import ProgramCard from '../UiCards/ProgramCard';
+import ProgramCard from '../../ReusableComponents/UiCards/ProgramCard';
 import {useNavigation, useRoute} from '@react-navigation/native';
-import LoadingScreen from '../../Screens/Loading';
-import ErrorScreen from '../../Screens/ErrorScreen';
+import LoadingScreen from '../SplashScreens/Loading';
+import ErrorScreen from '../SplashScreens/ErrorScreen';
 
 interface MeditationProps {
   category?: string;
@@ -59,9 +59,7 @@ const Meditation: React.FC<MeditationProps> = ({
 
   const renderItem = ({item}: {item: MeditationProps}) => {
     return (
-      <View
-        style={horizontal ? styles.listNotWide : styles.listWide}
-        key={item.id}>
+      <View style={horizontal ? styles.listNotWide : styles.listWide}>
         <TouchableOpacity
           onPress={() =>
             nav.navigate('MeditationPlayer', {

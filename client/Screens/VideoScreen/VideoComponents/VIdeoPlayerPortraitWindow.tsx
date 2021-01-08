@@ -1,4 +1,4 @@
-import {LessonPlayerStore} from '../../Screens/LessonPlayer';
+import {LessonScreenStore} from '../VideoScreen';
 import Video, {
   OnSeekData,
   OnLoadData,
@@ -23,7 +23,7 @@ interface iPlaybackShape {
 const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
   contentUrl,
 }) => {
-  let {state, dispatch} = useContext(LessonPlayerStore);
+  let {state, dispatch} = useContext(LessonScreenStore);
   let videoRef = useRef<HTMLElement | null>(null);
   const nav = useNavigation();
 
@@ -73,14 +73,14 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
       style={styles.videoPortrait}
       paused={state.paused}
       fullscreen={false}
-      fullscreenOrientation={'portrait'}
+      //fullscreenOrientation={'portrait'}
       ref={(video) => (videoRef.current = video)}
       onProgress={(currentTime: any) => onProgress(currentTime)}
       progressUpdateInterval={250}
       resizeMode={'cover'}
       bufferConfig={{
         minBufferMs: 30000,
-        maxBufferMs: 50000,
+        maxBufferMs: 70000,
         bufferForPlaybackMs: 3500,
         bufferForPlaybackAfterRebufferMs: 5000,
       }}

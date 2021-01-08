@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
-import RowSectionHeader from '../ReusableComponents/RowSectionHeader';
+import RowSectionHeader from '../../../../ReusableComponents/RowSectionHeader';
 
 interface PlayingNextProps {}
 

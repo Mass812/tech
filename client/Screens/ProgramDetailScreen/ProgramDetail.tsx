@@ -9,11 +9,11 @@ import {
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {useQuery} from 'urql';
-import ProgramCard from '../Components/UiCards/ProgramCard';
-import CourseOverview from '../Components/UiCards/CourseOverview';
-import InstructionalLessonCard from '../Components/UiCards/InstructionalLessonCard';
-import LoadingScreen from './Loading';
-import ErrorScreen from './ErrorScreen';
+import ProgramCard from '../../ReusableComponents/UiCards/ProgramCard';
+import CourseOverview from '../../ReusableComponents/UiCards/CourseOverview';
+import InstructionalLessonCard from '../../ReusableComponents/UiCards/InstructionalLessonCard';
+import LoadingScreen from '../SplashScreens/Loading';
+import ErrorScreen from '../SplashScreens/ErrorScreen';
 
 const findCourse = `
 query ($courseName: String!) {
@@ -111,7 +111,7 @@ const ProgramDetail: React.FC<ProgramDetailProps> = () => {
     weekNumber: string,
     lessonNumber: string,
   ) => {
-    nav.navigate('ClassDetail', {
+    nav.navigate('LessonDetail', {
       courseName,
       instructor,
       weekNumber,

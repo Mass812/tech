@@ -7,7 +7,7 @@ const LoadingScreen: React.FC = () => {
   return (
     <View style={styles.container}>
       <Image
-        source={require('../Components/Assets/fabletics_256_256.png')}
+        source={require('../../Assets/fabletics_256_256.png')}
         style={styles.image}
       />
       <View style={styles.spinnerRow}>

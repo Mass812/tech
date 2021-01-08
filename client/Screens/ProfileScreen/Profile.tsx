@@ -1,9 +1,9 @@
 import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import AcheivementBanner from '../Components/ProfileComponents/AcheivementBanner';
-import ProfileHeaderBanner from '../Components/ProfileComponents/ProfileHeaderBanner';
-import RecentlyDoneBanner from '../Components/ProfileComponents/RecentlyDoneBanner';
+import AcheivementBanner from './ProfileComponents/AcheivementBanner';
+import ProfileHeaderBanner from './ProfileComponents/ProfileHeaderBanner';
+import RecentlyDoneBanner from './ProfileComponents/RecentlyDoneBanner';
 
 interface ProfileProps {}
 

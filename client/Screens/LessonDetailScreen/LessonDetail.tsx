@@ -9,11 +9,11 @@ import {
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {useQuery} from 'urql';
-import ProgramCard from '../Components/UiCards/ProgramCard';
-import CourseOverview from '../Components/UiCards/CourseOverview';
-import InstructionalLessonCard from '../Components/UiCards/InstructionalLessonCard';
-import LoadingScreen from './Loading';
-import ErrorScreen from './ErrorScreen';
+import ProgramCard from '../../ReusableComponents/UiCards/ProgramCard';
+import CourseOverview from '../../ReusableComponents/UiCards/CourseOverview';
+import InstructionalLessonCard from '../../ReusableComponents/UiCards/InstructionalLessonCard';
+import LoadingScreen from '../SplashScreens/Loading';
+import ErrorScreen from '../SplashScreens/ErrorScreen';
 
 //courseName, instructor, lessonNumber, weekNumber
 const findPopular = `
@@ -121,7 +121,7 @@ const ClassDetail: React.FC<ClassDetailProps> = () => {
         onPress={() => {
           console.log('Cless Detail prop contentUrl: ', data.lesson.contentUrl);
 
-          nav.navigate('LessonPlayer', {
+          nav.navigate('VideoScreen', {
             contentUrl: data.lesson.contentUrl,
             weekNumber,
             lessonNumber,
