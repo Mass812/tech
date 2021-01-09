@@ -23,6 +23,9 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: 'white',
+    opacity: 0.8,
+    zIndex: 3,
   },
   image: {
     height: 75,

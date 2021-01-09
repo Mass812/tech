@@ -4,12 +4,21 @@ import Slider from '@react-native-community/slider';
 import {LessonScreenStore} from '../VideoScreen';
 const width = Dimensions.get('screen').width;
 
-interface VideoControlSliderProps {}
+interface VideoControlSliderProps {
+  onSlideComplete: () => void;
+}
 
-const VideoControlSlider: React.FC<VideoControlSliderProps> = ({}) => {
+const VideoControlSlider: React.FC<VideoControlSliderProps> = ({
+  onSlideComplete,
+}) => {
   let {state, dispatch} = useContext(LessonScreenStore);
 
   useEffect(() => {}, [state, dispatch]);
+
+  const onSlide = (sliderInfo: number) => {
+    //  dispatch({type: 'PAUSED', payload: true});
+    dispatch({type: 'CURRENT_TIME', payload: sliderInfo});
+  };
 
   return (
     <>
@@ -21,11 +30,10 @@ const VideoControlSlider: React.FC<VideoControlSliderProps> = ({}) => {
           minimumTrackTintColor={'#689493'}
           maximumTrackTintColor={'#FFFFFF'}
           step={1}
-          // onValueChange={(sliderInfo) =>
-          //   dispatch({type: 'CURRENT_PLAYER_TIME_AS_STRING', payload: sliderInfo})
-          // }
-          // onSlidingStart={onSlideStart}
-          // onSlidingComplete={onSlideEnd}
+          //   onValueChange={(sliderInfo) => onSlideEnd(sliderInfo)}
+          onSlidingComplete={onSlideComplete}
+          onSlidingStart={() => dispatch({type: 'PAUSED', payload: true})}
+          onValueChange={onSlide}
           // thumbTintColor={'rgba(28, 158, 155, 0.4)'}
         />
       </View>

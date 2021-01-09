@@ -11,7 +11,6 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import {useQuery} from 'urql';
 import ProgramCard from '../../ReusableComponents/UiCards/ProgramCard';
 import CourseOverview from '../../ReusableComponents/UiCards/CourseOverview';
-import InstructionalLessonCard from '../../ReusableComponents/UiCards/InstructionalLessonCard';
 import LoadingScreen from '../SplashScreens/Loading';
 import ErrorScreen from '../SplashScreens/ErrorScreen';
 
@@ -123,10 +122,10 @@ const ClassDetail: React.FC<ClassDetailProps> = () => {
 
           nav.navigate('VideoScreen', {
             contentUrl: data.lesson.contentUrl,
-            weekNumber,
-            lessonNumber,
-            courseName,
-            instructor,
+            weekNumber: data.lesson.weekNumber,
+            lessonNumber: data.lesson.lessonNumber,
+            courseName: data.lesson.courseName,
+            instructor: data.lesson.instructor,
             title: data.lesson.title,
           });
           console.log('navigating later');

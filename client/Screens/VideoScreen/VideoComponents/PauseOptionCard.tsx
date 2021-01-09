@@ -1,19 +1,25 @@
-import React, {useContext} from 'react';
-import {View, StyleSheet, Text, Button} from 'react-native';
-import {BaseButton, TouchableOpacity} from 'react-native-gesture-handler';
+import {useNavigation} from '@react-navigation/native';
+import React, {useContext, useState} from 'react';
+import {View, StyleSheet, Text, Dimensions} from 'react-native';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {faMusic, faPlayCircle} from '@fortawesome/free-solid-svg-icons';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import {LessonScreenStore} from '../VideoScreen';
 
 interface PauseOptionCardProps {
-  onPress?: () => void;
+  restartTheLeeson?: () => void;
 }
 
-interface iPauseOpButton {
+interface iPressText {
   text: string;
   onPress?: () => void;
 }
 
+const width = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
+
 const Haze: React.FC<PauseOptionCardProps> = () => {
-  let {state, dispatch} = useContext(LessonScreenStore);
+  const {state, dispatch} = useContext(LessonScreenStore);
   return (
     <View style={styles.haze}>
       <TouchableOpacity
@@ -24,22 +30,40 @@ const Haze: React.FC<PauseOptionCardProps> = () => {
   );
 };
 
-const CardButton: React.FC<iPauseOpButton> = ({text}) => {
-  let {state, dispatch} = useContext(LessonScreenStore);
+const CardButton: React.FC<iPressText> = ({text, onPress}) => {
   return (
-    <TouchableOpacity
-      style={styles.button}
-      onPress={() => dispatch({type: 'PAUSED', payload: false})}>
+    <TouchableOpacity style={styles.button} onPress={onPress}>
       <Text style={styles.buttonText}>{text}</Text>
     </TouchableOpacity>
   );
 };
+const CardButtonPink: React.FC<iPressText> = ({text, onPress}) => {
+  return (
+    <TouchableOpacity style={styles.buttonPink} onPress={onPress}>
+      <View style={styles.pinkButtonDetails}>
+        <FontAwesomeIcon icon={faPlayCircle} size={22} color={'white'} />
+        <Text style={styles.buttonText}>{`  ${text}`}</Text>
+      </View>
+    </TouchableOpacity>
+  );
+};
 
-const PauseOptionCard: React.FC<PauseOptionCardProps> = () => {
-  let {state, dispatch} = useContext(LessonScreenStore);
+const PauseOptionCard: React.FC<PauseOptionCardProps> = ({
+  restartTheLeeson,
+}) => {
+  const {state, dispatch} = useContext(LessonScreenStore);
+  const [showSecondCard, setShowSecondCard] = useState<boolean>();
+  let nav = useNavigation();
 
-  const handleUnPause = () => {
+  const handleQuitLesson = () => {
+    setShowSecondCard(true);
+  };
+  const handleResumeLesson = () => {
     dispatch({type: 'PAUSED', payload: false});
+  };
+
+  const handleMarkAsCompleted = () => {
+    console.log('do something');
   };
 
   return (
@@ -47,21 +71,51 @@ const PauseOptionCard: React.FC<PauseOptionCardProps> = () => {
       <Haze />
       <View style={styles.container}>
         <View style={styles.bottomContainer}>
-          <View style={styles.parent}>
-            <Text style={styles.question}>
-              {'question is what to you want to do'}
-            </Text>
-            <Text>By</Text>
-            <View style={{justifyContent: 'space-evenly', height: 225}}>
-              <CardButton
-                key={1}
-                onPress={handleUnPause}
-                text={'Resume Lesson'}
-              />
-              <CardButton text={'I am the first button prop click me'} />
-              <CardButton text={'I am the first button prop click me'} />
+          {!showSecondCard ? (
+            <View style={styles.parent}>
+              <Text style={styles.question}>{'What Do You Want To Do?'}</Text>
+
+              <View style={{justifyContent: 'flex-start', height: 225}}>
+                <CardButton
+                  onPress={restartTheLeeson}
+                  text={`Restart Lesson ${state.instructor}`}
+                />
+                <CardButton onPress={handleQuitLesson} text={'End Class'} />
+
+                <CardButtonPink
+                  onPress={handleResumeLesson}
+                  text={'Resume Lesson'}
+                />
+              </View>
             </View>
-          </View>
+          ) : (
+            <View style={styles.parent}>
+              <Text style={styles.question}>
+                {'How would you like to proceed?'}
+              </Text>
+              <Text style={styles.question}>
+                {`Time Remaining: ${state.timeRemainingAsString.substring(
+                  0,
+                  5,
+                )}`}
+              </Text>
+              <View>
+                <Text style={styles.textDetail}>{'Class '}</Text>
+                <Text style={styles.textDetail}>Card 2</Text>
+              </View>
+
+              <View style={{justifyContent: 'flex-start', height: 225}}>
+                <CardButton
+                  onPress={handleMarkAsCompleted}
+                  text={'Mark as Completed'}
+                />
+                <CardButton
+                  onPress={() => nav.navigate('Home')}
+                  text={'Quit Lesson'}
+                />
+              </View>
+            </View>
+          )}
         </View>
       </View>
     </>
@@ -80,64 +134,84 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     opacity: 0.3,
-    zIndex: 0,
   },
   hazeButton: {
     height: '100%',
     width: '100%',
   },
   container: {
-    // flex: 1,
-    // backgroundColor: 'black',
-    // height: '100%',
-    // width: '100%',
-    // position: 'absolute',
-    // opacity: 1,
-    // zIndex: 1,
+    height: 400,
+    position: 'absolute',
+    bottom: 0,
   },
   bottomContainer: {
     display: 'flex',
-    height: 440,
-    width: '100%',
+    height: 400,
+    width: width,
     alignItems: 'center',
     justifyContent: 'flex-start',
     backgroundColor: 'white',
-    position: 'absolute',
+    //  position: 'absolute',
     bottom: 0,
-    alignSelf: 'center',
+    left: 0,
+    top: 40,
     borderRadius: 36,
     padding: 30,
     paddingTop: 36,
-    opacity: 1,
-    zIndex: 2,
+
+    zIndex: 15,
   },
   parent: {
     justifyContent: 'flex-start',
     alignItems: 'center',
-    height: 275,
-    width: '100%',
+    height: 300,
+    width: width,
     backgroundColor: 'white',
-    opacity: 1,
+
     zIndex: 2,
   },
   question: {
-    fontSize: 16,
-
+    fontSize: 14,
+    fontWeight: '700',
     color: 'black',
+    marginBottom: 20,
+  },
+  textDetail: {
+    textAlign: 'left',
+    color: 'teal',
   },
   button: {
     borderWidth: 0.5,
-    backgroundColor: 'lightgrey',
-    width: '120%',
+    backgroundColor: 'rgba(224, 224, 224, .9)',
+    minWidth: width - 30,
     color: 'white',
     padding: 10,
     alignSelf: 'center',
-    borderRadius: 11,
+    borderRadius: 7,
+    margin: 14,
+  },
+  buttonPink: {
+    borderWidth: 0.5,
+    backgroundColor: 'rgb(239,150,128)',
+    minWidth: width - 30,
+    color: 'white',
+    padding: 10,
+    alignSelf: 'center',
+    borderRadius: 7,
+    margin: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  pinkButtonDetails: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   buttonText: {
     color: 'black',
     fontSize: 15,
     textAlign: 'center',
+    fontWeight: '500',
   },
 });
 export default PauseOptionCard;

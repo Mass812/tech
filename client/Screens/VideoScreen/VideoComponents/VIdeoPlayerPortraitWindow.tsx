@@ -1,19 +1,20 @@
 import {LessonScreenStore} from '../VideoScreen';
-import Video, {
-  OnSeekData,
-  OnLoadData,
-  OnProgressData,
-} from 'react-native-video';
-import React, {useContext, useRef} from 'react';
-import {StyleSheet, Dimensions} from 'react-native';
+import Video from 'react-native-video';
+import React, {useContext, useRef, useEffect, useState} from 'react';
+import {StyleSheet, Dimensions, Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import Orientation from 'react-native-orientation-locker';
+import VideoControls from './VideoControls';
+import PauseOptionCard from './PauseOptionCard';
+import TitleBannerUnderVideo from './TitleBannerUnderVideo';
+import {ScrollView} from 'react-native-gesture-handler';
+import PlayingNext from '../UnderVideoDetailComponents/IndependentWorkout/PlayingNext';
 
-const width = Dimensions.get('screen').width;
-
+const width = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
 interface VideoPlayerPortraitWindowProps {
   contentUrl: string;
 }
-
 interface iPlaybackShape {
   currentTime: number;
   playableDuration: number;
@@ -24,11 +25,43 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
   contentUrl,
 }) => {
   let {state, dispatch} = useContext(LessonScreenStore);
-  let videoRef = useRef<HTMLElement | null>(null);
+  const [hidePauseMenu, setHidePauseMenu] = useState(state.paused);
+  let videoRef = useRef<HTMLElement | any>(null);
+
   const nav = useNavigation();
+
+  const handleOrientation = (orientation: string) => {
+    var initial = Orientation.getInitialOrientation();
+    if (initial == 'LANDSCAPE-RIGHT' || 'LANDSCAPE-LEFT') {
+      dispatch({type: 'LOCK_PORTRAIT', payload: false});
+      return;
+    } else {
+      dispatch({type: 'LOCK_PORTRAIT', payload: true});
+      return;
+    }
+  };
+
+  const rerenderCurrentTime = () => {};
+
+  useEffect(() => {
+    console.log('rerendered ', state.currentTime);
+    Orientation.addOrientationListener((orientation: string) => {
+      handleOrientation(orientation);
+    });
+    return () => {
+      Orientation.removeOrientationListener((orientation: string) => {
+        console.log('no longer watching orientation');
+      });
+    };
+  }, []);
+
+  useEffect(() => {
+    dispatch({type: 'Paused', paylaod: false});
+  }, [state.restart]);
 
   const handleOnLoad = () => {
     dispatch({type: 'LOADING', payload: false});
+    dispatch({type: 'BUFFERING', payload: false});
   };
 
   const getMinutesFromSeconds = (time: number) => {
@@ -39,7 +72,6 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
     }`;
   };
   const onProgress = (data: iPlaybackShape) => {
-    //only way is metadata or db doc params
     if (!state.loading && !state.paused) {
       dispatch({
         type: 'CURRENT_TIME',
@@ -57,40 +89,131 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
         type: 'CURRENT_PLAYER_TIME_AS_STRING',
         payload: getMinutesFromSeconds(state.currentTime),
       });
+
+      let number = state.playableDuration - state.currentTime;
+
+      dispatch({
+        type: 'TIME_REMAINING_AS_STRING',
+        payload: getMinutesFromSeconds(number),
+      });
     }
+    return;
+  };
+
+  const seekToLocation = () => {
+    videoRef.current.seek(state.currentTime);
+    dispatch({type: 'Paused', paylaod: false});
+  };
+
+  const restartTheLesson = () => {
+    dispatch({type: 'Paused', paylaod: false});
+    videoRef.current.seek(0);
+    setHidePauseMenu(!hidePauseMenu);
   };
 
   return (
-    <Video
-      source={{
-        uri: `${contentUrl}`,
-      }}
-      onLoadStart={() => dispatch({type: 'LOADING', payload: true})}
-      onLoad={handleOnLoad}
-      onEnd={() => nav.goBack()}
-      //  onBuffer={() => dispatch({type: 'BUFFERING', payload: true})} // Callback when remote video is buffering
-      onError={() => console.log('error')} // Callback when video cannot be loaded
-      style={styles.videoPortrait}
-      paused={state.paused}
-      fullscreen={false}
-      //fullscreenOrientation={'portrait'}
-      ref={(video) => (videoRef.current = video)}
-      onProgress={(currentTime: any) => onProgress(currentTime)}
-      progressUpdateInterval={250}
-      resizeMode={'cover'}
-      bufferConfig={{
-        minBufferMs: 30000,
-        maxBufferMs: 70000,
-        bufferForPlaybackMs: 3500,
-        bufferForPlaybackAfterRebufferMs: 5000,
-      }}
-    />
+    <View style={styles.wholePage}>
+      <View style={styles.videoArea}>
+        <Video
+          source={{
+            uri: `${contentUrl}`,
+          }}
+          onLoadStart={() => dispatch({type: 'LOADING', payload: true})}
+          onLoad={handleOnLoad}
+          // onEnd={() => nav.goBack()}
+          // onBuffer={() => dispatch({type: 'BUFFERING', payload: true})}
+          onError={() => console.log('error')}
+          style={styles.videoPortrait}
+          paused={state.paused}
+          fullscreen={false}
+          fullscreenOrientation={'portrait'}
+          ref={(video) => (videoRef.current = video)}
+          onProgress={onProgress}
+          progressUpdateInterval={500}
+          resizeMode={'cover'}
+        />
+
+        <VideoControls seekToLocation={seekToLocation} />
+      </View>
+      <TitleBannerUnderVideo />
+
+      <View style={styles.componentArea}>
+        <View style={styles.playingNextParent}>
+          <ScrollView horizontal={false}>
+            {/* <PlayingNext /> */}
+            <Text>He</Text>
+            <Text>He</Text>
+            <Text>He</Text>
+            <Text>He</Text>
+            <Text>He</Text>
+            <Text>He</Text>
+            <Text>He</Text>
+            <Text>He</Text>
+            <Text>He</Text>
+            <Text>He</Text>
+            <Text>He</Text>
+            <Text>He</Text>
+            <Text>He</Text>
+            <Text>He</Text>
+            <Text>He</Text>
+            <Text>He</Text>
+            <Text>He</Text>
+            <Text>He</Text>
+            <Text>He</Text>
+            <Text>He</Text>
+            <Text>He</Text>
+            <Text>He</Text>
+            <Text>He</Text>
+            <Text>He</Text>
+          </ScrollView>
+        </View>
+      </View>
+      {state.paused && <PauseOptionCard restartTheLeeson={restartTheLesson} />}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  wholePage: {
+    maxHeight: height,
+  },
+  videoArea: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: width,
+    justifyContent: 'flex-start',
+  },
+  componentArea: {
+    maxHeight: 400,
+  },
   videoPortrait: {
     minHeight: 400,
+  },
+  videoWide: {
+    position: 'absolute',
+    height: height,
+    width: width,
+  },
+
+  sliderParent: {
+    padding: 30,
+    paddingBottom: 0,
+    position: 'absolute',
+    bottom: 10,
+    zIndex: 9,
+    width: width - 20,
+  },
+  timerParent: {
+    position: 'absolute',
+    left: 30,
+    bottom: 25,
+  },
+  timer: {
+    position: 'absolute',
+    bottom: 20,
+    zIndex: 2,
+    width: width - 20,
+    color: 'white',
   },
 });
 export default VideoPlayerPortraitWindow;

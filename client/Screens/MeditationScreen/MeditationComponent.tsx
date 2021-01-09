@@ -2,7 +2,6 @@ import React from 'react';
 import {
   View,
   StyleSheet,
-  Text,
   FlatList,
   SafeAreaView,
   Dimensions,
@@ -10,7 +9,7 @@ import {
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useQuery} from 'urql';
 import ProgramCard from '../../ReusableComponents/UiCards/ProgramCard';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import LoadingScreen from '../SplashScreens/Loading';
 import ErrorScreen from '../SplashScreens/ErrorScreen';
 

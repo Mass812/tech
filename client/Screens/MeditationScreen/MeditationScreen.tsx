@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, SafeAreaView} from 'react-native';
+import {View, SafeAreaView} from 'react-native';
 import MeditationComponent from './MeditationComponent';
 
 const Meditations = `
@@ -33,7 +33,7 @@ interface MeditationProps {
 const Meditation: React.FC<MeditationProps> = ({horizontal = false}) => {
   return (
     <SafeAreaView>
-      <View style={styles.container}>
+      <View>
         <MeditationComponent
           dataProps={'meditations'}
           horizontal={false}
@@ -44,11 +44,4 @@ const Meditation: React.FC<MeditationProps> = ({horizontal = false}) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    // flex:1,
-    // alignItems: 'center',
-    // justifyContent: 'center',
-  },
-});
 export default Meditation;

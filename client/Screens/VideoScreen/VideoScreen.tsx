@@ -2,7 +2,6 @@ import React, {useEffect, useReducer} from 'react';
 import {View, StyleSheet, Dimensions} from 'react-native';
 import {useRoute} from '@react-navigation/native';
 import {ScrollView} from 'react-native-gesture-handler';
-import Orientation from 'react-native-orientation-locker';
 import TitleBannerUnderVideo from './VideoComponents/TitleBannerUnderVideo';
 import VideoControls from './VideoComponents/VideoControls';
 import PlayingNext from './UnderVideoDetailComponents/IndependentWorkout/PlayingNext';
@@ -20,11 +19,21 @@ const InitialState: iComponentState = {
   playableDuration: 0,
   seekableDuration: 0,
   currentPlayerTimeAsString: '',
+  timeRemainingAsString: '',
   buffering: false,
   currentSlideTime: '0',
   totalPlayerTimeAsString: '0',
   screenOrientation: '',
   renderedVideoTapped: false,
+  lockPortrait: false,
+  restart: false,
+  courseName: '',
+  instructor: '',
+  length: '',
+  weekNumber: '',
+  lessonNumber: '',
+  targets: '',
+  title: '',
 };
 interface iComponentState {
   loading: boolean;
@@ -34,11 +43,21 @@ interface iComponentState {
   playableDuration: number;
   seekableDuration: number;
   currentPlayerTimeAsString: string;
+  totalPlayerTimeAsString: string;
+  timeRemainingAsString: string;
   buffering: boolean;
   currentSlideTime: string;
-  totalPlayerTimeAsString: string;
   screenOrientation: string;
   renderedVideoTapped: boolean;
+  lockPortrait: boolean;
+  restart: boolean;
+  courseName: string;
+  instructor: string;
+  length: string;
+  weekNumber: string;
+  lessonNumber: string;
+  targets: string;
+  title: string;
 }
 type Action =
   | {type: 'LOADING'; payload: boolean}
@@ -49,10 +68,21 @@ type Action =
   | {type: 'SEEKABLE_DURATION'; payload: number}
   | {type: 'CURRENT_PLAYER_TIME_AS_STRING'; payload: string}
   | {type: 'TOTAL_PLAYER_TIME_AS_STRING'; payload: string}
+  | {type: 'TIME_REMAINING_AS_STRING'; payload: string}
   | {type: 'BUFFERING'; payload: boolean}
   | {type: 'CURRENT_SLIDE_TIME'; payload: string}
   | {type: 'SCREEN_ORIENTATION'; payload: string}
-  | {type: 'RENDERED_VIDEO_TAPPED'; payload: boolean};
+  | {type: 'RENDERED_VIDEO_TAPPED'; payload: boolean}
+  | {type: 'LOCK_PORTRAIT'; payload: boolean}
+  | {type: 'RESTART'; payload: boolean}
+  | {type: 'COURSE_NAME'; payload: string}
+  | {type: 'INSTRUCTOR'; payload: string}
+  | {type: 'LENGTH'; payload: string}
+  | {type: 'WEEK_NUMBER'; payload: string}
+  | {type: 'LESSON_NUMBER'; payload: string}
+  | {type: 'TARGETS'; payload: string}
+  | {type: 'TITLE'; payload: string}
+  | {type: 'RESET'};
 
 export const videoReducer = (
   state = InitialState,
@@ -79,12 +109,32 @@ export const videoReducer = (
       return {...state, currentPlayerTimeAsString: action.payload};
     case 'TOTAL_PLAYER_TIME_AS_STRING':
       return {...state, totalPlayerTimeAsString: action.payload};
+    case 'TIME_REMAINING_AS_STRING':
+      return {...state, timeRemainingAsString: action.payload};
     case 'RENDERED_VIDEO_TAPPED':
       return {...state, renderedVideoTapped: action.payload};
     case 'BUFFERING':
       return {...state, buffering: action.payload};
+    case 'LOCK_PORTRAIT':
+      return {...state, lockPortrait: action.payload};
+    case 'COURSE_NAME':
+      return {...state, courseName: action.payload};
+    case 'INSTRUCTOR':
+      return {...state, instructor: action.payload};
+    case 'TITLE':
+      return {...state, title: action.payload};
+    case 'LENGTH':
+      return {...state, length: action.payload};
+    case 'WEEK_NUMBER':
+      return {...state, weekNumber: action.payload};
+    case 'LESSON_NUMBER':
+      return {...state, lessonNumber: action.payload};
+    case 'TARGETS':
+      return {...state, targets: action.payload};
+    case 'RESET':
+      return InitialState;
     default:
-      throw new Error('No action recognized ');
+      return state;
   }
 };
 interface iSeek {
@@ -106,13 +156,15 @@ type Params = {
   title: string;
   length?: string;
 };
+
 interface iPlaybackShape {
   currentTime: number;
   playableDuration: number;
   seekableDuration: number;
+  currentTimeRemaining?: number;
 }
 
-export const LessonScreenStore = React.createContext<LessonScreenProps | any>(
+export const LessonScreenStore = React.createContext<iComponentState | any>(
   InitialState,
 );
 
@@ -123,31 +175,6 @@ const LessonScreen: React.FC<LessonScreenProps> = () => {
     dispatch,
   ]);
 
-  const handleOrientation = (orientation: string) => {
-    var initial = Orientation.getInitialOrientation();
-    if (initial == 'LANDSCAPE-RIGHT' || 'LANDSCAPE-LEFT') {
-      console.log('screen mode landscape');
-
-      return;
-    } else {
-      //TODO POP LANDSCAPE SCREEN ON
-      console.log('screen mode portrait');
-      return;
-    }
-  };
-
-  useEffect(() => {
-    Orientation.addOrientationListener((orientation: string) => {
-      // console.log(orientation);
-      handleOrientation(orientation);
-    });
-    return () => {
-      Orientation.removeOrientationListener((orientation: string) => {
-        console.log('no longer watching orientation');
-      });
-    };
-  }, []);
-
   const route = useRoute<LessonScreenProps>();
   let {
     title,
@@ -156,31 +183,32 @@ const LessonScreen: React.FC<LessonScreenProps> = () => {
     weekNumber,
     lessonNumber,
     length,
+    courseName,
   } = route.params;
+
+  useEffect(() => {
+    dispatch({type: 'COURSE_NAME', payload: courseName ?? ''});
+    dispatch({type: 'TITLE', payload: title ?? ''});
+    dispatch({type: 'INSTRUCTOR', payload: instructor ?? ''});
+    dispatch({type: 'WEEK_NUMBER', payload: weekNumber ?? ''});
+    dispatch({type: 'LESSON_NUMBER', payload: lessonNumber ?? ''});
+    dispatch({type: 'LENGTH', payload: length ?? ''});
+  }, []);
+  // console.log(route.params);
 
   return (
     <LessonScreenStore.Provider value={videoRedux}>
+      <VideoPlayerPortraitWindow contentUrl={contentUrl} />
       <View style={styles.container}>
-        <View style={styles.videoParentPortrait}>
-          <VideoPlayerPortraitWindow contentUrl={contentUrl} />
-
-          <VideoControls />
-        </View>
-
-        {/*         Get API Key Spotify and Connect */}
-        <TitleBannerUnderVideo
-          width={width}
-          title={title}
-          length={'length'}
-          playAction={() => console.log('okay')}
-        />
-
+        {/* <View style={styles.videoParentPortrait}> */}
+        {/* </View> */}
+        {/* <TitleBannerUnderVideo />
         <ScrollView>
           <View style={styles.playingNextParent}>
             <PlayingNext />
           </View>
         </ScrollView>
-        {state.paused ? <PauseOptionCard /> : null}
+        {state.paused ? <PauseOptionCard /> : null} */}
       </View>
     </LessonScreenStore.Provider>
   );

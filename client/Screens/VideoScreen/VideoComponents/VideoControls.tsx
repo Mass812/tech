@@ -12,9 +12,11 @@ import {LessonScreenStore} from '../VideoScreen';
 import VideoControlSlider from './VideoControlSlider';
 const width = Dimensions.get('screen').width;
 
-interface VideoControlsProps {}
+interface VideoControlsProps {
+  seekToLocation: () => void;
+}
 
-const VideoControls: React.FC<VideoControlsProps> = ({}) => {
+const VideoControls: React.FC<VideoControlsProps> = ({seekToLocation}) => {
   let {state, dispatch} = useContext(LessonScreenStore);
 
   const nav = useNavigation();
@@ -61,14 +63,12 @@ const VideoControls: React.FC<VideoControlsProps> = ({}) => {
               <FontAwesomeIcon icon={faExpandAlt} size={17} color="black" />
             </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.middleIcon} onPress={handlePause}>
-            {state.paused ? (
-              <FontAwesomeIcon icon={faPlay} size={36} color={'black'} />
-            ) : (
-              <FontAwesomeIcon icon={faPause} size={36} color={'black'} />
-            )}
-          </TouchableOpacity>
-          <VideoControlSlider />
+          {state.paused ? null : (
+            <TouchableOpacity style={styles.middleIcon} onPress={handlePause}>
+              <FontAwesomeIcon icon={faPause} size={22} color={'black'} />
+            </TouchableOpacity>
+          )}
+          <VideoControlSlider onSlideComplete={seekToLocation} />
         </>
       ) : null}
     </TouchableOpacity>
