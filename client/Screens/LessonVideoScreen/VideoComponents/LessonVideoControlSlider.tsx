@@ -1,7 +1,7 @@
 import React, {useContext, useEffect} from 'react';
 import {View, StyleSheet, Dimensions, Text} from 'react-native';
 import Slider from '@react-native-community/slider';
-import {LessonScreenStore} from '../VideoScreen';
+import {VideoStore} from '../LessonVideoScreen';
 const width = Dimensions.get('screen').width;
 
 interface VideoControlSliderProps {
@@ -11,7 +11,7 @@ interface VideoControlSliderProps {
 const VideoControlSlider: React.FC<VideoControlSliderProps> = ({
   onSlideComplete,
 }) => {
-  let {state, dispatch} = useContext(LessonScreenStore);
+  let {state, dispatch} = useContext(VideoStore);
 
   useEffect(() => {}, [state, dispatch]);
 
@@ -34,7 +34,7 @@ const VideoControlSlider: React.FC<VideoControlSliderProps> = ({
           onSlidingComplete={onSlideComplete}
           onSlidingStart={() => dispatch({type: 'PAUSED', payload: true})}
           onValueChange={onSlide}
-          // thumbTintColor={'rgba(28, 158, 155, 0.4)'}
+          thumbTintColor={'rgba(28, 158, 155, 0.0)'}
         />
       </View>
       <View style={styles.timerParent}>

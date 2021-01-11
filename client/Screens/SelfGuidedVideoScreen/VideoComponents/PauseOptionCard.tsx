@@ -4,7 +4,7 @@ import {View, StyleSheet, Text, Dimensions} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faMusic, faPlayCircle} from '@fortawesome/free-solid-svg-icons';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {LessonScreenStore} from '../VideoScreen';
+import {SgVideoStore} from '../SelfGuidedVideoScreen';
 
 interface PauseOptionCardProps {
   restartTheLeeson?: () => void;
@@ -19,7 +19,7 @@ const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
 const Haze: React.FC<PauseOptionCardProps> = () => {
-  const {state, dispatch} = useContext(LessonScreenStore);
+  const {state, dispatch} = useContext(SgVideoStore);
   return (
     <View style={styles.haze}>
       <TouchableOpacity
@@ -51,7 +51,7 @@ const CardButtonPink: React.FC<iPressText> = ({text, onPress}) => {
 const PauseOptionCard: React.FC<PauseOptionCardProps> = ({
   restartTheLeeson,
 }) => {
-  const {state, dispatch} = useContext(LessonScreenStore);
+  const {state, dispatch} = useContext(SgVideoStore);
   const [showSecondCard, setShowSecondCard] = useState<boolean>();
   let nav = useNavigation();
 

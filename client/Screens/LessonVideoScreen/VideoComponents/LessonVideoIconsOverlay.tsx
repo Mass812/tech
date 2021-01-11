@@ -8,8 +8,8 @@ import {
   faPlay,
 } from '@fortawesome/free-solid-svg-icons';
 import {useNavigation, useRoute} from '@react-navigation/native';
-import {LessonScreenStore} from '../VideoScreen';
-import VideoControlSlider from './VideoControlSlider';
+import {VideoStore} from '../LessonVideoScreen';
+import VideoControlSlider from './LessonVideoControlSlider';
 const width = Dimensions.get('screen').width;
 
 interface VideoControlsProps {
@@ -17,12 +17,13 @@ interface VideoControlsProps {
 }
 
 const VideoControls: React.FC<VideoControlsProps> = ({seekToLocation}) => {
-  let {state, dispatch} = useContext(LessonScreenStore);
+  let {state, dispatch} = useContext(VideoStore);
 
   const nav = useNavigation();
 
   const handleClose = () => {
-    nav.goBack();
+    dispatch({type: 'PAUSED', payload: true});
+    // nav.goBack();
   };
 
   const hamdleExpand = () => {

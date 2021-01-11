@@ -1,14 +1,14 @@
-import {LessonScreenStore} from '../VideoScreen';
+import {SgVideoStore} from '../SelfGuidedVideoScreen';
 import Video from 'react-native-video';
 import React, {useContext, useRef, useEffect, useState} from 'react';
 import {StyleSheet, Dimensions, Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Orientation from 'react-native-orientation-locker';
-import VideoControls from './VideoControls';
+import VideoControls from './SelfGuidedVideoIconOverlay';
 import PauseOptionCard from './PauseOptionCard';
-import TitleBannerUnderVideo from './TitleBannerUnderVideo';
+import TitleBannerUnderVideo from './SelfGuidedTitleBannerUnderVideo';
 import {ScrollView} from 'react-native-gesture-handler';
-import PlayingNext from '../UnderVideoDetailComponents/IndependentWorkout/PlayingNext';
+import CourseOverview from '../../../ReusableComponents/UiCards/CourseOverview';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -23,8 +23,9 @@ interface iPlaybackShape {
 
 const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
   contentUrl,
+  children,
 }) => {
-  let {state, dispatch} = useContext(LessonScreenStore);
+  let {state, dispatch} = useContext(SgVideoStore);
   const [hidePauseMenu, setHidePauseMenu] = useState(state.paused);
   let videoRef = useRef<HTMLElement | any>(null);
 
@@ -41,8 +42,6 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
     }
   };
 
-  const rerenderCurrentTime = () => {};
-
   useEffect(() => {
     console.log('rerendered ', state.currentTime);
     Orientation.addOrientationListener((orientation: string) => {
@@ -55,9 +54,22 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
     };
   }, []);
 
-  useEffect(() => {
-    dispatch({type: 'Paused', paylaod: false});
-  }, [state.restart]);
+  const onEnd = () => {
+    if (state.sectionNumber + 1 === state.exerciseSections.length) {
+      nav.navigate('Home');
+    } else {
+      let next = state.sectionNumber + 1;
+
+      dispatch({
+        type: 'VIDEO_PLAYING',
+        payload: state.exerciseSections[next],
+      });
+      dispatch({
+        type: 'SECTION_NUMBER',
+        payload: next,
+      });
+    }
+  };
 
   const handleOnLoad = () => {
     dispatch({type: 'LOADING', payload: false});
@@ -100,73 +112,45 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
     return;
   };
 
-  const seekToLocation = () => {
-    videoRef.current.seek(state.currentTime);
-    dispatch({type: 'Paused', paylaod: false});
-  };
-
   const restartTheLesson = () => {
     dispatch({type: 'Paused', paylaod: false});
     videoRef.current.seek(0);
     setHidePauseMenu(!hidePauseMenu);
   };
 
+  let displayThisVideo = (
+    <Video
+      source={{
+        uri: state.videoPlaying,
+      }}
+      onLoadStart={() => dispatch({type: 'LOADING', payload: true})}
+      onLoad={handleOnLoad}
+      // TODO END OF VIDEO FX
+      onEnd={onEnd}
+      // onBuffer={() => dispatch({type: 'BUFFERING', payload: true})}
+      onError={() => console.log('error')}
+      style={styles.videoPortrait}
+      paused={state.paused}
+      fullscreen={false}
+      fullscreenOrientation={'portrait'}
+      ref={(video) => (videoRef.current = video)}
+      onProgress={onProgress}
+      progressUpdateInterval={500}
+      resizeMode={'cover'}
+    />
+  );
+
   return (
     <View style={styles.wholePage}>
       <View style={styles.videoArea}>
-        <Video
-          source={{
-            uri: `${contentUrl}`,
-          }}
-          onLoadStart={() => dispatch({type: 'LOADING', payload: true})}
-          onLoad={handleOnLoad}
-          // onEnd={() => nav.goBack()}
-          // onBuffer={() => dispatch({type: 'BUFFERING', payload: true})}
-          onError={() => console.log('error')}
-          style={styles.videoPortrait}
-          paused={state.paused}
-          fullscreen={false}
-          fullscreenOrientation={'portrait'}
-          ref={(video) => (videoRef.current = video)}
-          onProgress={onProgress}
-          progressUpdateInterval={500}
-          resizeMode={'cover'}
-        />
-
-        <VideoControls seekToLocation={seekToLocation} />
+        {displayThisVideo}
+        <VideoControls />
       </View>
       <TitleBannerUnderVideo />
 
       <View style={styles.componentArea}>
-        <View style={styles.playingNextParent}>
-          <ScrollView horizontal={false}>
-            {/* <PlayingNext /> */}
-            <Text>He</Text>
-            <Text>He</Text>
-            <Text>He</Text>
-            <Text>He</Text>
-            <Text>He</Text>
-            <Text>He</Text>
-            <Text>He</Text>
-            <Text>He</Text>
-            <Text>He</Text>
-            <Text>He</Text>
-            <Text>He</Text>
-            <Text>He</Text>
-            <Text>He</Text>
-            <Text>He</Text>
-            <Text>He</Text>
-            <Text>He</Text>
-            <Text>He</Text>
-            <Text>He</Text>
-            <Text>He</Text>
-            <Text>He</Text>
-            <Text>He</Text>
-            <Text>He</Text>
-            <Text>He</Text>
-            <Text>He</Text>
-          </ScrollView>
-        </View>
+        {/* <ScrollView horizontal={false}>{children}</ScrollView> */}
+        {children}
       </View>
       {state.paused && <PauseOptionCard restartTheLeeson={restartTheLesson} />}
     </View>
@@ -184,7 +168,9 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   componentArea: {
-    maxHeight: 400,
+    height: '100%',
+    minHeight: 400,
+    width: width,
   },
   videoPortrait: {
     minHeight: 400,
@@ -214,6 +200,9 @@ const styles = StyleSheet.create({
     zIndex: 2,
     width: width - 20,
     color: 'white',
+  },
+  childContainer: {
+    minHeight: 400,
   },
 });
 export default VideoPlayerPortraitWindow;

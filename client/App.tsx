@@ -5,12 +5,14 @@ import {createStackNavigator, HeaderTitle} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Home from './Screens/HomeScreen/Home';
 import LessonDetail from './Screens/LessonDetailScreen/LessonDetail';
-import Programs from './Screens/AllPrograms/AllProgramsScreen';
-import ProgramDetail from './Screens/ProgramDetailScreen/ProgramDetail';
-import Workouts from './Screens/Workouts/Workouts';
+import LessonVideoScreen from './Screens/LessonVideoScreen/LessonVideoScreen';
 import Meditation from './Screens/MeditationScreen/MeditationScreen';
 import Profile from './Screens/ProfileScreen/Profile';
+import Programs from './Screens/AllPrograms/AllProgramsScreen';
+import ProgramDetail from './Screens/ProgramDetailScreen/ProgramDetail';
 import MeditationPlayer from './Screens/MeditationScreen/MeditationPlayer/MeditationPlayer';
+import SelfGuidedVideoScreen from './Screens/SelfGuidedVideoScreen/SelfGuidedVideoScreen';
+import Workouts from './Screens/Workouts/Workouts';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {
   faHome,
@@ -19,8 +21,6 @@ import {
   faBalanceScale,
   faUserCircle,
 } from '@fortawesome/free-solid-svg-icons';
-
-import VideoScreen from './Screens/VideoScreen/VideoScreen';
 
 const client = createClient({
   url: 'http://localhost:4321/graphql',
@@ -51,7 +51,7 @@ type MeditationStackParams = {
 };
 
 type RootParams = {
-  VideoScreen: {
+  LessonVideoScreen: {
     contentUrl: string;
     weekNumber: string;
     lessonNumber: string;
@@ -59,6 +59,7 @@ type RootParams = {
     instructor: string;
     title: string;
   };
+  SelfGuidedVideoScreen: {};
   RootHome: {};
   MeditationPlayer: {
     courseName: string;
@@ -199,8 +200,13 @@ function App() {
               options={{headerShown: false}}
             />
             <Root.Screen
-              name="VideoScreen"
-              component={VideoScreen}
+              name="LessonVideoScreen"
+              component={LessonVideoScreen}
+              options={{headerShown: false}}
+            />
+            <Root.Screen
+              name="SelfGuidedVideoScreen"
+              component={SelfGuidedVideoScreen}
               options={{headerShown: false}}
             />
           </Root.Navigator>

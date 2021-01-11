@@ -1,4 +1,4 @@
-import {LessonScreenStore} from '../VideoScreen';
+import {VideoStore} from '../LessonVideoScreen';
 import Video, {
   OnSeekData,
   OnLoadData,
@@ -24,7 +24,7 @@ interface iPlaybackShape {
 const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
   contentUrl,
 }) => {
-  let {state, dispatch} = useContext(LessonScreenStore);
+  let {state, dispatch} = useContext(VideoStore);
   let videoRef = useRef<HTMLElement | null>(null);
   const nav = useNavigation();
 

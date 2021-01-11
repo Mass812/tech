@@ -31,6 +31,10 @@ const getAllMeditations_ddb = require("./DynamoDB_Request_Functions/Query_Reques
 const getPopularLessons_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getPopularLessons_ddb")
 const getPopularMeditations_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getPopularMeditations_ddb")
 const getPopularSelfGuided_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getPopularSelfGuided_ddb")
+const getSpecificCourseLesson_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getSpecificCourseLesson_ddb")
+const getLessonsOfCourses_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getLessonsOfCourses_ddb")
+const getSpecificSelfGuidedLesson_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getSpecificSelfGuidedLesson_ddb")
+const getVideoSectionsOfSelfGuidedLesson_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getVideoSectionsOfSelfGuidedLesson_ddb")
 //const getPopularCourses_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getPopularCourses_ddb")
 
 //db mutation calls
@@ -38,13 +42,12 @@ const createUser = require("./DynamoDB_Request_Functions/Mutation_Requests/creat
 const createCourse = require("./DynamoDB_Request_Functions/Mutation_Requests/createCourse_ddb")
 const createWorkout = require("./DynamoDB_Request_Functions/Mutation_Requests/createWorkout_ddb")
 const updateUserProfile = require("./DynamoDB_Request_Functions/Mutation_Requests/updateUser_ddb")
-const createLesson = require("./DynamoDB_Request_Functions/Mutation_Requests/createCourseLesson_ddb")
+const createCourseLesson = require("./DynamoDB_Request_Functions/Mutation_Requests/createCourseLesson_ddb")
 const createInstructorProfile = require("./DynamoDB_Request_Functions/Mutation_Requests/createInstructorProfile_ddb")
 const createCourseCompletionDoc_ddb = require("./DynamoDB_Request_Functions/Mutation_Requests/createCourseCompletionDoc_ddb")
-const createIndependentLesson_ddb = require("./DynamoDB_Request_Functions/Mutation_Requests/createIndependentLesson_ddb")
+const createSelfGuidedLesson_ddb = require("./DynamoDB_Request_Functions/Mutation_Requests/createSelfGuidedLesson_ddb")
 const createMeditation_ddb = require("./DynamoDB_Request_Functions/Mutation_Requests/createMeditation_ddb")
-const getSpecificCourseLesson_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getSpecificCourseLesson_ddb")
-const getLessonsOfCourses_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getLessonsOfCourses_ddb")
+const createSelfGuidedLessonSection_ddb = require("./DynamoDB_Request_Functions/Mutation_Requests/createSelfGuidedLessonVideoSection_ddb")
 
 const Query = gql`
   type Query {
@@ -65,7 +68,8 @@ const Query = gql`
     popularCourses: [Course]
     popularLessons: [Lesson]
     popularMeditations: [Meditation]
-    popularSelfGuided: [Lesson]
+    popularSelfGuided: [SelfGuided]
+    selfGuided(id: String!): SelfGuided
   }
 
   type User {
@@ -80,7 +84,7 @@ const Query = gql`
   type WeekReport {
     weekodYear: Int
     streak: Int
-    weeklyInDependentWorkouts: Int
+    weeklySelfGuidedWorkouts: Int
     weeklyGuidedWorkouts: Int
     height: Int
     weight: Int
@@ -89,7 +93,7 @@ const Query = gql`
   type MonthReport {
     monthNumber: Int
     highestStreak: Int
-    weeklyInDependentWorkouts: Int
+    weeklySelfGuidedWorkouts: Int
     weeklyGuidedWorkouts: Int
     height: Int
     weight: Int
@@ -176,6 +180,31 @@ const Query = gql`
     popularity: String
   }
 
+  type SelfGuided {
+    id: String
+    category: String
+    length: String
+    contentUrl: String
+    img: String
+    created: String
+    title: String
+    equipment: [String]
+    popularity: Int
+
+    selfGuidedLesson: Boolean
+    selfGuided: String
+    exerciseSections: [SelfGuidedVideoSection]
+  }
+
+  type SelfGuidedVideoSection {
+    title: String
+    id: String
+    length: Int
+    contentUrl: String
+    sectionNumber: Int
+    courseRelations: SelfGuided
+  }
+
   type Meditation {
     category: String
     instructor: String
@@ -208,11 +237,7 @@ const Query = gql`
     created: String!
     lectureCount: Int!
     description: String!
-    cost: String!
-    saleCost: String!
-    onSale: Boolean!
     length: String!
-    currentStudentCount: Int!
   }
 `
 
@@ -221,8 +246,9 @@ const Mutation = gql`
     createUser: User!
     updateUser(email: String!, attribute: String!, value: String!): User
     createCourse: Course!
-    createLesson: Lesson!
-    createIndependentLesson: Lesson!
+    createCourseLesson: Lesson!
+    createSelfGuidedLesson: SelfGuided
+    createSelfGuidedLessonSection: SelfGuidedVideoSection
     createInstructorProfile: InstructorProfile
     createWorkout: Workout!
     createCourseCompletionDoc: CourseCompletionDoc
@@ -281,7 +307,6 @@ let resolvers = {
     },
     popularCourses: async () => {
       //  return getPopularCourses_ddb()
-      console.log("popCourses hit")
     },
     popularLessons: async () => {
       return getPopularLessons_ddb()
@@ -291,6 +316,9 @@ let resolvers = {
     },
     popularSelfGuided: async () => {
       return getPopularSelfGuided_ddb()
+    },
+    selfGuided: async (parent, args) => {
+      return getSpecificSelfGuidedLesson_ddb(args)
     },
   },
 
@@ -310,24 +338,30 @@ let resolvers = {
     createCourse: async () => {
       return createCourse()
     },
-
-    createLesson: async () => {
-      return createLesson()
+    createCourseLesson: async () => {
+      return createCourseLesson()
     },
-    createIndependentLesson: async () => {
-      let data = createIndependentLesson_ddb()
+    createSelfGuidedLesson: async () => {
+      return createSelfGuidedLesson_ddb()
+    },
+    createSelfGuidedLessonSection: async () => {
+      return createSelfGuidedLessonSection_ddb()
     },
     createWorkout: async () => {
       return createWorkout()
     },
     createMeditation: async () => {
       return createMeditation_ddb()
-      return data
     },
   },
   Course: {
     courseRelation: (parent, args) => {
       return getLessonsOfCourses_ddb(parent)
+    },
+  },
+  SelfGuided: {
+    exerciseSections: (parent, args) => {
+      return getVideoSectionsOfSelfGuidedLesson_ddb(parent)
     },
   },
 }

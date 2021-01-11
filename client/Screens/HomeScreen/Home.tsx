@@ -28,12 +28,13 @@ query {
     title
   }
   popularSelfGuided{
+    img
     id
     length
     equipment
-    img
     title
     contentUrl
+    
   }
   popularMeditations{
     contentImg
@@ -66,8 +67,9 @@ interface PopularSelfGuided {
   title: string;
   length: string;
   id: string;
-  instructor: string;
+  exerciseSections: string;
   img: string;
+  equipment: [string];
 }
 
 interface HomeProps {}
@@ -102,17 +104,19 @@ const Home: React.FC<HomeProps> = () => {
   const sendToVideoScreen = (
     e: EventTarget,
     contentUrl: string,
-    instructor: string,
+    exerciseSections: string,
     length: string,
     id: string,
     title: string,
+    img: string,
   ) => {
-    nav.navigate('VideoScreen', {
+    nav.navigate('SelfGuidedVideoScreen', {
       contentUrl,
-      instructor,
+      exerciseSections,
       id,
       length,
       title,
+      img,
     });
   };
 
@@ -145,13 +149,14 @@ const Home: React.FC<HomeProps> = () => {
           sendToVideoScreen(
             e,
             item.contentUrl,
-            item.instructor,
+            item.exerciseSections,
             item.length,
             item.id,
             item.title,
+            item.img,
           )
         }
-        superscriptTitle={item.instructor}
+        superscriptTitle={item.exerciseSections}
         img={item.img}
         title={item.title}
         //  additionalInfo={[`${item.weekNumber} ${item.lessonNumber}`]}

@@ -5,29 +5,29 @@ AWS.config.update({ region: "us-east-2" })
 const db = new AWS.DynamoDB.DocumentClient()
 
 module.exports = async () => {
-  let instructor = "Ashley Wilkins"
-  let courseName = "Pure Burn"
+  let courseName = "Blitz Energy"
   let baseLink = process.env.REACT_APP_S3
   let contentUrl = "focus_energy_1.mp4"
-  let img = "rosannagh_macLennan_workout.jpg"
+  let img = "richard_simmons_course_img.png"
+  let id = uuidv4()
 
   const Params = {
     TableName: "App_Table",
     Item: {
       pk: `selfGuided`,
-      sk: `bodyPartFocus`,
-      id: uuidv4(),
-      category: "HIIT",
-      length: "20 min",
+      sk: `selfGuided#${id}`,
+      id: id,
+      category: "Cardio",
+      length: "3 min",
       contentUrl: `${baseLink}/${contentUrl}`,
       img: `${baseLink}/${img}`,
       created: new Date().toISOString(),
       title: courseName,
       equipment: ["Yoga Mat", "Light Dumbbells"],
-      instructor: `${instructor}`,
-      popularity: 3,
+      popularity: 10,
       selfGuidedLesson: true,
       selfGuided: "selfGuided",
+      exerciseSections: "3",
     },
   }
 

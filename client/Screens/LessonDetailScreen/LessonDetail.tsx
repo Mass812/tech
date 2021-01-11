@@ -35,7 +35,7 @@ query ($courseName: String!, $instructor: String!, $lessonNumber: String!, $week
   }
 `;
 
-interface ClassDetailProps {
+interface LessonDetailProps {
   courseName: string;
   instructor: string;
   // targets: string;
@@ -75,19 +75,11 @@ type Params = {
   instructor: string;
 };
 
-const ClassDetail: React.FC<ClassDetailProps> = () => {
+const LessonDetail: React.FC<LessonDetailProps> = () => {
   const route = useRoute<ParamList>();
   const nav = useNavigation();
 
   let {courseName, weekNumber, lessonNumber, instructor} = route.params;
-
-  console.log(
-    'in ClassDetail: ',
-    instructor,
-    courseName,
-    weekNumber,
-    lessonNumber,
-  );
 
   const [result, reexecuteQuery] = useQuery({
     query: findPopular,
@@ -103,7 +95,7 @@ const ClassDetail: React.FC<ClassDetailProps> = () => {
     nav.navigate('ProgramDetail', {courseName});
   };
 
-  console.log('ClassDetail Component: ', data.lesson);
+  console.log('LessonDetail Component: ', data.lesson);
 
   return (
     <ScrollView style={styles.container}>
@@ -120,7 +112,7 @@ const ClassDetail: React.FC<ClassDetailProps> = () => {
         onPress={() => {
           console.log('Cless Detail prop contentUrl: ', data.lesson.contentUrl);
 
-          nav.navigate('VideoScreen', {
+          nav.navigate('LessonVideoScreen', {
             contentUrl: data.lesson.contentUrl,
             weekNumber: data.lesson.weekNumber,
             lessonNumber: data.lesson.lessonNumber,
@@ -162,4 +154,4 @@ const styles = StyleSheet.create({
     color: 'green',
   },
 });
-export default ClassDetail;
+export default LessonDetail;
