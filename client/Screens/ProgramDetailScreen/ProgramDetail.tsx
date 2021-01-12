@@ -14,6 +14,7 @@ import CourseOverview from '../../ReusableComponents/UiCards/CourseOverview';
 import InstructionalLessonCard from '../../ReusableComponents/UiCards/InstructionalLessonCard';
 import LoadingScreen from '../SplashScreens/Loading';
 import ErrorScreen from '../SplashScreens/ErrorScreen';
+import FocusGraph from '../../ReusableComponents/FocusGraph/FocusGraph';
 
 const findCourse = `
 query ($courseName: String!) {
@@ -29,6 +30,10 @@ query ($courseName: String!) {
       courseImg
       equipment
       targets
+      targetArmsValue
+      targetBackValue
+      targetLegsValue
+      targetAbstValues
       courseRelation {
         contentUrl
         title
@@ -156,7 +161,15 @@ const ProgramDetail: React.FC<ProgramDetailProps> = () => {
         title={data.course.courseName}
         bulletPoints={`${data.course.lectureCount} Programes *  ${data.course.length}`}
         //TODO Link This to  All Course Videos Componet
-        onPress={() => nav.navigate('Home')}
+        onPress={(e: EventTarget) =>
+          onPress(
+            e,
+            data.course.courseRelation[0].courseName,
+            data.course.courseRelation[0].instructor,
+            data.course.courseRelation[0].weekNumber,
+            data.course.courseRelation[0].lessonNumber,
+          )
+        }
         displayAsCard={false}
       />
       <CourseOverview
@@ -172,7 +185,12 @@ const ProgramDetail: React.FC<ProgramDetailProps> = () => {
         img={data.course.img}
         created={data.course.created}
       />
-
+      <FocusGraph
+        targetArmsValue={data.course.targetArmsValue}
+        targetBackValue={data.course.targetBackValue}
+        targetLegsValue={data.course.targetLegsValue}
+        targetAbstValues={data.course.targetAbstValues}
+      />
       <Text style={{margin: 12, fontSize: 23}}>Program BreakDown</Text>
       <FlatList<LessonProps>
         data={data.course.courseRelation}

@@ -35,5 +35,8 @@ const styles = StyleSheet.create({
     right: -20,
     height: 21,
   },
+  trackbar: {
+    fontSize: 15,
+  },
 });
 export default VideoControlSlider;

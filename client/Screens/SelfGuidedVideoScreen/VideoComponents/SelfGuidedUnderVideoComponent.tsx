@@ -37,7 +37,6 @@ const IndependentUnderVideoComponent: React.FC<IndependentUnderVideoComponentPro
   let hold: string[] = [];
   useEffect(() => {
     data.map((n) => {
-      console.log('n value of map', n.contentUrl);
       hold.push(n.contentUrl);
     });
     dispatch({type: 'VIDEO_PLAYING', payload: data[0].contentUrl ?? ''});
@@ -72,8 +71,6 @@ const IndependentUnderVideoComponent: React.FC<IndependentUnderVideoComponentPro
   return (
     <ScrollView>
       <View style={styles.container}>
-        <Text>This is under video component </Text>
-
         <FlatList
           data={data}
           keyExtractor={(item) => `${item.id}`}
@@ -99,9 +96,9 @@ const styles = StyleSheet.create({
   tableRow: {
     width: width,
     height: 75,
-    borderRightColor: 'grey',
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
+    borderRightColor: '#e0e0e0',
+    //borderTopWidth: 0.5,
+    borderBottomWidth: 0.5,
     padding: 0,
     //  justifyContent: 'space-between',
   },

@@ -13,6 +13,7 @@ import ProgramCard from '../../ReusableComponents/UiCards/ProgramCard';
 import CourseOverview from '../../ReusableComponents/UiCards/CourseOverview';
 import LoadingScreen from '../SplashScreens/Loading';
 import ErrorScreen from '../SplashScreens/ErrorScreen';
+import FocusGraph from '../../ReusableComponents/FocusGraph/FocusGraph';
 
 //courseName, instructor, lessonNumber, weekNumber
 const findPopular = `
@@ -31,6 +32,11 @@ query ($courseName: String!, $instructor: String!, $lessonNumber: String!, $week
       weekNumber
       title
       contentUrl
+      targetChestValue
+      targetLegsValue
+      targetArmsValue
+      targetAbstValues
+      targetBackValue
     }
   }
 `;
@@ -140,6 +146,13 @@ const LessonDetail: React.FC<LessonDetailProps> = () => {
         onPress={(e: EventTarget) =>
           sendToProgram(e, data.lesson.id, data.lesson.courseName)
         }
+      />
+      <FocusGraph
+        //targetChestValue={data.lesson.  targetChestValue}
+        targetLegsValue={data.lesson.targetLegsValue}
+        targetArmsValue={data.lesson.targetArmsValue}
+        targetAbstValues={data.lesson.targetAbstValues}
+        targetBackValue={data.lesson.targetBackValue}
       />
     </ScrollView>
   );

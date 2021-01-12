@@ -24,7 +24,7 @@ const InstructorLessonCard: React.FC<InstructionalLessonCardProps> = ({
   title,
   img,
   superscriptTitle,
-  additionalInfo,
+  additionalInfo = [],
   id,
   length,
   category,
@@ -55,7 +55,13 @@ const InstructorLessonCard: React.FC<InstructionalLessonCardProps> = ({
             <View style={styles.fourthRow}>
               <Text style={styles.leftDetail}>{length}</Text>
               <View style={styles.additionalInfo}>
-                <Text>{additionalInfo}</Text>
+                {additionalInfo.map((n, idx) =>
+                  idx < additionalInfo.length - 1 ? (
+                    <Text key={idx}> {n},</Text>
+                  ) : (
+                    <Text key={idx}> {n}</Text>
+                  ),
+                )}
               </View>
             </View>
           </View>

@@ -17,6 +17,7 @@ const InitialState: iComponentState = {
   paused: false,
   videoPlaying: '',
   currentTime: 0,
+  userWatchTime: 0,
   playableDuration: 0,
   currentPlayerTimeAsString: '',
   timeRemainingAsString: '',
@@ -39,6 +40,7 @@ interface iComponentState {
   paused: boolean;
   videoPlaying: string;
   currentTime: number;
+  userWatchTime: number;
   playableDuration: number;
   currentPlayerTimeAsString: string;
   totalPlayerTimeAsString: string;
@@ -61,6 +63,7 @@ type Action =
   | {type: 'PAUSED'; payload: boolean}
   | {type: 'VIDEO_PLAYING'; payload: string}
   | {type: 'CURRENT_TIME'; payload: number}
+  | {type: 'USER_WATCH_TIME'; payload: number}
   | {type: 'PLAYABLE_DURATION'; payload: number}
   | {type: 'CURRENT_PLAYER_TIME_AS_STRING'; payload: string}
   | {type: 'TOTAL_PLAYER_TIME_AS_STRING'; payload: string}
@@ -91,26 +94,24 @@ export const sgVideoReducer = (
       return {...state, paused: action.payload};
     case 'VIDEO_PLAYING':
       return {...state, videoPlaying: action.payload};
-
     case 'SCREEN_ORIENTATION':
       return {...state, screenOrientation: action.payload};
     case 'CURRENT_TIME':
       return {...state, currentTime: action.payload};
     case 'PLAYABLE_DURATION':
       return {...state, playableDuration: action.payload};
-
+    case 'USER_WATCH_TIME':
+      return {...state, userWatchTime: action.payload};
     case 'CURRENT_PLAYER_TIME_AS_STRING':
       return {...state, currentPlayerTimeAsString: action.payload};
     case 'TOTAL_PLAYER_TIME_AS_STRING':
       return {...state, totalPlayerTimeAsString: action.payload};
     case 'TIME_REMAINING_AS_STRING':
       return {...state, timeRemainingAsString: action.payload};
-
     case 'BUFFERING':
       return {...state, buffering: action.payload};
     case 'LOCK_PORTRAIT':
       return {...state, lockPortrait: action.payload};
-
     case 'EXERCISE_SECTIONS':
       return {...state, exerciseSections: action.payload};
     case 'TITLE':

@@ -160,7 +160,6 @@ const Query = gql`
     contentUrl: String
     img: String
     courseName: String
-    created: String
     title: String
     description: String
     equipment: [String]
@@ -176,8 +175,11 @@ const Query = gql`
     outfitBottomImgUrl: String
     selfGuidedLesson: Boolean
     courseRelation: Course
-    lesson: String
-    popularity: String
+    targetChestValue: Int
+    targetLegsValue: Int
+    targetArmsValue: Int
+    targetAbstValues: Int
+    targetBackValue: Int
   }
 
   type SelfGuided {

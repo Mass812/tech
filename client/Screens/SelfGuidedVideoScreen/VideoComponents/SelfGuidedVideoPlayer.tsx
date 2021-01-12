@@ -43,7 +43,6 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
   };
 
   useEffect(() => {
-    console.log('rerendered ', state.currentTime);
     Orientation.addOrientationListener((orientation: string) => {
       handleOrientation(orientation);
     });
@@ -55,9 +54,13 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
   }, []);
 
   const onEnd = () => {
+    let cumulativeTime = state.userWatchTime + state.currentTime;
+
     if (state.sectionNumber + 1 === state.exerciseSections.length) {
+      dispatch({type: 'USER_WATCH_TIME', payload: cumulativeTime});
       nav.navigate('Home');
     } else {
+      dispatch({type: 'USER_WATCH_TIME', payload: cumulativeTime});
       let next = state.sectionNumber + 1;
 
       dispatch({
@@ -70,7 +73,7 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
       });
     }
   };
-
+  console.log('userWatchTime: ', state.currentTime, state.userWatchTime);
   const handleOnLoad = () => {
     dispatch({type: 'LOADING', payload: false});
     dispatch({type: 'BUFFERING', payload: false});

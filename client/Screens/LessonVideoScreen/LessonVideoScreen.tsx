@@ -12,6 +12,7 @@ const InitialState: iComponentState = {
   loading: false,
   paused: false,
   currentTime: 0,
+  userWatchTime: 0,
   playableDuration: 0,
   seekableDuration: 0,
   currentPlayerTimeAsString: '',
@@ -35,6 +36,7 @@ interface iComponentState {
   loading: boolean;
   paused: boolean;
   currentTime: number;
+  userWatchTime: number;
   playableDuration: number;
   seekableDuration: number;
   currentPlayerTimeAsString: string;
@@ -58,6 +60,7 @@ type Action =
   | {type: 'LOADING'; payload: boolean}
   | {type: 'PAUSED'; payload: boolean}
   | {type: 'CURRENT_TIME'; payload: number}
+  | {type: 'USER_WATCH_TIME'; payload: number}
   | {type: 'PLAYABLE_DURATION'; payload: number}
   | {type: 'SEEKABLE_DURATION'; payload: number}
   | {type: 'CURRENT_PLAYER_TIME_AS_STRING'; payload: string}
@@ -91,6 +94,8 @@ export const videoReducer = (
       return {...state, screenOrientation: action.payload};
     case 'CURRENT_TIME':
       return {...state, currentTime: action.payload};
+    case 'USER_WATCH_TIME':
+      return {...state, userWatchTime: action.payload};
     case 'CURRENT_SLIDE_TIME':
       return {...state, currentSlideTime: action.payload};
     case 'PLAYABLE_DURATION':

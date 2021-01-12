@@ -7,7 +7,7 @@ module.exports = async (args) => {
   const { category } = args
   const Params = {
     TableName: "App_Table",
-    IndexName: "course_category",
+    IndexName: "pk_category",
     KeyConditionExpression: "pk = :v and category = :sk",
     ExpressionAttributeValues: {
       ":v": "course",

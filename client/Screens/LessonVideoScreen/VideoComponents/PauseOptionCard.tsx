@@ -62,8 +62,10 @@ const PauseOptionCard: React.FC<PauseOptionCardProps> = ({
     dispatch({type: 'PAUSED', payload: false});
   };
 
+  // TODO ADD TIME TO USER DOC
   const handleMarkAsCompleted = () => {
-    console.log('do something');
+    console.log('Setting user Watch Time To');
+    dispatch({type: 'USER_WATCH_TIME', payload: state.currentTime});
   };
 
   return (

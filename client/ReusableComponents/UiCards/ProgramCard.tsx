@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 
 const width = Dimensions.get('window').width;
-const height = Dimensions.get('window').height;
 
 interface ProgramCardProps {
   photo: any;
@@ -71,15 +70,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: 300,
     width: width,
-    // width:  width-30,
-    // maxWidth: width-30,
-
     justifyContent: 'center',
     alignItems: 'center',
     alignContent: 'center',
     textAlign: 'center',
     marginBottom: 20,
-    // margin: 'auto',
     backgroundColor: 'black',
     alignSelf: 'center',
     opacity: 0.86,
@@ -90,7 +85,6 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: width,
     zIndex: -1,
-
     opacity: 0.86,
   },
   detailsLayoutNonCardType: {
@@ -104,7 +98,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     height: 200,
-    //  width: width,
     width: '100%',
     maxWidth: width - 30,
     borderWidth: 0,
@@ -117,7 +110,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
     alignSelf: 'center',
     borderRadius: 10,
-
     opacity: 0.95,
   },
   imageCardType: {
@@ -131,10 +123,8 @@ const styles = StyleSheet.create({
     opacity: 0.77,
   },
   detailsLayoutCardType: {
-    // height: '50%',
     display: 'flex',
     flexDirection: 'column',
-    // alignSelf: 'flex-end',
   },
   instructor: {
     fontSize: 15,
@@ -147,11 +137,9 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    // flex:1,
     fontSize: 24,
     fontWeight: '600',
     color: 'white',
-    // width: width,
     top: 0.2,
     marginTop: 5,
     marginBottom: 1,
@@ -179,10 +167,6 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 20,
     borderRadius: 25,
-
-    // textAlign: 'center',
-    // top: height * 0.400,
-    //left:  width* -.5 + 90 ,
   },
   buttonText: {
     fontSize: 16,

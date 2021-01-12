@@ -110,6 +110,10 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
     setHidePauseMenu(!hidePauseMenu);
   };
 
+  const onEnd = () => {
+    dispatch({type: 'USER_WATCH_TIME', payload: state.currentTime});
+  };
+
   return (
     <View style={styles.wholePage}>
       <View style={styles.videoArea}>
@@ -120,7 +124,7 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
           onLoadStart={() => dispatch({type: 'LOADING', payload: true})}
           onLoad={handleOnLoad}
           // TODO END OF VIDEO FX
-          // onEnd={() => nav.goBack()}
+          onEnd={() => nav.goBack()}
           // onBuffer={() => dispatch({type: 'BUFFERING', payload: true})}
           onError={() => console.log('error')}
           style={styles.videoPortrait}

@@ -59,7 +59,7 @@ interface PopularLessonsProps {
   weekNumber: string;
   lessonNumber: string;
   title: string;
-  equipemnt: string[];
+  equipment: string[];
 }
 
 interface PopularSelfGuided {
@@ -135,7 +135,7 @@ const Home: React.FC<HomeProps> = () => {
         superscriptTitle={item.instructor}
         img={item.img}
         title={item.title}
-        additionalInfo={[`${item.weekNumber} ${item.lessonNumber}`]}
+        additionalInfo={item.equipment.slice(0, 2)}
         length={item.length}
         wideDimension={false}
       />
