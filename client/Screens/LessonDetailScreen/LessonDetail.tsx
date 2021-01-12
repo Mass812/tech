@@ -25,7 +25,6 @@ query ($courseName: String!, $instructor: String!, $lessonNumber: String!, $week
       description
       lessonNumber
       length
-      created
       category
       img
       equipment
@@ -49,7 +48,6 @@ interface LessonDetailProps {
   description: string;
   lessonNumber: string;
   length: string;
-  created: string;
   category: string;
   equipment: string[];
   img: string;
@@ -141,7 +139,6 @@ const LessonDetail: React.FC<LessonDetailProps> = () => {
         description={data.lesson.description}
         category={data.lesson.category}
         img={data.lesson.img}
-        created={data.lesson.created}
         displayProgramLink={true}
         onPress={(e: EventTarget) =>
           sendToProgram(e, data.lesson.id, data.lesson.courseName)

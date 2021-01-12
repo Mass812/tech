@@ -2,6 +2,7 @@ import * as React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faClock, faDumbbell, faBolt} from '@fortawesome/free-solid-svg-icons';
+import AcheivementIconBlock from './AcheivementBannerIconBlock';
 
 interface AcheivementProps {
   subject?: string;
@@ -13,36 +14,9 @@ const Acheivement: React.FC<AcheivementProps> = () => {
     <View style={styles.parent}>
       <Text style={styles.title}>WEEKLY PROGRESS</Text>
       <View style={styles.badgeRow}>
-        {/*      1    */}
-        <View style={styles.iconColumn}>
-          <View style={styles.iconHalo}>
-            <FontAwesomeIcon icon={faClock} size={30} color={'#0896a3'} />
-          </View>
-          <Text style={styles.detailTitle}>Time</Text>
-          <View>
-            <Text>3 hrs 12 min</Text>
-          </View>
-        </View>
-        {/*      2    */}
-        <View style={styles.iconColumn}>
-          <View style={styles.iconHalo}>
-            <FontAwesomeIcon icon={faDumbbell} size={30} color={'#0896a3'} />
-          </View>
-          <Text style={styles.detailTitle}>Time</Text>
-          <View>
-            <Text>3 hrs 12 min</Text>
-          </View>
-        </View>
-        {/*      3    */}
-        <View style={styles.iconColumn}>
-          <View style={styles.iconHalo}>
-            <FontAwesomeIcon icon={faBolt} size={30} color={'#0896a3'} />
-          </View>
-          <Text style={styles.detailTitle}>Time</Text>
-          <View>
-            <Text>3 hrs 12 min</Text>
-          </View>
-        </View>
+        <AcheivementIconBlock icon={faClock} textSubject={'Time'} />
+        <AcheivementIconBlock icon={faDumbbell} textSubject={'Workouts'} />
+        <AcheivementIconBlock icon={faBolt} textSubject={'Streak'} />
       </View>
     </View>
   );
@@ -71,28 +45,6 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'space-evenly',
     padding: 1,
-  },
-  iconColumn: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    height: 130,
-    justifyContent: 'center',
-    padding: 5,
-  },
-  iconHalo: {
-    display: 'flex',
-    flexDirection: 'column',
-    backgroundColor: '#83c0c9',
-    borderRadius: 30,
-    height: 60,
-    width: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
-    margin: 10,
-  },
-  detailTitle: {
-    margin: 0,
   },
 });
 

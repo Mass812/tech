@@ -9,7 +9,6 @@ interface CourseOverviewProps {
   description: string;
   lectureCount?: string;
   length: string;
-  created?: string;
   category: string;
   img: string;
   equipment: string[];
@@ -25,7 +24,6 @@ const CourseOverview: React.FC<CourseOverviewProps> = ({
   description,
   lectureCount,
   length,
-  created,
   category,
   equipment,
   onPress,

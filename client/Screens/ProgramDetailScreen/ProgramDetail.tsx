@@ -25,7 +25,6 @@ query ($courseName: String!) {
       description
       lectureCount
       length
-      created
       category
       courseImg
       equipment
@@ -59,7 +58,6 @@ interface ProgramDetailProps {
   description: string;
   lectureCount: string;
   length: string;
-  created: string;
   category: string;
   equipment: string[];
   courseRelation: CourseRelation;
@@ -183,7 +181,6 @@ const ProgramDetail: React.FC<ProgramDetailProps> = () => {
         description={data.course.description}
         category={data.course.category}
         img={data.course.img}
-        created={data.course.created}
       />
       <FocusGraph
         targetArmsValue={data.course.targetArmsValue}
