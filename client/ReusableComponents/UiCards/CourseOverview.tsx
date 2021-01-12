@@ -12,7 +12,7 @@ interface CourseOverviewProps {
   category: string;
   img: string;
   equipment: string[];
-  targets: string;
+  targets?: string[];
   displayProgramLink?: boolean;
   onPress?: (event: React.SyntheticEvent) => void;
 }
@@ -59,7 +59,7 @@ const CourseOverview: React.FC<CourseOverviewProps> = ({
           />
         ) : null}
         <TableItem itemTitle={'course length'} itemValue={length} />
-        <TableItem itemTitle={'targets'} itemValue={targets} />
+        {targets && <TableItem itemTitle={'targets'} itemValue={targets[0]} />}
         <TableItem itemTitle={'category'} itemValue={category} />
         <Text style={{color: 'lightgrey'}}>ID: {id}</Text>
       </View>

@@ -41,7 +41,7 @@ const Workouts: React.FC<WorkoutsProps> = ({text}) => {
         <LessonThumbnail text={'Toning'} onPress={handleToningLookUp} />
         <LessonThumbnail text={'Yoga'} onPress={handleYogaLookUp} />
       </View>
-      <WorkoutCard />
+      <WorkoutCard text={'Hi'} onPress={() => console.log('hitme')} />
     </ScrollView>
   );
 };

@@ -18,7 +18,6 @@ const height = Dimensions.get('window').height;
 
 const Mega: React.FC<MegaProps> = () => {
   const nav = useNavigation();
-  const itemSelected = useRef<HTMLElement>(null);
 
   let photoOne = require('../../Assets/fitness_mega_1.jpeg');
   let photoTwo = require('../../Assets/fitness_mega_2.jpg');
@@ -29,7 +28,7 @@ const Mega: React.FC<MegaProps> = () => {
     {
       photo: photoOne,
       instructor: 'Amy Green',
-      bulletPoints: '4 Weeks ∑ 20 Classes',
+      bulletPoints: '4 Weeks • 20 Classes',
       id: 1,
       title: 'HIIT & Strength',
       buttonText: 'View Program',
@@ -37,7 +36,7 @@ const Mega: React.FC<MegaProps> = () => {
     {
       photo: photoThree,
       instructor: 'Rachele Lyle',
-      bulletPoints: '1 Week ∑ 3 Classes',
+      bulletPoints: '1 Week • 3 Classes',
       id: 2,
       title: 'Part Time Pilates',
       buttonText: 'View Progam',
@@ -60,8 +59,8 @@ const Mega: React.FC<MegaProps> = () => {
     },
   ];
 
-  let displayPhotos = photoArray.map((n) => (
-    <View style={styles.imageParent} key={n.id}>
+  let displayPhotos = photoArray.map((n, idx) => (
+    <View key={idx + n.id} style={styles.imageParent}>
       <Image style={styles.image} source={n.photo} />
       <Text style={styles.instructor}>{n.instructor}</Text>
       <Text style={styles.title}>{n.title}</Text>
@@ -80,8 +79,9 @@ const Mega: React.FC<MegaProps> = () => {
     <ScrollView
       horizontal={true}
       decelerationRate={0}
+      showsHorizontalScrollIndicator={false}
       snapToInterval={width}
-      snapToAlignment={'center'}>
+      snapToAlignment={'start'}>
       {displayPhotos}
     </ScrollView>
   );

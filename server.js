@@ -134,12 +134,11 @@ const Query = gql`
     id: String
     category: String
     courseName: String
-    created: String
     description: String
     equipment: [String]
     img: String
     courseImg: String
-    targets: String
+    targets: [String]
     instructor: String
     intensity: String
     keywords: [String]
@@ -147,7 +146,7 @@ const Query = gql`
     length: String
     targetArmsValue: Int
     targetBackValue: Int
-    targetAbstValues: Int
+    targetAbsValue: Int
     trgetChestValue: Int
     targetLegsValue: Int
     courseRelation: [Lesson]
@@ -161,6 +160,7 @@ const Query = gql`
     img: String
     courseName: String
     title: String
+    targets: [String]
     description: String
     equipment: [String]
     instructor: String
@@ -178,7 +178,7 @@ const Query = gql`
     targetChestValue: Int
     targetLegsValue: Int
     targetArmsValue: Int
-    targetAbstValues: Int
+    targetAbsValue: Int
     targetBackValue: Int
   }
 

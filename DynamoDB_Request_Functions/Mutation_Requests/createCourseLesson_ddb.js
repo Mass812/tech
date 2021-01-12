@@ -45,7 +45,7 @@ module.exports = async () => {
       targets: ["arms", "legs", "heart"],
       targetArmsValue: 9,
       targetBackValue: 6,
-      targetAbstValues: 2,
+      targetAbsValue: 2,
       targetChestValue: 6,
       targetLegsValue: 2,
       courseRelation: [`changeThistoFirstClass`],

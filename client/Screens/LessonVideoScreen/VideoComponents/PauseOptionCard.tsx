@@ -75,8 +75,13 @@ const PauseOptionCard: React.FC<PauseOptionCardProps> = ({
         <View style={styles.bottomContainer}>
           {!showSecondCard ? (
             <View style={styles.parent}>
-              <Text style={styles.question}>{'What Do You Want To Do?'}</Text>
-
+              <Text style={styles.question}>{'Lesson Name Here'}</Text>
+              <View style={styles.subHeader}>
+                <Text style={styles.subHeaderText}>
+                  {state.totalPlayerTimeAsString} Min
+                </Text>
+                <Text style={styles.subHeaderText}>{state.targets[0]}</Text>
+              </View>
               <View style={{justifyContent: 'flex-start', height: 225}}>
                 <CardButton
                   onPress={restartTheLeeson}
@@ -93,18 +98,15 @@ const PauseOptionCard: React.FC<PauseOptionCardProps> = ({
           ) : (
             <View style={styles.parent}>
               <Text style={styles.question}>
-                {'How would you like to proceed?'}
+                {'How would you like to end your class?'}
               </Text>
-              <Text style={styles.question}>
-                {`Time Remaining: ${state.timeRemainingAsString.substring(
-                  0,
-                  5,
-                )}`}
+              <Text style={styles.subHeaderText}>
+                {`${state.timeRemainingAsString.substring(0, 5)} Min Left`}
               </Text>
-              <View>
+              {/* <View>
                 <Text style={styles.textDetail}>{'Class '}</Text>
-                <Text style={styles.textDetail}>Card 2</Text>
-              </View>
+                <Text style={styles.subHeaderText}>Card 2</Text>
+              </View> */}
 
               <View style={{justifyContent: 'flex-start', height: 225}}>
                 <CardButton
@@ -172,11 +174,19 @@ const styles = StyleSheet.create({
 
     zIndex: 2,
   },
+  subHeader: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  subHeaderText: {
+    fontSize: 12,
+    margin: 5,
+  },
   question: {
     fontSize: 14,
     fontWeight: '700',
     color: 'black',
-    marginBottom: 20,
+    marginBottom: 5,
   },
   textDetail: {
     textAlign: 'left',

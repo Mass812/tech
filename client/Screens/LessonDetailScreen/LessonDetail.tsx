@@ -31,11 +31,16 @@ query ($courseName: String!, $instructor: String!, $lessonNumber: String!, $week
       weekNumber
       title
       contentUrl
+      targets
       targetChestValue
       targetLegsValue
       targetArmsValue
-      targetAbstValues
+      targetAbsValue
       targetBackValue
+      outfitTopName
+    outfitTopImgUrl
+    outfitBottomName
+    outfitBottomImgUrl
     }
   }
 `;
@@ -43,7 +48,6 @@ query ($courseName: String!, $instructor: String!, $lessonNumber: String!, $week
 interface LessonDetailProps {
   courseName: string;
   instructor: string;
-  // targets: string;
   id: string;
   description: string;
   lessonNumber: string;
@@ -56,6 +60,11 @@ interface LessonDetailProps {
   additionalInfo: string[];
   weekNumber: string;
   lectureNumber: string;
+  targets: string[];
+  outfitTopName: string;
+  outfitTopImgUrl: string;
+  outfitBottomName: string;
+  outfitBottomImgUrl: string;
 }
 
 type CourseRelation = {
@@ -123,6 +132,11 @@ const LessonDetail: React.FC<LessonDetailProps> = () => {
             courseName: data.lesson.courseName,
             instructor: data.lesson.instructor,
             title: data.lesson.title,
+            targets: data.lesson.targets,
+            outfitTopName: data.lesson.outfitTopName,
+            outfitTopImgUrl: data.lesson.outfitTopImgUrl,
+            outfitBottomName: data.lesson.outfitBottomName,
+            outfitBottomImgUrl: data.lesson.outfitBottomImgUrl,
           });
           console.log('navigating later');
         }}
@@ -132,11 +146,11 @@ const LessonDetail: React.FC<LessonDetailProps> = () => {
         equipment={data.lesson.equipment}
         instructor={data.lesson.instructor}
         length={data.lesson.length}
-        targets={data.lesson.targets}
         courseName={data.lesson.courseName}
         // id={data.lesson.id}
         //  lectureCount={data.lesson.lectureCount}
         description={data.lesson.description}
+        targets={data.lesson.targets}
         category={data.lesson.category}
         img={data.lesson.img}
         displayProgramLink={true}
@@ -145,10 +159,10 @@ const LessonDetail: React.FC<LessonDetailProps> = () => {
         }
       />
       <FocusGraph
-        //targetChestValue={data.lesson.  targetChestValue}
+        //targetChestValue={data.lesson.targetChestValue}
         targetLegsValue={data.lesson.targetLegsValue}
         targetArmsValue={data.lesson.targetArmsValue}
-        targetAbstValues={data.lesson.targetAbstValues}
+        targetAbstValues={data.lesson.targetAbsValue}
         targetBackValue={data.lesson.targetBackValue}
       />
     </ScrollView>

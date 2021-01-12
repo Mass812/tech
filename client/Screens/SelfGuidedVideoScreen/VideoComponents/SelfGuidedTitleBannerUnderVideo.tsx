@@ -9,7 +9,9 @@ const TitleBannerUnderVideo: React.FC<TitleBannerUnderVideoProps> = ({}) => {
 
   return (
     <View style={styles.thinHeaderBanner}>
-      <Text style={styles.leftText}>Exercises</Text>
+      <Text style={styles.leftText}>
+        Exercises Left: {state.exerciseSections.length - state.sectionNumber}
+      </Text>
       <Text style={styles.rightText}>
         {state.exerciseSections.length} Exercises
       </Text>

@@ -192,7 +192,7 @@ const SgVideoPlayer: React.FC<SgVideoPlayerProps> = () => {
   });
 
   useEffect(() => {
-    // dispatch({type: 'TITLE', payload: title ?? ''});
+    dispatch({type: 'TITLE', payload: title ?? ''});
     // dispatch({type: 'LENGTH', payload: length ?? ''});
     // dispatch({type: 'EXERCISE_SECTIONS', payload: exerciseSections ?? ''});
     dispatch({type: 'ID', payload: id ?? ''});
@@ -202,8 +202,6 @@ const SgVideoPlayer: React.FC<SgVideoPlayerProps> = () => {
   // return LessonUnderVideoContext or SelfGuidedUnderVideoComponent as props here
 
   const {data, fetching, error} = results;
-
-  console.log('query data in self guided', data);
 
   if (fetching) return <LoadingScreen />;
 

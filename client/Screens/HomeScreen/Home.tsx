@@ -171,6 +171,7 @@ const Home: React.FC<HomeProps> = () => {
       decelerationRate={'fast'}
       scrollEventThrottle={9}
       showsHorizontalScrollIndicator={false}
+      horizontal={false}
       // disableIntervalMomentum={true}
     >
       <View style={styles.main}>
@@ -225,15 +226,9 @@ const Home: React.FC<HomeProps> = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    //  flex: 1,
-  },
   main: {
     flex: 1,
     marginTop: -50,
-  },
-  bottom: {
-    // flex: 1,
   },
 });
 

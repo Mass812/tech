@@ -69,16 +69,16 @@ const IndependentUnderVideoComponent: React.FC<IndependentUnderVideoComponentPro
   };
 
   return (
-    <ScrollView>
-      <View style={styles.container}>
+    <View style={styles.container}>
+      <ScrollView>
         <FlatList
           data={data}
           keyExtractor={(item) => `${item.id}`}
           renderItem={renderItem}
           initialNumToRender={10}
         />
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 
@@ -111,12 +111,12 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: 16,
+    fontSize: 14,
     color: 'black',
     marginLeft: 25,
   },
   time: {
-    fontSize: 16,
+    fontSize: 14,
     color: 'teal',
     marginLeft: 12,
   },

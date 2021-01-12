@@ -19,7 +19,7 @@ const TitleBannerUnderVideo: React.FC<TitleBannerUnderVideoProps> = ({}) => {
         <View style={styles.timeAndTargetBlock}>
           <Text style={styles.timeFont}>{state.totalPlayerTimeAsString}</Text>
           <Text style={styles.dot}> • </Text>
-          <Text style={styles.targetFont}>Target Here</Text>
+          <Text style={styles.targetFont}>{state.targets[0]}</Text>
         </View>
       </View>
 
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     padding: 14,
     alignContent: 'center',
     width: '100%',
-    height: 75,
+    height: 90,
   },
   twoColumns: {
     display: 'flex',
@@ -54,11 +54,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   timeFont: {
-    fontSize: 16,
+    fontSize: 14,
     color: 'grey',
   },
   targetFont: {
-    fontSize: 16,
+    fontSize: 14,
     color: 'grey',
   },
   lessonTitle: {

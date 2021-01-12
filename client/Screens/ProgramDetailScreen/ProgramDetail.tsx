@@ -32,7 +32,7 @@ query ($courseName: String!) {
       targetArmsValue
       targetBackValue
       targetLegsValue
-      targetAbstValues
+      targetAbsValue
       courseRelation {
         contentUrl
         title
@@ -52,7 +52,7 @@ query ($courseName: String!) {
 interface ProgramDetailProps {
   courseName: string;
   instructor: string;
-  targets: string;
+  targets: string[];
   id: string;
   courseImg: string;
   description: string;
@@ -99,7 +99,7 @@ const ProgramDetail: React.FC<ProgramDetailProps> = () => {
 
   const [result, reexecuteQuery] = useQuery({
     query: findCourse,
-    variables: {courseName},
+    variables: {courseName: courseName},
   });
 
   let {data, fetching, error} = result;
@@ -127,7 +127,6 @@ const ProgramDetail: React.FC<ProgramDetailProps> = () => {
   const renderItem = ({item}: {item: LessonProps}) => {
     return (
       <InstructionalLessonCard
-        key={item.id}
         img={item.img}
         title={item.title}
         additionalInfo={item.equipment}
@@ -186,7 +185,7 @@ const ProgramDetail: React.FC<ProgramDetailProps> = () => {
         targetArmsValue={data.course.targetArmsValue}
         targetBackValue={data.course.targetBackValue}
         targetLegsValue={data.course.targetLegsValue}
-        targetAbstValues={data.course.targetAbstValues}
+        targetAbstValues={data.course.targetAbsValue}
       />
       <Text style={{margin: 12, fontSize: 23}}>Program BreakDown</Text>
       <FlatList<LessonProps>
