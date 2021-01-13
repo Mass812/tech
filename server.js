@@ -35,6 +35,8 @@ const getSpecificCourseLesson_ddb = require("./DynamoDB_Request_Functions/Query_
 const getLessonsOfCourses_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getLessonsOfCourses_ddb")
 const getSpecificSelfGuidedLesson_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getSpecificSelfGuidedLesson_ddb")
 const getVideoSectionsOfSelfGuidedLesson_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getVideoSectionsOfSelfGuidedLesson_ddb")
+const getAllLessonsOfACategory_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getAllLessonsOfACategory_ddb")
+const getAllSelfGuidedOfACategory_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getAllSelfGuidedOfACategory_ddb")
 //const getPopularCourses_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getPopularCourses_ddb")
 
 //db mutation calls
@@ -48,6 +50,7 @@ const createCourseCompletionDoc_ddb = require("./DynamoDB_Request_Functions/Muta
 const createSelfGuidedLesson_ddb = require("./DynamoDB_Request_Functions/Mutation_Requests/createSelfGuidedLesson_ddb")
 const createMeditation_ddb = require("./DynamoDB_Request_Functions/Mutation_Requests/createMeditation_ddb")
 const createSelfGuidedLessonSection_ddb = require("./DynamoDB_Request_Functions/Mutation_Requests/createSelfGuidedLessonVideoSection_ddb")
+const getCoursesForCategory_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getCoursesForCategory_ddb")
 
 const Query = gql`
   type Query {
@@ -62,6 +65,8 @@ const Query = gql`
     course(courseName: String!): Course
     courses: [Course]
     coursesByCategory(category: String!): [Course]
+    categoryLessons(category: String!): [CategoryLesson]
+    selfGuidedOfCategory(category: String!): [SelfGuided]
     meditations: [Meditation]
     userWorkoutsByCategory(email: String!, category: String!): [Workout]
     workouts(category: String!, email: String!): [Workout]!
@@ -180,6 +185,19 @@ const Query = gql`
     targetArmsValue: Int
     targetAbsValue: Int
     targetBackValue: Int
+    lesson: String
+  }
+
+  type CategoryLesson {
+    length: String
+    instructor: String
+    courseName: String
+    title: String
+    equipment: [String]
+    weekNumber: String
+    lessonNumber: String
+    img: String
+    id: String
   }
 
   type SelfGuided {
@@ -192,7 +210,6 @@ const Query = gql`
     title: String
     equipment: [String]
     popularity: Int
-
     selfGuidedLesson: Boolean
     selfGuided: String
     exerciseSections: [SelfGuidedVideoSection]
@@ -280,16 +297,20 @@ let resolvers = {
     user: async (_, args) => {
       return getUserProfile(args)
     },
-
     course: async (_, args) => {
       return getCoursesByName(args)
     },
     courses: async () => {
       return getAllCourses()
     },
-
     coursesByCategory: async (_, args) => {
-      return getCoursesForCategory(args)
+      return getCoursesForCategory_ddb(args)
+    },
+    categoryLessons: async (_, args) => {
+      return getAllLessonsOfACategory_ddb(args)
+    },
+    selfGuidedOfCategory: async (_, args) => {
+      return getAllSelfGuidedOfACategory_ddb(args)
     },
     userWorkoutsByCategory: async (_, args) => {
       return getUserWorkoutsByCategory(args)

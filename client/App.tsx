@@ -1,8 +1,17 @@
 import React, {lazy, useState} from 'react';
+
 import {createClient, Provider as UrqlProvider} from 'urql';
 import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator, HeaderTitle} from '@react-navigation/stack';
+import {
+  createStackNavigator,
+  HeaderBackground,
+  HeaderTitle,
+} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {
+  createMaterialTopTabNavigator,
+  MaterialTopTabBar,
+} from '@react-navigation/material-top-tabs';
 import Home from './Screens/HomeScreen/Home';
 import LessonDetail from './Screens/LessonDetailScreen/LessonDetail';
 import LessonVideoScreen from './Screens/LessonVideoScreen/LessonVideoScreen';
@@ -13,6 +22,7 @@ import ProgramDetail from './Screens/ProgramDetailScreen/ProgramDetail';
 import MeditationPlayer from './Screens/MeditationScreen/MeditationPlayer/MeditationPlayer';
 import SelfGuidedVideoScreen from './Screens/SelfGuidedVideoScreen/SelfGuidedVideoScreen';
 import Workouts from './Screens/Workouts/Workouts';
+import WorkoutCards from './Screens/Workouts/WorkoutComponents/WorkoutCards';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {
   faHome,
@@ -21,6 +31,9 @@ import {
   faBalanceScale,
   faUserCircle,
 } from '@fortawesome/free-solid-svg-icons';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {Dimensions} from 'react-native';
+import WorkoutCard from './Screens/Workouts/WorkoutComponents/WorkoutCards';
 
 const client = createClient({
   url: 'http://localhost:4321/graphql',
@@ -72,6 +85,8 @@ type RootParams = {
 
 const HomeStack = createStackNavigator<HomeStackParams>();
 const ProgramStack = createStackNavigator<ProgramStackParams>();
+const LessonByCategoryStack = createStackNavigator();
+const WorkoutsTab = createMaterialTopTabNavigator();
 const MeditationStack = createStackNavigator<MeditationStackParams>();
 const Bottom = createBottomTabNavigator();
 const Root = createStackNavigator<RootParams>();
@@ -85,6 +100,51 @@ const HomeStackRoutes = () => {
         options={{headerShown: false}}
       />
     </HomeStack.Navigator>
+  );
+};
+
+const WorkoutLessonsByCategoryStack = () => {
+  return (
+    <LessonByCategoryStack.Navigator>
+      <LessonByCategoryStack.Screen
+        name="WorkoutCategories"
+        component={Workouts}
+        options={{headerShown: false}}
+      />
+      <LessonByCategoryStack.Screen
+        name="CategoryLessons"
+        component={WorkoutCard}
+        options={{headerShown: true}}
+      />
+    </LessonByCategoryStack.Navigator>
+  );
+};
+
+const WorkoutsStackRoutes = () => {
+  return (
+    <WorkoutsTab.Navigator
+      tabBarOptions={{
+        labelStyle: {fontSize: 14, fontWeight: '500', letterSpacing: 3},
+        tabStyle: {minWidth: 200},
+        indicatorStyle: {
+          backgroundColor: 'black',
+        },
+        style: {
+          paddingTop: 50,
+          alignContent: 'center',
+        },
+      }}>
+      <WorkoutsTab.Screen
+        options={{title: 'Classes'}}
+        name="Workouts"
+        component={WorkoutLessonsByCategoryStack}
+      />
+      <WorkoutsTab.Screen
+        options={{title: 'Self-Guided'}}
+        name="CategorySelfGuided"
+        component={WorkoutCards}
+      />
+    </WorkoutsTab.Navigator>
   );
 };
 
@@ -149,7 +209,7 @@ const BottomNavigatorScreens = () => {
       />
       <Bottom.Screen
         name="Workouts"
-        component={Workouts}
+        component={WorkoutsStackRoutes}
         options={{
           tabBarLabel: 'Workouts',
           tabBarIcon: () => (

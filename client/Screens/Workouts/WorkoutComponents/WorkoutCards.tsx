@@ -1,42 +1,58 @@
-import {faTextWidth} from '@fortawesome/free-solid-svg-icons';
-import * as React from 'react';
+import React from 'react';
 import {
   View,
   StyleSheet,
-  Text,
   TouchableOpacity,
-  Image,
+  FlatList,
+  Text,
   Dimensions,
 } from 'react-native';
 import ProgramCard from '../../../ReusableComponents/UiCards/ProgramCard';
 import {useQuery} from 'urql';
 import LoadingScreen from '../../SplashScreens/Loading';
 import ErrorScreen from '../../SplashScreens/ErrorScreen';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 const width = Dimensions.get('screen').width;
 
 const findCoursesByCategory = `
 query($category: String!){
-    coursesByCategory(category: $category){
-        courseName
-        instructor
-        length
-        equipment
-        img
+  categoryLessons(category: $category){
+      instructor,
+       length,
+        weekNumber,
+         lessonNumber,
+          equipment,
+           courseName,
+            title
+            
+            img
     }
 }
 
 `;
 
-interface WorkoutCardProps {
-  onPress: () => void;
-  text: string;
-}
+interface WorkoutCardProps {}
+type ParamList = {
+  category: string;
+  key: string;
+  name: string;
+  params: Params;
+};
 
-const WorkoutCard: React.FC<WorkoutCardProps> = ({text, onPress}) => {
+type Params = {
+  category: string;
+};
+
+const WorkoutCard: React.FC<WorkoutCardProps> = () => {
+  const nav = useNavigation();
+  const route = useRoute<ParamList>();
+
+  const {category} = route.params ?? 'HIIT';
+
   const [results, reexecuteQuery] = useQuery({
     query: findCoursesByCategory,
-    variables: {category: 'Cardio'},
+    variables: {category},
   });
 
   const {data, error, fetching} = results;
@@ -44,60 +60,60 @@ const WorkoutCard: React.FC<WorkoutCardProps> = ({text, onPress}) => {
   if (fetching) return <LoadingScreen />;
   if (error) return <ErrorScreen error={error.message} />;
 
+  type Category = {
+    title: string;
+    length: string;
+    courseName: string;
+    weekNumber: string;
+    lessonNumber?: string;
+    instructor: string;
+    img?: string;
+    id: string;
+  };
+
+  const renderItem = ({item}: {item: Category}) => {
+    return (
+      <TouchableOpacity
+        onPress={() =>
+          nav.navigate('LessonDetail', {
+            courseName: item.courseName,
+            instructor: item.instructor,
+            weekNumber: item.weekNumber,
+            lessonNumber: item.lessonNumber,
+          })
+        }>
+        <ProgramCard
+          instructor={item.instructor}
+          photo={`${item.img}`}
+          title={item.courseName}
+          bulletPoints={`${item.instructor} * ${item.length}`}
+          button={false}
+          displayAsCard={true}
+        />
+      </TouchableOpacity>
+    );
+  };
+
   console.log('WorkoutCard : ', data);
 
   return (
-    <TouchableOpacity onPress={onPress}>
-      <View style={styles.parent}>
-        <ProgramCard
-          instructor={data.coursesByCategory[0].instructor}
-          photo={data.coursesByCategory[0].img}
-          title={data.coursesByCategory[0].courseName}
-          bulletPoints={`${data.coursesByCategory[0].instructor} * ${data.coursesByCategory[0].length}`}
-          button={false}
-          id={data.coursesByCategory[0].id}
-          displayAsCard={true}
-        />
-      </View>
-    </TouchableOpacity>
+    <View style={styles.parent}>
+      <FlatList
+        data={data.categoryLessons}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+      />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   parent: {
+    flex: 1,
     display: 'flex',
+
     width: width,
-    minWidth: 200,
-    maxWidth: 375,
-    height: 220,
-    margin: 10,
-    alignSelf: 'center',
-  },
-  cardBlock: {
-    display: 'flex',
-    minWidth: 200,
-    maxWidth: 375,
-    height: 220,
-    justifyContent: 'center',
-    backgroundColor: 'tan',
-    textAlign: 'center',
-    borderRadius: 11,
-  },
-  image: {
-    minWidth: 200,
-    maxWidth: 375,
-    height: 220,
-    position: 'absolute',
-    borderRadius: 11,
-    opacity: 0.87,
-  },
-  text: {
-    fontSize: 21,
-    fontWeight: '500',
-    color: 'white',
-    alignSelf: 'center',
-    textShadowColor: 'black',
-    textShadowRadius: 9,
+    // height: 800,
   },
 });
 export default WorkoutCard;

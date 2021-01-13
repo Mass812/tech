@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
-import * as React from 'react';
-import {View, StyleSheet, Text, Image} from 'react-native';
+import React, {useState} from 'react';
+import {View, StyleSheet, SafeAreaView} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 
 import LessonThumbnail from './WorkoutComponents/LessonThumbNail';
@@ -12,37 +12,78 @@ interface WorkoutsProps {
 
 const Workouts: React.FC<WorkoutsProps> = ({text}) => {
   const nav = useNavigation();
-
-  const handleBarreLookUp = () => {};
-  const handleCardioLookUp = () => {};
-  const handleDanceLookUp = () => {};
-  const handleHIITLookUp = () => {};
-  const handleMeditationsLookUp = () => {};
-  const handlePilatesLookUp = () => {};
-  const handleRecoveryLookUp = () => {};
-  const handleStrengthLookUp = () => {};
-  const handleToningLookUp = () => {};
-  const handleYogaLookUp = () => {};
+  const [targetedTab, setTargetedTab] = useState(true);
+  const hadnleSelection = () => {};
 
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        <LessonThumbnail text={'Barre'} onPress={handleBarreLookUp} />
-        <LessonThumbnail text={'Cardio'} onPress={handleCardioLookUp} />
-        <LessonThumbnail text={'Dance'} onPress={handleDanceLookUp} />
-        <LessonThumbnail text={'HIIT'} onPress={handleHIITLookUp} />
-        <LessonThumbnail
-          text={'Meditations'}
-          onPress={handleMeditationsLookUp}
-        />
-        <LessonThumbnail text={'Pilates'} onPress={handlePilatesLookUp} />
-        <LessonThumbnail text={'Recovery'} onPress={handleRecoveryLookUp} />
-        <LessonThumbnail text={'Strength'} onPress={handleStrengthLookUp} />
-        <LessonThumbnail text={'Toning'} onPress={handleToningLookUp} />
-        <LessonThumbnail text={'Yoga'} onPress={handleYogaLookUp} />
-      </View>
-      <WorkoutCard text={'Hi'} onPress={() => console.log('hitme')} />
-    </ScrollView>
+    <SafeAreaView>
+      <ScrollView>
+        <View style={styles.container}>
+          <>
+            <LessonThumbnail
+              text={'Barre'}
+              onPress={() =>
+                nav.navigate('CategoryLessons', {category: 'Barre'})
+              }
+            />
+            <LessonThumbnail
+              text={'Cardio'}
+              onPress={() =>
+                nav.navigate('CategoryLessons', {category: 'Cardio'})
+              }
+            />
+            <LessonThumbnail
+              text={'Dance'}
+              onPress={() =>
+                nav.navigate('CategoryLessons', {category: 'Dance'})
+              }
+            />
+            <LessonThumbnail
+              text={'HIIT'}
+              onPress={() =>
+                nav.navigate('CategoryLessons', {category: 'HIIT'})
+              }
+            />
+            <LessonThumbnail
+              text={'Meditations'}
+              onPress={() =>
+                nav.navigate('CategoryLessons', {category: 'Meditations'})
+              }
+            />
+            <LessonThumbnail
+              text={'Pilates'}
+              onPress={() =>
+                nav.navigate('CategoryLessons', {category: 'Pilates'})
+              }
+            />
+            <LessonThumbnail
+              text={'Recovery'}
+              onPress={() =>
+                nav.navigate('CategoryLessons', {category: 'Recovery'})
+              }
+            />
+            <LessonThumbnail
+              text={'Strength'}
+              onPress={() =>
+                nav.navigate('CategoryLessons', {category: 'Strength'})
+              }
+            />
+            <LessonThumbnail
+              text={'Toning'}
+              onPress={() =>
+                nav.navigate('CategoryLessons', {category: 'Toning'})
+              }
+            />
+            <LessonThumbnail
+              text={'Yoga'}
+              onPress={() =>
+                nav.navigate('CategoryLessons', {category: 'Yoga'})
+              }
+            />
+          </>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
@@ -55,7 +96,36 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     justifyContent: 'space-around',
-    //padding: 30,
+  },
+  tabHeader: {
+    display: 'flex',
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingLeft: 25,
+    paddingRight: 25,
+  },
+  tabBlock: {
+    //height: 60,
+    width: '50%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 12,
+  },
+  tabBlockTarget: {
+    //height: 60,
+    width: '50%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderBottomWidth: 2,
+    margin: 12,
+  },
+  tabText: {
+    fontSize: 17,
+    fontWeight: '500',
+    letterSpacing: 2,
+    paddingBottom: 4,
   },
 });
 export default Workouts;
