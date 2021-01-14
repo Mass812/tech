@@ -38,6 +38,7 @@ const getVideoSectionsOfSelfGuidedLesson_ddb = require("./DynamoDB_Request_Funct
 const getAllLessonsOfACategory_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getAllLessonsOfACategory_ddb")
 const getAllSelfGuidedOfACategory_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getAllSelfGuidedOfACategory_ddb")
 //const getPopularCourses_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getPopularCourses_ddb")
+const getCoursesForCategory_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getCoursesForCategory_ddb")
 
 //db mutation calls
 const createUser = require("./DynamoDB_Request_Functions/Mutation_Requests/createUser_ddb")
@@ -50,7 +51,7 @@ const createCourseCompletionDoc_ddb = require("./DynamoDB_Request_Functions/Muta
 const createSelfGuidedLesson_ddb = require("./DynamoDB_Request_Functions/Mutation_Requests/createSelfGuidedLesson_ddb")
 const createMeditation_ddb = require("./DynamoDB_Request_Functions/Mutation_Requests/createMeditation_ddb")
 const createSelfGuidedLessonSection_ddb = require("./DynamoDB_Request_Functions/Mutation_Requests/createSelfGuidedLessonVideoSection_ddb")
-const getCoursesForCategory_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getCoursesForCategory_ddb")
+const getAllSelfGuided_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getAllSelfGuided_ddb")
 
 const Query = gql`
   type Query {
@@ -66,7 +67,7 @@ const Query = gql`
     courses: [Course]
     coursesByCategory(category: String!): [Course]
     categoryLessons(category: String!): [CategoryLesson]
-    selfGuidedOfCategory(category: String!): [SelfGuided]
+    categorySelfGuided(category: String!): [SelfGuided]
     meditations: [Meditation]
     userWorkoutsByCategory(email: String!, category: String!): [Workout]
     workouts(category: String!, email: String!): [Workout]!
@@ -74,6 +75,7 @@ const Query = gql`
     popularLessons: [Lesson]
     popularMeditations: [Meditation]
     popularSelfGuided: [SelfGuided]
+    allSelfGuided: [SelfGuided]
     selfGuided(id: String!): SelfGuided
   }
 
@@ -309,7 +311,7 @@ let resolvers = {
     categoryLessons: async (_, args) => {
       return getAllLessonsOfACategory_ddb(args)
     },
-    selfGuidedOfCategory: async (_, args) => {
+    categorySelfGuided: async (_, args) => {
       return getAllSelfGuidedOfACategory_ddb(args)
     },
     userWorkoutsByCategory: async (_, args) => {
@@ -342,6 +344,9 @@ let resolvers = {
     },
     selfGuided: async (parent, args) => {
       return getSpecificSelfGuidedLesson_ddb(args)
+    },
+    allSelfGuided: async () => {
+      return getAllSelfGuided_ddb()
     },
   },
 

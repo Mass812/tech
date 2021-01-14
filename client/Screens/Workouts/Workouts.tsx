@@ -1,43 +1,36 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
-import {View, StyleSheet, SafeAreaView} from 'react-native';
+import {View, StyleSheet, Text} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 
 import LessonThumbnail from './WorkoutComponents/LessonThumbNail';
-import WorkoutCard from './WorkoutComponents/WorkoutCards';
 
-interface WorkoutsProps {
+interface CategoryLessonsProps {
   text: string;
 }
 
-const Workouts: React.FC<WorkoutsProps> = ({text}) => {
+const CategoryLessons: React.FC<CategoryLessonsProps> = ({text}) => {
   const nav = useNavigation();
-  const [targetedTab, setTargetedTab] = useState(true);
-  const hadnleSelection = () => {};
 
   return (
-    <SafeAreaView>
-      <ScrollView>
+    <ScrollView>
+      <>
         <View style={styles.container}>
           <>
-            <LessonThumbnail
-              text={'Barre'}
-              onPress={() =>
-                nav.navigate('CategoryLessons', {category: 'Barre'})
-              }
-            />
+            {/* <LessonThumbnail
+            text={'Barre'}
+            onPress={() => nav.navigate('CategoryLessons', {category: 'Barre'})}
+          /> */}
             <LessonThumbnail
               text={'Cardio'}
               onPress={() =>
                 nav.navigate('CategoryLessons', {category: 'Cardio'})
               }
             />
-            <LessonThumbnail
-              text={'Dance'}
-              onPress={() =>
-                nav.navigate('CategoryLessons', {category: 'Dance'})
-              }
-            />
+            {/* <LessonThumbnail
+            text={'Dance'}
+            onPress={() => nav.navigate('CategoryLessons', {category: 'Dance'})}
+          /> */}
             <LessonThumbnail
               text={'HIIT'}
               onPress={() =>
@@ -46,9 +39,7 @@ const Workouts: React.FC<WorkoutsProps> = ({text}) => {
             />
             <LessonThumbnail
               text={'Meditations'}
-              onPress={() =>
-                nav.navigate('CategoryLessons', {category: 'Meditations'})
-              }
+              onPress={() => nav.navigate('Meditation')}
             />
             <LessonThumbnail
               text={'Pilates'}
@@ -56,34 +47,32 @@ const Workouts: React.FC<WorkoutsProps> = ({text}) => {
                 nav.navigate('CategoryLessons', {category: 'Pilates'})
               }
             />
-            <LessonThumbnail
-              text={'Recovery'}
-              onPress={() =>
-                nav.navigate('CategoryLessons', {category: 'Recovery'})
-              }
-            />
-            <LessonThumbnail
-              text={'Strength'}
-              onPress={() =>
-                nav.navigate('CategoryLessons', {category: 'Strength'})
-              }
-            />
-            <LessonThumbnail
-              text={'Toning'}
-              onPress={() =>
-                nav.navigate('CategoryLessons', {category: 'Toning'})
-              }
-            />
-            <LessonThumbnail
-              text={'Yoga'}
-              onPress={() =>
-                nav.navigate('CategoryLessons', {category: 'Yoga'})
-              }
-            />
+            {/* <LessonThumbnail
+            text={'Recovery'}
+            onPress={() =>
+              nav.navigate('CategoryLessons', {category: 'Recovery'})
+            }
+          />
+          <LessonThumbnail
+            text={'Strength'}
+            onPress={() =>
+              nav.navigate('CategoryLessons', {category: 'Strength'})
+            }
+          />
+          <LessonThumbnail
+            text={'Toning'}
+            onPress={() =>
+              nav.navigate('CategoryLessons', {category: 'Toning'})
+            }
+          />
+          <LessonThumbnail
+            text={'Yoga'}
+            onPress={() => nav.navigate('CategoryLessons', {category: 'Yoga'})}
+          /> */}
           </>
         </View>
-      </ScrollView>
-    </SafeAreaView>
+      </>
+    </ScrollView>
   );
 };
 
@@ -128,4 +117,4 @@ const styles = StyleSheet.create({
     paddingBottom: 4,
   },
 });
-export default Workouts;
+export default CategoryLessons;

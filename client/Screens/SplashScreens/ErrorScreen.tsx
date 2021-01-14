@@ -13,7 +13,7 @@ const ErrorScreen: React.FC<ErrorProps> = ({error}) => {
 
   useEffect(() => {
     setTimeout(() => {
-      nav.goBack();
+      nav.navigate('Home');
     }, 2500);
   }, []);
 

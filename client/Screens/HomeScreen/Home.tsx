@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {View, StyleSheet, Dimensions, FlatList} from 'react-native';
-
 import {useQuery} from 'urql';
 import {useNavigation} from '@react-navigation/native';
 import Mega from './Mega';
@@ -104,19 +103,13 @@ const Home: React.FC<HomeProps> = () => {
   const sendToVideoScreen = (
     e: EventTarget,
     contentUrl: string,
-    exerciseSections: string,
-    length: string,
     id: string,
     title: string,
-    img: string,
   ) => {
     nav.navigate('SelfGuidedVideoScreen', {
       contentUrl,
-      exerciseSections,
       id,
-      length,
       title,
-      img,
     });
   };
 
@@ -146,15 +139,7 @@ const Home: React.FC<HomeProps> = () => {
     return (
       <InstructionalLessonCard
         onPress={(e: EventTarget) =>
-          sendToVideoScreen(
-            e,
-            item.contentUrl,
-            item.exerciseSections,
-            item.length,
-            item.id,
-            item.title,
-            item.img,
-          )
+          sendToVideoScreen(e, item.contentUrl, item.id, item.title)
         }
         superscriptTitle={item.exerciseSections}
         img={item.img}
@@ -171,15 +156,12 @@ const Home: React.FC<HomeProps> = () => {
       decelerationRate={'fast'}
       scrollEventThrottle={9}
       showsHorizontalScrollIndicator={false}
-      horizontal={false}
-      // disableIntervalMomentum={true}
-    >
+      horizontal={false}>
       <View style={styles.main}>
         <Mega />
       </View>
 
       <RowSectionHeader text={`Popular Classes`} />
-      {/*          290, 350                 */}
       <FlatList
         data={data.popularLessons}
         renderItem={renderPopular}

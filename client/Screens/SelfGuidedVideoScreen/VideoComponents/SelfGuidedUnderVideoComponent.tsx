@@ -35,6 +35,7 @@ const IndependentUnderVideoComponent: React.FC<IndependentUnderVideoComponentPro
   let {state, dispatch} = useContext(SgVideoStore);
 
   let hold: string[] = [];
+
   useEffect(() => {
     data.map((n) => {
       hold.push(n.contentUrl);
@@ -52,19 +53,15 @@ const IndependentUnderVideoComponent: React.FC<IndependentUnderVideoComponentPro
 
   const renderItem = ({item}: {item: Data}) => {
     return (
-      <>
-        <TouchableOpacity
-          style={styles.tableRow}
-          onPress={(e: EventTarget) => playThisVideo(e, item.sectionNumber)}>
-          <View style={styles.detailRow}>
-            <Text style={styles.time}>{item.length / 1000} seconds</Text>
-            <Text style={styles.title}>{item.title}</Text>
-          </View>
-          {state.sectionNumber === item.sectionNumber - 1 ? (
-            <SelfGuidedSlider />
-          ) : null}
-        </TouchableOpacity>
-      </>
+      <TouchableOpacity
+        style={styles.tableRow}
+        onPress={(e: EventTarget) => playThisVideo(e, item.sectionNumber)}>
+        <View style={styles.detailRow}>
+          <Text style={styles.time}>{item.length / 1000} seconds</Text>
+          <Text style={styles.title}>{item.title}</Text>
+        </View>
+        {state.sectionNumber === item.sectionNumber - 1 && <SelfGuidedSlider />}
+      </TouchableOpacity>
     );
   };
 

@@ -183,7 +183,7 @@ const SgVideoPlayer: React.FC<SgVideoPlayerProps> = () => {
   ]);
 
   const route = useRoute<SgVideoPlayerProps>();
-  let {contentUrl, id, length, title, exerciseSections} = route.params;
+  let {contentUrl, id, title} = route.params;
   console.log('params in screenPlayer: ', id);
 
   const [results, reexecuteQuery] = useQuery({
