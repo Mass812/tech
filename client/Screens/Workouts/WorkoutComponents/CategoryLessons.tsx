@@ -86,7 +86,7 @@ const WorkoutCard: React.FC<WorkoutCardProps> = () => {
           instructor={item.instructor}
           photo={`${item.img}`}
           title={item.courseName}
-          bulletPoints={`${item.instructor} * ${item.length}`}
+          bulletPoints={`Lesson ${item.lessonNumber} * ${item.length}`}
           button={false}
           displayAsCard={true}
         />

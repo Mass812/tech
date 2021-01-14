@@ -6,12 +6,14 @@ import {
   FlatList,
   Text,
   Dimensions,
+  Image,
 } from 'react-native';
 import ProgramCard from '../../../ReusableComponents/UiCards/ProgramCard';
 import {useQuery} from 'urql';
 import LoadingScreen from '../../SplashScreens/Loading';
 import ErrorScreen from '../../SplashScreens/ErrorScreen';
 import {useNavigation, useRoute} from '@react-navigation/native';
+import SelfGuidedCardMini from './SelfGuidedCardMini';
 
 const width = Dimensions.get('screen').width;
 
@@ -61,13 +63,12 @@ const WorkoutCard: React.FC<WorkoutCardProps> = () => {
             title: item.title,
           })
         }>
-        <ProgramCard
+        <SelfGuidedCardMini
           //  instructor={item.instructor}
-          photo={`${item.img}`}
+          img={`${item.img}`}
           title={item.title}
-          bulletPoints={`${item.category} * ${item.length}`}
-          button={false}
-          displayAsCard={true}
+          category={`${item.category}`}
+          length={`${item.length}`}
         />
       </TouchableOpacity>
     );
@@ -89,6 +90,7 @@ const styles = StyleSheet.create({
     flex: 1,
     display: 'flex',
     width: width,
+    padding: 20,
   },
 });
 export default WorkoutCard;
