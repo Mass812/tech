@@ -75,13 +75,19 @@ const WorkoutCard: React.FC<WorkoutCardProps> = () => {
   };
 
   return (
-    <View style={styles.parent}>
-      <FlatList
-        data={data.allSelfGuided}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-      />
-    </View>
+    <>
+      <View style={styles.thinHeader}>
+        <Text>Workouts</Text>
+        <Text>{data.allSelfGuided.length} Workouts</Text>
+      </View>
+      <View style={styles.parent}>
+        <FlatList
+          data={data.allSelfGuided}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+        />
+      </View>
+    </>
   );
 };
 
@@ -91,6 +97,17 @@ const styles = StyleSheet.create({
     display: 'flex',
     width: width,
     padding: 20,
+  },
+  thinHeader: {
+    display: 'flex',
+    flexDirection: 'row',
+    height: 35,
+    backgroundColor: 'lightgrey',
+    width: '100%',
+    justifyContent: 'space-between',
+    alignContent: 'center',
+    alignItems: 'center',
+    padding: 5,
   },
 });
 export default WorkoutCard;
