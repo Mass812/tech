@@ -26,11 +26,11 @@ const SelfGuidedCardMini: React.FC<SelfGuidedCardMiniProps> = ({
           />
         </View>
         <View style={styles.detailBlock}>
-          <Text>{title}</Text>
+          <Text style={styles.detailTitle}>{title}</Text>
           <View style={styles.textDetailRow}>
-            <Text>{category}</Text>
+            <Text style={styles.detailText}>{category}</Text>
             <Text> • </Text>
-            <Text>{length}</Text>
+            <Text style={styles.detailText}>{length}</Text>
           </View>
         </View>
       </View>
@@ -57,6 +57,16 @@ const styles = StyleSheet.create({
   textDetailRow: {
     display: 'flex',
     flexDirection: 'row',
+  },
+  detailTitle: {
+    color: 'black',
+    fontWeight: '500',
+    letterSpacing: 1,
+    marginBottom: 5,
+  },
+  detailText: {
+    color: 'darkgrey',
+    fontWeight: '400',
   },
 });
 export default SelfGuidedCardMini;
