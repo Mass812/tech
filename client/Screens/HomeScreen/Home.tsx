@@ -50,6 +50,7 @@ query {
   instructor
   description
   title
+  id
   }
 }
 `;
@@ -84,7 +85,7 @@ interface MeditationProps {
   contentUrl?: string;
   contentImg: string;
   description?: string;
-  id?: string;
+  id: string;
   instructor?: string;
   title: string;
   horizontal?: boolean;
@@ -135,7 +136,7 @@ const Home: React.FC<HomeProps> = () => {
     });
   };
 
-  const renderLessons = ({item}: {item: PopularLessonsProps}) => {
+  const renderPopularLessons = ({item}: {item: PopularLessonsProps}) => {
     return (
       <InstructionalLessonCard
         onPress={(e: EventTarget) =>
@@ -174,40 +175,31 @@ const Home: React.FC<HomeProps> = () => {
     );
   };
 
-  const renderItem = ({item}: {item: MeditationProps}) => {
+  const renderPopularMeditations = ({item}: {item: MeditationProps}) => {
     return (
-      <View key={item.id}>
-        <TouchableOpacity
-          key={item.id}
-          onPress={() =>
-            nav.navigate('MeditationPlayer', {
-              contentUrl: item.contentUrl,
-              contentImg: item.contentImg,
-              instructor: item.instructor,
-              category: item.category,
-              length: item.length,
-              title: item.title,
-              description: item.description,
-              id: item.id,
-            })
-          }>
-          <HomeScreenMeditationComponent
-            img={item.contentImg}
-            title={item.title}
-            rowDetailOne={`${item.instructor}`}
-            rowDetailTwo={`${item.length}`}
-          />
-        </TouchableOpacity>
-      </View>
+      <HomeScreenMeditationComponent
+        img={item.contentImg}
+        title={item.title}
+        rowDetailOne={`${item.instructor}`}
+        rowDetailTwo={`${item.length}`}
+        onPress={() =>
+          nav.navigate('MeditationPlayer', {
+            contentUrl: item.contentUrl,
+            contentImg: item.contentImg,
+            instructor: item.instructor,
+            category: item.category,
+            length: item.length,
+            title: item.title,
+            description: item.description,
+            id: item.id,
+          })
+        }
+      />
     );
   };
 
   return (
-    <ScrollView
-      decelerationRate={'fast'}
-      scrollEventThrottle={9}
-      showsHorizontalScrollIndicator={false}
-      horizontal={false}>
+    <ScrollView decelerationRate={'fast'} scrollEventThrottle={9}>
       <View style={styles.main}>
         <Mega />
       </View>
@@ -215,7 +207,7 @@ const Home: React.FC<HomeProps> = () => {
       <RowSectionHeader text={`Popular Classes`} />
       <FlatList
         data={data.popularLessons}
-        renderItem={renderLessons}
+        renderItem={renderPopularLessons}
         keyExtractor={(item) => item.id}
         horizontal={true}
         snapToAlignment={'center'}
@@ -241,9 +233,10 @@ const Home: React.FC<HomeProps> = () => {
       />
 
       <RowSectionHeader text={`Popular Meditations`} />
-      <FlatList<MeditationProps>
+      <FlatList
         data={data.popularMeditations}
-        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        renderItem={renderPopularMeditations}
         snapToAlignment={'center'}
         snapToInterval={300}
         decelerationRate={'fast'}
@@ -252,11 +245,6 @@ const Home: React.FC<HomeProps> = () => {
         disableIntervalMomentum={true}
         horizontal={true}
       />
-      {/* <MeditationComponent
-        dataProps={'popularMeditations'}
-        horizontal={true}
-        queryValue={PopularQuery}
-      /> */}
 
       <RowSectionHeader text={`Meet our instructors`} />
       <InstructorProfileThumb
