@@ -27,7 +27,7 @@ type Params = {
   description: string;
   title: string;
 };
-interface playbackShape {
+interface iPlaybackShape {
   currentTime: number;
   playableDuration: number;
   seekableDuration: number;
@@ -36,7 +36,10 @@ interface playbackShape {
 const MeditationPlayer: React.FC<MeditationPlayerProps> = () => {
   let player = useRef<HTMLInputElement>('player');
   const nav = useNavigation();
+  const [isBuffering, setIsBuffering] = useState(false);
+  const [errrorMessage, setErrorMessage] = useState('');
   const route = useRoute<MeditationPlayerProps>();
+
   let {
     title,
     contentImg,
@@ -45,16 +48,14 @@ const MeditationPlayer: React.FC<MeditationPlayerProps> = () => {
     instructor,
     description,
   } = route.params;
-  const [isBuffering, setIsBuffering] = useState(false);
-  const [errrorMessage, setErrorMessage] = useState('');
-  const [progressData, setProgressData] = useState<playbackShape>({
+
+  const [progressData, setProgressData] = useState<iPlaybackShape>({
     currentTime: 0,
     playableDuration: 34.6,
     seekableDuration: 888,
   });
-  const [pause, setPause] = useState(false);
 
-  console.log('PROGRESS DATA: ==> ', progressData);
+  const [pause, setPause] = useState(false);
 
   return (
     <View>

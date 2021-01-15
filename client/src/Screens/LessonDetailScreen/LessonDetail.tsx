@@ -1,12 +1,5 @@
-import React, {useEffect} from 'react';
-import {
-  View,
-  ScrollView,
-  StyleSheet,
-  Text,
-  Image,
-  FlatList,
-} from 'react-native';
+import React from 'react';
+import {ScrollView, StyleSheet} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {useQuery} from 'urql';
 import ProgramCard from '../../ReusableComponents/UiCards/ProgramCard';
@@ -14,92 +7,43 @@ import CourseOverview from '../../ReusableComponents/UiCards/CourseOverview';
 import LoadingScreen from '../SplashScreens/Loading';
 import ErrorScreen from '../SplashScreens/ErrorScreen';
 import FocusGraph from '../../ReusableComponents/FocusGraph/FocusGraph';
-
-//courseName, instructor, lessonNumber, weekNumber
-const findPopular = `
-query ($courseName: String!, $instructor: String!, $lessonNumber: String!, $weekNumber: String!) {
-    lesson(courseName: $courseName, instructor: $instructor, lessonNumber: $lessonNumber, weekNumber: $weekNumber){
-      courseName
-      instructor
-      id
-      description
-      lessonNumber
-      length
-      category
-      img
-      equipment
-      weekNumber
-      title
-      contentUrl
-      targets
-      targetChestValue
-      targetLegsValue
-      targetArmsValue
-      targetAbsValue
-      targetBackValue
-      outfitTopName
-    outfitTopImgUrl
-    outfitBottomName
-    outfitBottomImgUrl
-    }
-  }
-`;
-
-interface LessonDetailProps {
-  courseName: string;
-  instructor: string;
-  id: string;
-  description: string;
-  lessonNumber: string;
-  length: string;
-  category: string;
-  equipment: string[];
-  img: string;
-  contentUrl: string;
-  title: string;
-  additionalInfo: string[];
-  weekNumber: string;
-  lectureNumber: string;
-  targets: string[];
-  outfitTopName: string;
-  outfitTopImgUrl: string;
-  outfitBottomName: string;
-  outfitBottomImgUrl: string;
-}
-
-type CourseRelation = {
-  img: string;
-};
-
-type ParamList = {
-  courseName: string;
-  weekNumber: string;
-  lessonNumber: string;
-  instructor: string;
-  key: string;
-  name: string;
-  params: Params;
-};
-
-type Params = {
-  courseName: string;
-  weekNumber: string;
-  lessonNumber: string;
-  instructor: string;
-};
+import GetLesson_LessonDetailScreen from '../../Urql_Requests/Querys/GetLessons_LessonDetailScreen';
+import {
+  LessonDetailProps,
+  ParamList,
+} from '../../Interfaces/LessonDetailScreenInterfaces';
 
 const LessonDetail: React.FC<LessonDetailProps> = () => {
-  const route = useRoute<ParamList>();
   const nav = useNavigation();
-
+  const route = useRoute<ParamList>();
   let {courseName, weekNumber, lessonNumber, instructor} = route.params;
 
-  const [result, reexecuteQuery] = useQuery({
-    query: findPopular,
+  const [result] = useQuery({
+    query: GetLesson_LessonDetailScreen,
     variables: {courseName, instructor, lessonNumber, weekNumber},
   });
 
   let {data, fetching, error} = result;
+
+  let {
+    img,
+    contentUrl,
+    length,
+    title,
+    targets,
+    outfitTopName,
+    outfitTopImgUrl,
+    outfitBottomName,
+    outfitBottomImgUrl,
+    description,
+    targetLegsValue,
+    targetArmsValue,
+    targetAbsValue,
+    targetBackValue,
+    id,
+    equipment,
+    category,
+  } = data.lesson;
 
   if (fetching) return <LoadingScreen />;
   if (error) return <ErrorScreen error={error.message} />;
@@ -108,62 +52,50 @@ const LessonDetail: React.FC<LessonDetailProps> = () => {
     nav.navigate('ProgramDetail', {courseName});
   };
 
-  console.log('LessonDetail Component: ', data.lesson);
-
   return (
     <ScrollView style={styles.container}>
       <ProgramCard
         button={true}
         buttonText={'Start Class'}
-        // id={data.lesson.id}
-        instructor={data.lesson.instructor}
-        photo={data.lesson.img}
-        title={data.lesson.title}
-        bulletPoints={`Lesson ${data.lesson.lessonNumber}  *  ${data.lesson.length}`}
-        displayAsCard={false}
-        //TODO Link This to  All Course Videos Componet
+        instructor={instructor}
+        photo={img}
+        title={title}
+        bulletPoints={`Lesson ${lessonNumber}  *  ${length}`}
         onPress={() => {
-          console.log('Cless Detail prop contentUrl: ', data.lesson.contentUrl);
-
           nav.navigate('LessonVideoScreen', {
-            contentUrl: data.lesson.contentUrl,
-            weekNumber: data.lesson.weekNumber,
-            lessonNumber: data.lesson.lessonNumber,
-            courseName: data.lesson.courseName,
-            instructor: data.lesson.instructor,
-            title: data.lesson.title,
-            targets: data.lesson.targets,
-            outfitTopName: data.lesson.outfitTopName,
-            outfitTopImgUrl: data.lesson.outfitTopImgUrl,
-            outfitBottomName: data.lesson.outfitBottomName,
-            outfitBottomImgUrl: data.lesson.outfitBottomImgUrl,
+            contentUrl,
+            weekNumber,
+            lessonNumber,
+            courseName,
+            instructor,
+            title,
+            targets,
+            outfitTopName,
+            outfitTopImgUrl,
+            outfitBottomName,
+            outfitBottomImgUrl,
           });
-          console.log('navigating later');
         }}
       />
 
       <CourseOverview
-        equipment={data.lesson.equipment}
-        instructor={data.lesson.instructor}
-        length={data.lesson.length}
-        courseName={data.lesson.courseName}
-        // id={data.lesson.id}
-        //  lectureCount={data.lesson.lectureCount}
-        description={data.lesson.description}
-        targets={data.lesson.targets}
-        category={data.lesson.category}
-        img={data.lesson.img}
+        equipment={equipment}
+        instructor={instructor}
+        length={length}
+        courseName={courseName}
+        description={description}
+        targets={targets}
+        category={category}
+        img={img}
         displayProgramLink={true}
-        onPress={(e: EventTarget) =>
-          sendToProgram(e, data.lesson.id, data.lesson.courseName)
-        }
+        onPress={(e: EventTarget) => sendToProgram(e, id, courseName)}
       />
       <FocusGraph
-        //targetChestValue={data.lesson.targetChestValue}
-        targetLegsValue={data.lesson.targetLegsValue}
-        targetArmsValue={data.lesson.targetArmsValue}
-        targetAbstValues={data.lesson.targetAbsValue}
-        targetBackValue={data.lesson.targetBackValue}
+        //targetChestValue={targetChestValue}
+        targetLegsValue={targetLegsValue}
+        targetArmsValue={targetArmsValue}
+        targetAbstValues={targetAbsValue}
+        targetBackValue={targetBackValue}
       />
     </ScrollView>
   );
