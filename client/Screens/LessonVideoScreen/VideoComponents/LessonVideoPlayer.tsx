@@ -54,10 +54,6 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
     };
   }, []);
 
-  useEffect(() => {
-    dispatch({type: 'Paused', paylaod: false});
-  }, [state.restart]);
-
   const handleOnLoad = () => {
     dispatch({type: 'LOADING', payload: false});
     dispatch({type: 'BUFFERING', payload: false});
@@ -112,6 +108,7 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
 
   const onEnd = () => {
     dispatch({type: 'USER_WATCH_TIME', payload: state.currentTime});
+    dispatch({type: 'LESSON_COMPLETED', payload: true});
   };
 
   return (
@@ -124,7 +121,7 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
           onLoadStart={() => dispatch({type: 'LOADING', payload: true})}
           onLoad={handleOnLoad}
           // TODO END OF VIDEO FX
-          onEnd={() => nav.goBack()}
+          onEnd={onEnd}
           // onBuffer={() => dispatch({type: 'BUFFERING', payload: true})}
           onError={() => console.log('error')}
           style={styles.videoPortrait}

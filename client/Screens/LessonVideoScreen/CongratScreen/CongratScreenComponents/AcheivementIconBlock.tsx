@@ -5,22 +5,28 @@ import {faClock, faDumbbell, faBolt} from '@fortawesome/free-solid-svg-icons';
 
 interface AcheivementIconBlockProps {
   icon: any;
-  textSubject: string;
+
+  title: string;
+  detailOne: string;
+  detailTwo?: string;
 }
 
 const AcheivementIconBlock: React.FC<AcheivementIconBlockProps> = ({
   icon,
-  textSubject,
+
+  title,
+  detailOne,
+  detailTwo,
 }) => {
   return (
     <View style={styles.iconColumn}>
       <View style={styles.iconHalo}>
         <FontAwesomeIcon icon={icon} size={30} color={'#0896a3'} />
       </View>
-      <Text style={styles.detailTitle}>{textSubject}</Text>
-      <View>
-        <Text>3 hrs 12 min</Text>
-        <Text></Text>
+      <Text style={styles.detailTitle}>{title}</Text>
+      <View style={styles.detailColumn}>
+        <Text style={styles.detailOne}>{detailOne}</Text>
+        <Text style={styles.detailTwo}>{detailTwo}</Text>
       </View>
     </View>
   );
@@ -56,8 +62,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     margin: 10,
   },
+  detailColumn: {
+    height: 36,
+    marginTop: 4,
+    justifyContent: 'space-around',
+  },
   detailTitle: {
     margin: 0,
+    fontWeight: '700',
+  },
+  detailOne: {
+    fontWeight: '500',
+    color: 'red',
+  },
+  detailTwo: {
+    fontWeight: '500',
+    color: 'seagreen',
   },
 });
 export default AcheivementIconBlock;
