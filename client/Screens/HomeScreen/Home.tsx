@@ -1,5 +1,11 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, Dimensions, FlatList} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Dimensions,
+  FlatList,
+  TouchableOpacity,
+} from 'react-native';
 import {useQuery} from 'urql';
 import {useNavigation} from '@react-navigation/native';
 import Mega from './Mega';
@@ -10,6 +16,8 @@ import ErrorScreen from '../SplashScreens/ErrorScreen';
 import MeditationComponent from '../MeditationScreen/MeditationComponent';
 import InstructorProfileThumb from '../../ReusableComponents/UiCards/InstructorProfileThumb';
 import RowSectionHeader from '../../ReusableComponents/RowSectionHeader';
+import ProgramCard from '../../ReusableComponents/UiCards/ProgramCard';
+import HomeScreenMeditationComponent from '../MeditationScreen/MeditationComponents/HomeScreenMeditationComponent';
 
 const PopularQuery = `
 query {
@@ -71,6 +79,20 @@ interface PopularSelfGuided {
   equipment: [string];
 }
 
+interface MeditationProps {
+  category?: string;
+  contentUrl?: string;
+  contentImg: string;
+  description?: string;
+  id?: string;
+  instructor?: string;
+  title: string;
+  horizontal?: boolean;
+  queryValue?: string;
+  length?: string;
+  dataProps?: string;
+}
+
 interface HomeProps {}
 
 const Home: React.FC<HomeProps> = () => {
@@ -113,7 +135,7 @@ const Home: React.FC<HomeProps> = () => {
     });
   };
 
-  const renderPopular = ({item}: {item: PopularLessonsProps}) => {
+  const renderLessons = ({item}: {item: PopularLessonsProps}) => {
     return (
       <InstructionalLessonCard
         onPress={(e: EventTarget) =>
@@ -131,6 +153,7 @@ const Home: React.FC<HomeProps> = () => {
         additionalInfo={item.equipment.slice(0, 2)}
         length={item.length}
         wideDimension={false}
+        category={item.category}
       />
     );
   };
@@ -151,6 +174,34 @@ const Home: React.FC<HomeProps> = () => {
     );
   };
 
+  const renderItem = ({item}: {item: MeditationProps}) => {
+    return (
+      <View key={item.id}>
+        <TouchableOpacity
+          key={item.id}
+          onPress={() =>
+            nav.navigate('MeditationPlayer', {
+              contentUrl: item.contentUrl,
+              contentImg: item.contentImg,
+              instructor: item.instructor,
+              category: item.category,
+              length: item.length,
+              title: item.title,
+              description: item.description,
+              id: item.id,
+            })
+          }>
+          <HomeScreenMeditationComponent
+            img={item.contentImg}
+            title={item.title}
+            rowDetailOne={`${item.instructor}`}
+            rowDetailTwo={`${item.length}`}
+          />
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
   return (
     <ScrollView
       decelerationRate={'fast'}
@@ -164,7 +215,7 @@ const Home: React.FC<HomeProps> = () => {
       <RowSectionHeader text={`Popular Classes`} />
       <FlatList
         data={data.popularLessons}
-        renderItem={renderPopular}
+        renderItem={renderLessons}
         keyExtractor={(item) => item.id}
         horizontal={true}
         snapToAlignment={'center'}
@@ -190,11 +241,22 @@ const Home: React.FC<HomeProps> = () => {
       />
 
       <RowSectionHeader text={`Popular Meditations`} />
-      <MeditationComponent
+      <FlatList<MeditationProps>
+        data={data.popularMeditations}
+        renderItem={renderItem}
+        snapToAlignment={'center'}
+        snapToInterval={300}
+        decelerationRate={'fast'}
+        scrollEventThrottle={8}
+        showsHorizontalScrollIndicator={false}
+        disableIntervalMomentum={true}
+        horizontal={true}
+      />
+      {/* <MeditationComponent
         dataProps={'popularMeditations'}
         horizontal={true}
         queryValue={PopularQuery}
-      />
+      /> */}
 
       <RowSectionHeader text={`Meet our instructors`} />
       <InstructorProfileThumb

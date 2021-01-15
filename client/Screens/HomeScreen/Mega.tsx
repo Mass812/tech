@@ -89,8 +89,8 @@ const Mega: React.FC<MegaProps> = () => {
 
 const styles = StyleSheet.create({
   imageParent: {
-    height: height * 0.6,
-    maxHeight: height * 0.6,
+    height: height * 0.7,
+    maxHeight: height * 0.7,
     width: width,
     maxWidth: width,
     justifyContent: 'flex-end',
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
   },
   image: {
     position: 'absolute',
-    height: height * 0.6,
+    height: height * 0.7,
     width: width,
     maxWidth: width,
     zIndex: -1,

@@ -5,7 +5,10 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
   Image,
+  Dimensions,
 } from 'react-native';
+
+const width = Dimensions.get('screen').width;
 
 interface InstructionalLessonCardProps {
   img: string;
@@ -88,7 +91,7 @@ const styles = StyleSheet.create({
     borderColor: 'lightgrey',
     backgroundColor: 'rgba(198,227,231, .03)',
     marginLeft: 10,
-    width: 350,
+    width: width - 80,
   },
   card: {
     borderColor: 'grey',
@@ -130,7 +133,7 @@ const styles = StyleSheet.create({
   },
   thirdRow: {
     borderBottomWidth: 1,
-    borderColor: 'grey',
+    borderColor: 'rgba(209, 209, 209, 1)',
     borderStyle: 'solid',
   },
   fourthRow: {
@@ -179,7 +182,7 @@ const styles = StyleSheet.create({
     color: 'black',
     marginRight: 2,
     fontWeight: '300',
-    fontSize: 14,
+    fontSize: 12,
   },
 });
 export default InstructorLessonCard;

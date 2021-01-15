@@ -58,8 +58,11 @@ const Meditation: React.FC<MeditationProps> = ({
 
   const renderItem = ({item}: {item: MeditationProps}) => {
     return (
-      <View style={horizontal ? styles.listNotWide : styles.listWide}>
+      <View
+        style={horizontal ? styles.listNotWide : styles.listWide}
+        key={item.id}>
         <TouchableOpacity
+          key={item.id}
           onPress={() =>
             nav.navigate('MeditationPlayer', {
               contentUrl: item.contentUrl,
@@ -86,22 +89,19 @@ const Meditation: React.FC<MeditationProps> = ({
   };
 
   return (
-    <SafeAreaView>
-      <View style={styles.main}>
-        <FlatList<FlatListProps>
-          data={data[dataProps]}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-          horizontal={horizontal}
-          snapToAlignment={'center'}
-          snapToInterval={300}
-          decelerationRate={'fast'}
-          scrollEventThrottle={8}
-          showsHorizontalScrollIndicator={false}
-          disableIntervalMomentum={true}
-        />
-      </View>
-    </SafeAreaView>
+    <View style={styles.main}>
+      <FlatList<FlatListProps>
+        data={data[dataProps]}
+        renderItem={renderItem}
+        horizontal={horizontal}
+        snapToAlignment={'center'}
+        snapToInterval={300}
+        decelerationRate={'fast'}
+        scrollEventThrottle={8}
+        showsHorizontalScrollIndicator={false}
+        disableIntervalMomentum={true}
+      />
+    </View>
   );
 };
 

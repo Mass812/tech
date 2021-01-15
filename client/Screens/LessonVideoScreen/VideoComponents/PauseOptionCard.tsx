@@ -5,6 +5,15 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faMusic, faPlayCircle} from '@fortawesome/free-solid-svg-icons';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {VideoStore} from '../LessonVideoScreen';
+import {useMutation} from 'urql';
+
+const updateLessonPopularity = `
+  mutation ($instructor: String!, $courseName: String!, $weekNumber: String!, $lessonNumber: String!){
+    updateLessonPopularity( instructor: $instructor, courseName: $courseName, weekNumber: $weekNumber, lessonNumber: $lessonNumber){
+popularity
+    }
+    }
+`;
 
 interface PauseOptionCardProps {
   restartTheLeeson?: () => void;
@@ -17,6 +26,8 @@ interface iPressText {
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
+
+// TODO export to sepatate components
 
 const Haze: React.FC<PauseOptionCardProps> = () => {
   const {state, dispatch} = useContext(VideoStore);
@@ -53,6 +64,9 @@ const PauseOptionCard: React.FC<PauseOptionCardProps> = ({
 }) => {
   const {state, dispatch} = useContext(VideoStore);
   const [showSecondCard, setShowSecondCard] = useState<boolean>();
+  const [data, executeMutation] = useMutation(updateLessonPopularity);
+  const {instructor, courseName, weekNumber, lessonNumber} = state;
+
   let nav = useNavigation();
 
   const handleQuitLesson = () => {
@@ -64,8 +78,23 @@ const PauseOptionCard: React.FC<PauseOptionCardProps> = ({
 
   // TODO ADD TIME TO USER DOC
   const handleMarkAsCompleted = () => {
-    console.log('Setting user Watch Time To');
     dispatch({type: 'USER_WATCH_TIME', payload: state.currentTime});
+
+    executeMutation({
+      instructor,
+      courseName,
+      weekNumber,
+      lessonNumber,
+    }).then(() => console.log(data, 'fired off mutation'));
+  };
+
+  const handleJustQuit = () => {
+    executeMutation({
+      instructor,
+      courseName,
+      weekNumber,
+      lessonNumber,
+    }).then(() => nav.navigate('Home'));
   };
 
   return (
@@ -113,10 +142,7 @@ const PauseOptionCard: React.FC<PauseOptionCardProps> = ({
                   onPress={handleMarkAsCompleted}
                   text={'Mark as Completed'}
                 />
-                <CardButton
-                  onPress={() => nav.navigate('Home')}
-                  text={'Quit Lesson'}
-                />
+                <CardButton onPress={handleJustQuit} text={'Quit Lesson'} />
               </View>
             </View>
           )}
@@ -130,8 +156,6 @@ const styles = StyleSheet.create({
   haze: {
     // flex: 1,
     backgroundColor: 'black',
-    //   height: '100%',
-    //  width: '100%',
     position: 'absolute',
     top: 0,
     left: 0,

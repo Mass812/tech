@@ -67,14 +67,14 @@ const IndependentUnderVideoComponent: React.FC<IndependentUnderVideoComponentPro
 
   return (
     <View style={styles.container}>
-      <ScrollView>
+      <View>
         <FlatList
           data={data}
           keyExtractor={(item) => `${item.id}`}
           renderItem={renderItem}
           initialNumToRender={10}
         />
-      </ScrollView>
+      </View>
     </View>
   );
 };

@@ -39,6 +39,7 @@ const getAllLessonsOfACategory_ddb = require("./DynamoDB_Request_Functions/Query
 const getAllSelfGuidedOfACategory_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getAllSelfGuidedOfACategory_ddb")
 //const getPopularCourses_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getPopularCourses_ddb")
 const getCoursesForCategory_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getCoursesForCategory_ddb")
+const getAllSelfGuided_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getAllSelfGuided_ddb")
 
 //db mutation calls
 const createUser = require("./DynamoDB_Request_Functions/Mutation_Requests/createUser_ddb")
@@ -51,7 +52,7 @@ const createCourseCompletionDoc_ddb = require("./DynamoDB_Request_Functions/Muta
 const createSelfGuidedLesson_ddb = require("./DynamoDB_Request_Functions/Mutation_Requests/createSelfGuidedLesson_ddb")
 const createMeditation_ddb = require("./DynamoDB_Request_Functions/Mutation_Requests/createMeditation_ddb")
 const createSelfGuidedLessonSection_ddb = require("./DynamoDB_Request_Functions/Mutation_Requests/createSelfGuidedLessonVideoSection_ddb")
-const getAllSelfGuided_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getAllSelfGuided_ddb")
+const updateLessonPopularity_ddb = require("./DynamoDB_Request_Functions/Mutation_Requests/updateLessonPopularity_ddb")
 
 const Query = gql`
   type Query {
@@ -188,6 +189,7 @@ const Query = gql`
     targetAbsValue: Int
     targetBackValue: Int
     lesson: String
+    popularity: Int
   }
 
   type CategoryLesson {
@@ -274,11 +276,12 @@ const Mutation = gql`
     createWorkout: Workout!
     createCourseCompletionDoc: CourseCompletionDoc
     createMeditation: Meditation
-  }
-  input UserUpdateInput {
-    email: String!
-    attribute: String!
-    value: String!
+    updateLessonPopularity(
+      instructor: String!
+      courseName: String!
+      weekNumber: String!
+      lessonNumber: String!
+    ): Lesson
   }
 `
 
@@ -380,6 +383,9 @@ let resolvers = {
     },
     createMeditation: async () => {
       return createMeditation_ddb()
+    },
+    updateLessonPopularity: async (_, args) => {
+      return updateLessonPopularity_ddb(args)
     },
   },
   Course: {
