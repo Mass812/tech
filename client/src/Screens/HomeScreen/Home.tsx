@@ -1,98 +1,21 @@
 import React, {useState} from 'react';
-import {
-  View,
-  StyleSheet,
-  Dimensions,
-  FlatList,
-  TouchableOpacity,
-} from 'react-native';
+import {View, StyleSheet, FlatList} from 'react-native';
 import {useQuery} from 'urql';
 import {useNavigation} from '@react-navigation/native';
-import Mega from './Mega';
+import Mega from './HomescreenComponents/Mega';
 import {ScrollView} from 'react-native-gesture-handler';
 import InstructionalLessonCard from '../../ReusableComponents/UiCards/InstructionalLessonCard';
 import LoadingScreen from '../SplashScreens/Loading';
 import ErrorScreen from '../SplashScreens/ErrorScreen';
-import MeditationComponent from '../MeditationScreen/MeditationComponent';
 import InstructorProfileThumb from '../../ReusableComponents/UiCards/InstructorProfileThumb';
 import RowSectionHeader from '../../ReusableComponents/RowSectionHeader';
-import ProgramCard from '../../ReusableComponents/UiCards/ProgramCard';
 import HomeScreenMeditationComponent from '../MeditationScreen/MeditationComponents/HomeScreenMeditationComponent';
-
-const PopularQuery = `
-query {
-  popularLessons{
-    id
-    category
-    length
-    contentUrl
-    img
-    courseName
-    equipment
-    instructor
-    weekNumber
-    lessonNumber
-    title
-  }
-  popularSelfGuided{
-    img
-    id
-    length
-    equipment
-    title
-    contentUrl
-    
-  }
-  popularMeditations{
-    contentImg
-   contentUrl
-  length
-  instructor
-  description
-  title
-  id
-  }
-}
-`;
-interface PopularLessonsProps {
-  courseName: string;
-  instructor: string;
-  lectureCount: string;
-  keywords: string[];
-  id: string;
-  img: string;
-  length: string;
-  category: string;
-  error: string;
-  weekNumber: string;
-  lessonNumber: string;
-  title: string;
-  equipment: string[];
-}
-
-interface PopularSelfGuided {
-  contentUrl: string;
-  title: string;
-  length: string;
-  id: string;
-  exerciseSections: string;
-  img: string;
-  equipment: [string];
-}
-
-interface MeditationProps {
-  category?: string;
-  contentUrl?: string;
-  contentImg: string;
-  description?: string;
-  id: string;
-  instructor?: string;
-  title: string;
-  horizontal?: boolean;
-  queryValue?: string;
-  length?: string;
-  dataProps?: string;
-}
+import PopularQuery_HomeScreen from '../../Urql_Requests/Querys/PopularQuery_HomeScreen';
+import {
+  PopularLessonsProps,
+  PopularSelfGuided,
+  MeditationProps,
+} from '../../Interfaces/HomeScreenInterfaces';
 
 interface HomeProps {}
 
@@ -100,7 +23,7 @@ const Home: React.FC<HomeProps> = () => {
   const nav = useNavigation();
 
   const [result, reexecuteQuery] = useQuery({
-    query: PopularQuery,
+    query: PopularQuery_HomeScreen,
   });
 
   let {data, fetching, error} = result;
@@ -108,92 +31,83 @@ const Home: React.FC<HomeProps> = () => {
   if (fetching) return <LoadingScreen />;
   if (error) return <ErrorScreen error={error.message} />;
 
-  const sendToLessonDetail = (
-    e: EventTarget,
-    courseName: string,
-    instructor: string,
-    weekNumber: string,
-    lessonNumber: string,
-  ) => {
-    nav.navigate('LessonDetail', {
+  const renderPopularLessons = ({item}: {item: PopularLessonsProps}) => {
+    const {
       courseName,
       instructor,
       weekNumber,
       lessonNumber,
-    });
-  };
-
-  const sendToVideoScreen = (
-    e: EventTarget,
-    contentUrl: string,
-    id: string,
-    title: string,
-  ) => {
-    nav.navigate('SelfGuidedVideoScreen', {
-      contentUrl,
-      id,
+      img,
       title,
-    });
-  };
+      length,
+      category,
+      equipment,
+    } = item;
 
-  const renderPopularLessons = ({item}: {item: PopularLessonsProps}) => {
+    const lessonDetailParams = {
+      courseName,
+      instructor,
+      weekNumber,
+      lessonNumber,
+    };
+
     return (
       <InstructionalLessonCard
-        onPress={(e: EventTarget) =>
-          sendToLessonDetail(
-            e,
-            item.courseName,
-            item.instructor,
-            item.weekNumber,
-            item.lessonNumber,
-          )
-        }
-        superscriptTitle={item.instructor}
-        img={item.img}
-        title={item.title}
-        additionalInfo={item.equipment.slice(0, 2)}
-        length={item.length}
+        onPress={() => nav.navigate('LessonDetail', lessonDetailParams)}
+        superscriptTitle={instructor}
+        img={img}
+        title={title}
+        additionalInfo={equipment.slice(0, 2)}
+        length={length}
         wideDimension={false}
-        category={item.category}
+        category={category}
       />
     );
   };
 
   const renderSelfGuided = ({item}: {item: PopularSelfGuided}) => {
+    const {contentUrl, id, title, length, exerciseSections, img} = item;
+    const selfGuidedParams = {contentUrl, id, title};
     return (
       <InstructionalLessonCard
-        onPress={(e: EventTarget) =>
-          sendToVideoScreen(e, item.contentUrl, item.id, item.title)
-        }
-        superscriptTitle={item.exerciseSections}
-        img={item.img}
-        title={item.title}
-        //  additionalInfo={[`${item.weekNumber} ${item.lessonNumber}`]}
-        length={item.length}
+        onPress={() => nav.navigate('SelfGuidedVideoScreen', selfGuidedParams)}
+        superscriptTitle={exerciseSections}
+        img={img}
+        title={title}
+        length={length}
         wideDimension={true}
       />
     );
   };
 
   const renderPopularMeditations = ({item}: {item: MeditationProps}) => {
+    const {
+      contentUrl,
+      contentImg,
+      instructor,
+      category,
+      length,
+      title,
+      description,
+      id,
+    } = item;
+    const meditationParams = {
+      contentUrl,
+      contentImg,
+      instructor,
+      category,
+      length,
+      title,
+      description,
+      id,
+    };
     return (
       <HomeScreenMeditationComponent
-        img={item.contentImg}
-        title={item.title}
-        rowDetailOne={`${item.instructor}`}
-        rowDetailTwo={`${item.length}`}
-        onPress={() =>
-          nav.navigate('MeditationPlayer', {
-            contentUrl: item.contentUrl,
-            contentImg: item.contentImg,
-            instructor: item.instructor,
-            category: item.category,
-            length: item.length,
-            title: item.title,
-            description: item.description,
-            id: item.id,
-          })
-        }
+        img={contentImg}
+        title={title}
+        rowDetailOne={`${instructor}`}
+        rowDetailTwo={`${length}`}
+        onPress={() => nav.navigate('MeditationPlayer', meditationParams)}
       />
     );
   };

@@ -16,16 +16,16 @@ import {
   createMaterialTopTabNavigator,
   MaterialTopTabBar,
 } from '@react-navigation/material-top-tabs';
-import Home from './Screens/HomeScreen/Home';
-import LessonDetail from './Screens/LessonDetailScreen/LessonDetail';
-import LessonVideoScreen from './Screens/LessonVideoScreen/LessonVideoScreen';
-import Meditation from './Screens/MeditationScreen/MeditationScreen';
-import Profile from './Screens/ProfileScreen/Profile';
-import Programs from './Screens/AllPrograms/AllProgramsScreen';
-import ProgramDetail from './Screens/ProgramDetailScreen/ProgramDetail';
-import MeditationPlayer from './Screens/MeditationScreen/MeditationPlayer/MeditationPlayer';
-import Workouts from './Screens/Workouts/Workouts';
-import SelfGuidedVideoScreen from './Screens/SelfGuidedVideoScreen/SelfGuidedVideoScreen';
+import Home from './src/Screens/HomeScreen/Home';
+import LessonDetail from './src/Screens/LessonDetailScreen/LessonDetail';
+import LessonVideoScreen from './src/Screens/LessonVideoScreen/LessonVideoScreen';
+import Meditation from './src/Screens/MeditationScreen/MeditationScreen';
+import Profile from './src/Screens/ProfileScreen/Profile';
+import Programs from './src/Screens/AllPrograms/AllProgramsScreen';
+import ProgramDetail from './src/Screens/ProgramDetailScreen/ProgramDetail';
+import MeditationPlayer from './src/Screens/MeditationScreen/MeditationPlayer/MeditationPlayer';
+import Workouts from './src/Screens/Workouts/Workouts';
+import SelfGuidedVideoScreen from './src/Screens/SelfGuidedVideoScreen/SelfGuidedVideoScreen';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {
   faHome,
@@ -38,8 +38,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Dimensions} from 'react-native';
-import CategorySelfGuided from './Screens/Workouts/WorkoutComponents/CategorySelfGuided';
-import CategoryLessons from './Screens/Workouts/WorkoutComponents/CategoryLessons';
+import CategorySelfGuided from './src/Screens/Workouts/WorkoutComponents/CategorySelfGuided';
+import CategoryLessons from './src/Screens/Workouts/WorkoutComponents/CategoryLessons';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const client = createClient({

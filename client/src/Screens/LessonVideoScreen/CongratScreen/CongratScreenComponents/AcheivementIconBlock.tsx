@@ -1,11 +1,9 @@
 import * as React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faClock, faDumbbell, faBolt} from '@fortawesome/free-solid-svg-icons';
 
 interface AcheivementIconBlockProps {
   icon: any;
-
   title: string;
   detailOne: string;
   detailTwo?: string;

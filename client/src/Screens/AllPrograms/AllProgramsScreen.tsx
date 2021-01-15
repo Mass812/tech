@@ -12,9 +12,6 @@ import {
 } from 'react-native';
 import {useQuery} from 'urql';
 import {useNavigation} from '@react-navigation/native';
-import Mega from '../HomeScreen/Mega';
-import {ScrollView} from 'react-native-gesture-handler';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
 import ProgramCard from '../../ReusableComponents/UiCards/ProgramCard';
 import LoadingScreen from '../SplashScreens/Loading';
 import ErrorScreen from '../SplashScreens/ErrorScreen';
@@ -54,18 +51,13 @@ interface ProgramsProps {}
 const Programs: React.FC<ProgramsProps> = () => {
   const nav = useNavigation();
 
-  const [result, reexecuteQuery] = useQuery({
+  const [result] = useQuery({
     query: CoursesQuery,
   });
 
   let {data, fetching, error} = result;
 
-  if (fetching)
-    return (
-      <View style={styles.main}>
-        <LoadingScreen />
-      </View>
-    );
+  if (fetching) return <LoadingScreen />;
   if (error) return <ErrorScreen error={error.message} />;
 
   const sendToLesson = async (e: EventTarget, courseName: string) => {
