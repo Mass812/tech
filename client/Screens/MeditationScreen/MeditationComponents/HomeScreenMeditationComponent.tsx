@@ -7,6 +7,7 @@ interface HomepageMeditationComponentProps {
   rowDetailOne: string;
   rowDetailTwo: string;
   img: string;
+  onPress: () => void;
 }
 
 const HomepageMeditationComponent: React.FC<HomepageMeditationComponentProps> = ({
@@ -14,19 +15,22 @@ const HomepageMeditationComponent: React.FC<HomepageMeditationComponentProps> = 
   rowDetailOne,
   rowDetailTwo,
   img,
+  onPress,
 }) => {
   return (
-    <View style={styles.parent}>
-      <View style={styles.cardBlock}>
-        <Image source={{uri: img}} style={styles.image} />
-        <Text style={styles.detailTitle}>{title}</Text>
-        <View style={styles.textDetailRow}>
-          <Text style={styles.detailText}>{rowDetailOne}</Text>
-          <Text> • </Text>
-          <Text style={styles.detailText}>{rowDetailTwo}</Text>
+    <TouchableOpacity onPress={onPress}>
+      <View style={styles.parent}>
+        <View style={styles.cardBlock}>
+          <Image source={{uri: img}} style={styles.image} />
+          <Text style={styles.detailTitle}>{title}</Text>
+          <View style={styles.textDetailRow}>
+            <Text style={styles.detailText}>{rowDetailOne}</Text>
+            <Text> • </Text>
+            <Text style={styles.detailText}>{rowDetailTwo}</Text>
+          </View>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

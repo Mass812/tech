@@ -92,22 +92,22 @@ const Meditation: React.FC<MeditationProps> = ({}) => {
   };
 
   return (
-    <ScrollView>
-      <View style={styles.main}>
-        <FlatList<FlatListProps>
-          keyExtractor={(item) => item.id}
-          data={data.meditations}
-          renderItem={renderItem}
-          horizontal={false}
-          snapToAlignment={'center'}
-          snapToInterval={300}
-          decelerationRate={'fast'}
-          scrollEventThrottle={8}
-          showsHorizontalScrollIndicator={false}
-          disableIntervalMomentum={true}
-        />
-      </View>
-    </ScrollView>
+    // <ScrollView>
+    <View style={styles.main}>
+      <FlatList<FlatListProps>
+        keyExtractor={(item) => item.id}
+        data={data.meditations}
+        renderItem={renderItem}
+        horizontal={false}
+        snapToAlignment={'center'}
+        snapToInterval={300}
+        decelerationRate={'fast'}
+        scrollEventThrottle={8}
+        showsHorizontalScrollIndicator={false}
+        disableIntervalMomentum={true}
+      />
+    </View>
+    // </ScrollView>
   );
 };
 
