@@ -33,13 +33,10 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
 
   const handleOrientation = (orientation: string) => {
     var initial = Orientation.getInitialOrientation();
-    if (initial == 'LANDSCAPE-RIGHT' || 'LANDSCAPE-LEFT') {
-      dispatch({type: 'LOCK_PORTRAIT', payload: false});
-      return;
-    } else {
-      dispatch({type: 'LOCK_PORTRAIT', payload: true});
-      return;
-    }
+
+    initial == 'LANDSCAPE-RIGHT' || 'LANDSCAPE-LEFT'
+      ? dispatch({type: 'LOCK_PORTRAIT', payload: false})
+      : dispatch({type: 'LOCK_PORTRAIT', payload: true});
   };
 
   useEffect(() => {
@@ -112,7 +109,6 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
         payload: getMinutesFromSeconds(number),
       });
     }
-    return;
   };
 
   const restartTheLesson = () => {
@@ -128,7 +124,6 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
       }}
       onLoadStart={() => dispatch({type: 'LOADING', payload: true})}
       onLoad={handleOnLoad}
-      // TODO END OF VIDEO FX
       onEnd={onEnd}
       // onBuffer={() => dispatch({type: 'BUFFERING', payload: true})}
       onError={() => console.log('error')}
@@ -150,11 +145,7 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
         <VideoControls />
       </View>
       <TitleBannerUnderVideo />
-
-      <View style={styles.componentArea}>
-        {/* <ScrollView horizontal={false}>{children}</ScrollView> */}
-        {children}
-      </View>
+      <View style={styles.componentArea}>{children}</View>
       {state.paused && <PauseOptionCard restartTheLeeson={restartTheLesson} />}
     </View>
   );

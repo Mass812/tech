@@ -1,11 +1,8 @@
 import React, {useEffect, useReducer} from 'react';
-import {View, StyleSheet, Dimensions} from 'react-native';
+import {Dimensions} from 'react-native';
 import {useRoute} from '@react-navigation/native';
 import VideoPlayerPortraitWindow from './VideoComponents/LessonVideoPlayer';
 import CourseOverview from '../../ReusableComponents/UiCards/CourseOverview';
-import ErrorScreen from '../SplashScreens/ErrorScreen';
-import LoadingScreen from '../SplashScreens/Loading';
-import {useQuery} from 'urql';
 import CongratScreen from './CongratScreen/CongratScreen';
 
 let width = Dimensions.get('screen').width;

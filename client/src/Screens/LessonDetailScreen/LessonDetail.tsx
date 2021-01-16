@@ -61,6 +61,7 @@ const LessonDetail: React.FC<LessonDetailProps> = () => {
         photo={img}
         title={title}
         bulletPoints={`Lesson ${lessonNumber}  *  ${length}`}
+        displayAsCard={false}
         onPress={() => {
           nav.navigate('LessonVideoScreen', {
             contentUrl,
