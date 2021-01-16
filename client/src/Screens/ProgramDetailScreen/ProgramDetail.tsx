@@ -94,7 +94,6 @@ const ProgramDetail: React.FC<ProgramDetailProps> = () => {
         photo={data.course.courseImg}
         title={data.course.courseName}
         bulletPoints={`${data.course.lectureCount} Programes *  ${data.course.length}`}
-        //TODO Link This to  All Course Videos Componet
         onPress={(e: EventTarget) =>
           onPress(
             e,

@@ -1,7 +1,8 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import {View, StyleSheet, FlatList} from 'react-native';
 import {useQuery} from 'urql';
 import {useNavigation} from '@react-navigation/native';
+import {useScrollToTop} from '@react-navigation/native';
 import Mega from './HomescreenComponents/Mega';
 import {ScrollView} from 'react-native-gesture-handler';
 import InstructionalLessonCard from '../../ReusableComponents/UiCards/InstructionalLessonCard';
@@ -21,6 +22,8 @@ interface HomeProps {}
 
 const Home: React.FC<HomeProps> = () => {
   const nav = useNavigation();
+  const screen = useRef<HTMLElement | any>(null);
+  useScrollToTop(screen);
 
   const [result, reexecuteQuery] = useQuery({
     query: PopularQuery_HomeScreen,
@@ -113,7 +116,7 @@ const Home: React.FC<HomeProps> = () => {
   };
 
   return (
-    <ScrollView decelerationRate={'fast'} scrollEventThrottle={9}>
+    <ScrollView ref={screen} decelerationRate={'fast'} scrollEventThrottle={9}>
       <View style={styles.main}>
         <Mega />
       </View>

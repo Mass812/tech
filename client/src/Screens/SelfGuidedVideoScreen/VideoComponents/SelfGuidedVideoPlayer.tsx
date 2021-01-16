@@ -8,21 +8,15 @@ import VideoControls from './SelfGuidedVideoIconOverlay';
 import PauseOptionCard from './PauseOptionCard';
 import TitleBannerUnderVideo from './SelfGuidedTitleBannerUnderVideo';
 import {ScrollView} from 'react-native-gesture-handler';
-import CourseOverview from '../../../ReusableComponents/UiCards/CourseOverview';
+import {iPlaybackShape} from '../../../Interfaces/SelfGuidedVideoScreenInterfaces';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 interface VideoPlayerPortraitWindowProps {
-  contentUrl: string;
-}
-interface iPlaybackShape {
-  currentTime: number;
-  playableDuration: number;
-  seekableDuration: number;
+  // contentUrl: string;
 }
 
 const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
-  contentUrl,
   children,
 }) => {
   let {state, dispatch} = useContext(SgVideoStore);
@@ -55,6 +49,7 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
 
     if (state.sectionNumber + 1 === state.exerciseSections.length) {
       dispatch({type: 'USER_WATCH_TIME', payload: cumulativeTime});
+      // TODO congrats screen
       nav.navigate('Home');
     } else {
       dispatch({type: 'USER_WATCH_TIME', payload: cumulativeTime});
@@ -70,7 +65,7 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
       });
     }
   };
-  console.log('userWatchTime: ', state.currentTime, state.userWatchTime);
+
   const handleOnLoad = () => {
     dispatch({type: 'LOADING', payload: false});
     dispatch({type: 'BUFFERING', payload: false});
@@ -83,6 +78,7 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
       seconds >= 10 ? seconds : '0' + seconds
     }`;
   };
+
   const onProgress = (data: iPlaybackShape) => {
     if (!state.loading && !state.paused) {
       dispatch({

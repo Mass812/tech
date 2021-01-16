@@ -23,7 +23,6 @@ const ErrorScreen: React.FC<ErrorProps> = ({error}) => {
         source={require('../../Assets/fabletics_256_256.png')}
         style={styles.image}
       />
-
       <View style={styles.spinnerRow}>
         <FontAwesomeIcon icon={faDizzy} size={20} color={'teal'} />
         <Text style={styles.text}>Sorry, there was an error.</Text>

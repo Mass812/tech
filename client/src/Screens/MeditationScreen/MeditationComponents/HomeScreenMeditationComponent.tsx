@@ -22,11 +22,13 @@ const HomepageMeditationComponent: React.FC<HomepageMeditationComponentProps> = 
       <View style={styles.parent}>
         <View style={styles.cardBlock}>
           <Image source={{uri: img}} style={styles.image} />
-          <Text style={styles.detailTitle}>{title}</Text>
+
           <View style={styles.textDetailRow}>
             <Text style={styles.detailText}>{rowDetailOne}</Text>
-            <Text> • </Text>
-            <Text style={styles.detailText}>{rowDetailTwo}</Text>
+            <View style={styles.titleView}>
+              <Text style={styles.detailTitle}>{title}</Text>
+            </View>
+            <Text style={styles.detailTextBottom}>{rowDetailTwo}</Text>
           </View>
         </View>
       </View>
@@ -37,41 +39,64 @@ const HomepageMeditationComponent: React.FC<HomepageMeditationComponentProps> = 
 const styles = StyleSheet.create({
   parent: {
     display: 'flex',
-    width: 300,
-    height: 180,
+    width: 320,
+    height: 175,
     margin: 10,
   },
   cardBlock: {
     display: 'flex',
-    width: 300,
-    height: 180,
+    width: 320,
+    height: 175,
     justifyContent: 'center',
     backgroundColor: 'black',
-    textAlign: 'center',
     borderRadius: 11,
+    opacity: 1,
   },
   image: {
-    width: 300,
-    height: 180,
+    width: 320,
+    height: 175,
     position: 'absolute',
     borderRadius: 11,
-    opacity: 0.8,
+    opacity: 0.5,
+  },
+  textDetailRow: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+    alignSelf: 'flex-end',
+    padding: 15,
+    width: '100%',
+    height: 175,
+  },
+  titleView: {
+    borderColor: 'white',
+    opacity: 1,
+    borderBottomWidth: 1,
+    margin: 2,
+    paddingBottom: 6,
   },
   detailTitle: {
     fontSize: 23,
     fontWeight: '500',
     color: 'white',
-    alignSelf: 'center',
+    paddingTop: 4,
+    paddingBottom: 4,
     textShadowColor: 'black',
     textShadowRadius: 9,
   },
-  textDetailRow: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
 
   detailText: {
+    color: 'white',
+    fontSize: 13,
+    textShadowColor: 'black',
+    textShadowRadius: 10,
+    fontWeight: '500',
+  },
+  detailTextBottom: {
+    // position: 'absolute',
+    // left: 15,
+    // bottom: 5,
+    paddingTop: 7,
     color: 'white',
     fontSize: 16,
     textShadowColor: 'black',
