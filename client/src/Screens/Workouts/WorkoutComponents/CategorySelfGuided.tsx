@@ -8,27 +8,14 @@ import {
   Dimensions,
   Image,
 } from 'react-native';
-import ProgramCard from '../../../ReusableComponents/UiCards/ProgramCard';
 import {useQuery} from 'urql';
 import LoadingScreen from '../../SplashScreens/Loading';
 import ErrorScreen from '../../SplashScreens/ErrorScreen';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import SelfGuidedCardMini from './SelfGuidedCardMini';
-
+import GetAllSelfGuided from '../../../Urql_Requests/Querys/GetAllSelfGuided_CategorySelfGuided';
+import {SelfGuidedCategory} from '../../../Interfaces/WorkoutScreenInterfaces';
 const width = Dimensions.get('screen').width;
-
-const selfGuided = `
-query {
-allSelfGuided {
-contentUrl
-id
-length
-title
-img
-category
-}
-}
-`;
 
 interface WorkoutCardProps {}
 
@@ -36,7 +23,7 @@ const WorkoutCard: React.FC<WorkoutCardProps> = () => {
   const nav = useNavigation();
 
   const [results, reexecuteQuery] = useQuery({
-    query: selfGuided,
+    query: GetAllSelfGuided,
   });
 
   const {data, error, fetching} = results;
@@ -44,16 +31,7 @@ const WorkoutCard: React.FC<WorkoutCardProps> = () => {
   if (fetching) return <LoadingScreen />;
   if (error) return <ErrorScreen error={error.message} />;
 
-  type Category = {
-    title: string;
-    length: string;
-    contentUrl: string;
-    img: string;
-    id: string;
-    category: string;
-  };
-
-  const renderItem = ({item}: {item: Category}) => {
+  const renderItem = ({item}: {item: SelfGuidedCategory}) => {
     return (
       <TouchableOpacity
         onPress={() =>

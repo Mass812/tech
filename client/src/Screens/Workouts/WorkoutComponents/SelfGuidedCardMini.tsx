@@ -1,12 +1,6 @@
 import React from 'react';
 import {View, StyleSheet, Text, Image} from 'react-native';
-
-interface SelfGuidedCardMiniProps {
-  img: string;
-  title: string;
-  length: string;
-  category: string;
-}
+import {SelfGuidedCardMiniProps} from '../../../Interfaces/SelfGuidedCardMiniInterface';
 
 const SelfGuidedCardMini: React.FC<SelfGuidedCardMiniProps> = ({
   img,

@@ -12,37 +12,14 @@ import {useQuery} from 'urql';
 import LoadingScreen from '../../SplashScreens/Loading';
 import ErrorScreen from '../../SplashScreens/ErrorScreen';
 import {useNavigation, useRoute} from '@react-navigation/native';
+import FindCoursesByCategory from '../../../Urql_Requests/Querys/FindCourseByCategory_WorkoutScreen';
+import {
+  WorkoutCardProps,
+  Category,
+  ParamList,
+} from '../../../Interfaces/WorkoutScreenInterfaces';
 
 const width = Dimensions.get('screen').width;
-
-const findCoursesByCategory = `
-query($category: String!){
-  categoryLessons(category: $category){
-      instructor,
-       length,
-        weekNumber,
-         lessonNumber,
-          equipment,
-           courseName,
-            title
-            
-            img
-    }
-}
-
-`;
-
-interface WorkoutCardProps {}
-type ParamList = {
-  category: string;
-  key: string;
-  name: string;
-  params: Params;
-};
-
-type Params = {
-  category: string;
-};
 
 const WorkoutCard: React.FC<WorkoutCardProps> = () => {
   const nav = useNavigation();
@@ -50,8 +27,8 @@ const WorkoutCard: React.FC<WorkoutCardProps> = () => {
 
   const {category} = route.params ?? 'HIIT';
 
-  const [results, reexecuteQuery] = useQuery({
-    query: findCoursesByCategory,
+  const [results] = useQuery({
+    query: FindCoursesByCategory,
     variables: {category},
   });
 
@@ -59,17 +36,6 @@ const WorkoutCard: React.FC<WorkoutCardProps> = () => {
 
   if (fetching) return <LoadingScreen />;
   if (error) return <ErrorScreen error={error.message} />;
-
-  type Category = {
-    title: string;
-    length: string;
-    courseName: string;
-    weekNumber: string;
-    lessonNumber?: string;
-    instructor: string;
-    img?: string;
-    id: string;
-  };
 
   const renderItem = ({item}: {item: Category}) => {
     return (
@@ -93,9 +59,6 @@ const WorkoutCard: React.FC<WorkoutCardProps> = () => {
       </TouchableOpacity>
     );
   };
-
-  console.log('WorkoutCard : ', data);
-
   return (
     <View style={styles.parent}>
       <FlatList
@@ -111,7 +74,6 @@ const styles = StyleSheet.create({
   parent: {
     flex: 1,
     display: 'flex',
-
     width: width,
     // height: 800,
   },
