@@ -15,80 +15,12 @@ import InstructionalLessonCard from '../../ReusableComponents/UiCards/Instructio
 import LoadingScreen from '../SplashScreens/Loading';
 import ErrorScreen from '../SplashScreens/ErrorScreen';
 import FocusGraph from '../../ReusableComponents/FocusGraph/FocusGraph';
-
-const findCourse = `
-query ($courseName: String!) {
-    course(courseName: $courseName){
-      courseName
-      instructor
-      id
-      description
-      lectureCount
-      length
-      category
-      courseImg
-      equipment
-      targets
-      targetArmsValue
-      targetBackValue
-      targetLegsValue
-      targetAbsValue
-      courseRelation {
-        contentUrl
-        title
-        id
-        length
-        img
-        equipment
-        weekNumber
-        lessonNumber
-        courseName
-        instructor
-      }
-    }
-  }
-`;
-
-interface ProgramDetailProps {
-  courseName: string;
-  instructor: string;
-  targets: string[];
-  id: string;
-  courseImg: string;
-  description: string;
-  lectureCount: string;
-  length: string;
-  category: string;
-  equipment: string[];
-  courseRelation: CourseRelation;
-  img: string;
-  contentUrl: string;
-  title: string;
-  additionalInfo: string[];
-  weekNumber: string;
-  lessonNumber: string;
-}
-
-type CourseRelation = {
-  img: string;
-};
-
-type ParamList = {
-  courseName: string;
-  key: string;
-  name: string;
-  params: Params;
-};
-
-type Params = {courseName: string};
-
-interface LessonProps extends ProgramDetailProps {
-  e: EventTarget;
-  courseName: string;
-  instructor: string;
-  weekNumber: string;
-  lessonNumber: string;
-}
+import GetSpecificCourse from '../../Urql_Requests/Querys/GetSpecificCourse_ProgramDetailScreen';
+import {
+  ProgramDetailProps,
+  ParamList,
+  LessonProps,
+} from '../../Interfaces/ProgramDetailsScreenInterface';
 
 const ProgramDetail: React.FC<ProgramDetailProps> = () => {
   const [showThis, setShowThis] = useState<any>('');
@@ -98,7 +30,7 @@ const ProgramDetail: React.FC<ProgramDetailProps> = () => {
   let courseName = route.params.courseName;
 
   const [result, reexecuteQuery] = useQuery({
-    query: findCourse,
+    query: GetSpecificCourse,
     variables: {courseName: courseName},
   });
 
@@ -125,23 +57,28 @@ const ProgramDetail: React.FC<ProgramDetailProps> = () => {
   console.log('desired state attribute: ', showThis);
 
   const renderItem = ({item}: {item: LessonProps}) => {
+    const {
+      img,
+      title,
+      equipment,
+      length,
+      id,
+      instructor,
+      courseName,
+      weekNumber,
+      lessonNumber,
+    } = item;
     return (
       <InstructionalLessonCard
-        img={item.img}
-        title={item.title}
-        additionalInfo={item.equipment}
-        length={item.length}
+        img={img}
+        title={title}
+        additionalInfo={equipment}
+        length={length}
         wideDimension={true}
-        id={item.id}
+        id={id}
         //   onPress={() => console.log('uh Oh')}
         onPress={(e: EventTarget) =>
-          onPress(
-            e,
-            item.courseName,
-            item.instructor,
-            item.weekNumber,
-            item.lessonNumber,
-          )
+          onPress(e, courseName, instructor, weekNumber, lessonNumber)
         }
       />
     );
