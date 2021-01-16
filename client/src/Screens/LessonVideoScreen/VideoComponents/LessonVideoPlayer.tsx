@@ -141,7 +141,7 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
       <View style={styles.componentArea}>
         <ScrollView horizontal={false}>{children}</ScrollView>
       </View>
-      {state.paused && <PauseOptionCard restartTheLeeson={restartTheLesson} />}
+      {state.paused && <PauseOptionCard restartTheLesson={restartTheLesson} />}
     </View>
   );
 };

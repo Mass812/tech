@@ -142,7 +142,7 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
       </View>
       <TitleBannerUnderVideo />
       <View style={styles.componentArea}>{children}</View>
-      {state.paused && <PauseOptionCard restartTheLeeson={restartTheLesson} />}
+      {state.paused && <PauseOptionCard restartTheLesson={restartTheLesson} />}
     </View>
   );
 };
