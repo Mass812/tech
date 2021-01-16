@@ -13,10 +13,7 @@ const VideoControlSlider: React.FC<VideoControlSliderProps> = ({
 }) => {
   let {state, dispatch} = useContext(VideoStore);
 
-  useEffect(() => {}, [state, dispatch]);
-
   const onSlide = (sliderInfo: number) => {
-    //  dispatch({type: 'PAUSED', payload: true});
     dispatch({type: 'CURRENT_TIME', payload: sliderInfo});
   };
 
@@ -30,7 +27,6 @@ const VideoControlSlider: React.FC<VideoControlSliderProps> = ({
           minimumTrackTintColor={'#689493'}
           maximumTrackTintColor={'#FFFFFF'}
           step={1}
-          //   onValueChange={(sliderInfo) => onSlideEnd(sliderInfo)}
           onSlidingComplete={onSlideComplete}
           onSlidingStart={() => dispatch({type: 'PAUSED', payload: true})}
           onValueChange={onSlide}

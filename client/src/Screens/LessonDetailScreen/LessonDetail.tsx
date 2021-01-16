@@ -12,6 +12,7 @@ import {
   LessonDetailProps,
   ParamList,
 } from '../../Interfaces/LessonDetailScreenInterfaces';
+import {VideoStore} from '../LessonVideoScreen/LessonVideoScreen';
 
 const LessonDetail: React.FC<LessonDetailProps> = () => {
   const nav = useNavigation();
@@ -24,6 +25,9 @@ const LessonDetail: React.FC<LessonDetailProps> = () => {
   });
 
   let {data, fetching, error} = result;
+
+  if (fetching) return <LoadingScreen />;
+  if (error) return <ErrorScreen error={error.message} />;
 
   let {
     img,
@@ -44,9 +48,6 @@ const LessonDetail: React.FC<LessonDetailProps> = () => {
     equipment,
     category,
   } = data.lesson;
-
-  if (fetching) return <LoadingScreen />;
-  if (error) return <ErrorScreen error={error.message} />;
 
   const sendToProgram = (e: EventTarget, id: string, courseName: string) => {
     nav.navigate('ProgramDetail', {courseName});

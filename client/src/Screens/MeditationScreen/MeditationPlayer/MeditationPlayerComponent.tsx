@@ -31,15 +31,6 @@ const MediaPlayerComponent: React.FC<MediaPlayerComponentProps> = ({
     <View style={styles.container}>
       <View style={styles.headerBlock}>
         <View style={styles.detailGroup}>
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={onPressArrowBack}>
-            <FontAwesomeIcon
-              icon={faArrowCircleLeft}
-              color={'darkgrey'}
-              size={28}
-            />
-          </TouchableOpacity>
           <Text style={styles.headerText1}> {instructor} </Text>
           <Text style={styles.title}> {title}</Text>
           <Text style={styles.textTime}> {length} </Text>
@@ -109,7 +100,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'white',
     textAlign: 'center',
-    fontWeight: '700',
+    fontWeight: '500',
     textShadowColor: 'black',
     textShadowRadius: 10,
     marginTop: 50,

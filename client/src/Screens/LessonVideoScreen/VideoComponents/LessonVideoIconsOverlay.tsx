@@ -23,7 +23,6 @@ const VideoControls: React.FC<VideoControlsProps> = ({seekToLocation}) => {
 
   const handleClose = () => {
     dispatch({type: 'PAUSED', payload: true});
-    // nav.goBack();
   };
 
   const hamdleExpand = () => {
@@ -34,14 +33,6 @@ const VideoControls: React.FC<VideoControlsProps> = ({seekToLocation}) => {
     let playingMode = !state.paused;
     dispatch({type: 'PAUSED', payload: playingMode});
     dispatch({type: 'SHOW_OPTIONS', payload: playingMode});
-
-    setTimeout(() => {
-      if (state.paused)
-        return dispatch({
-          type: 'RENDERED_VIDEO_TAPPED',
-          payload: false,
-        });
-    }, 900);
   };
 
   const handlePressScreen = () => {

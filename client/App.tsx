@@ -35,6 +35,7 @@ import {
   faUserCircle,
   faBackward,
   faChevronLeft,
+  faArrowCircleLeft,
 } from '@fortawesome/free-solid-svg-icons';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Dimensions} from 'react-native';
@@ -59,6 +60,21 @@ const minimalistHeader = {
   },
   headerBackImage: () => (
     <FontAwesomeIcon icon={faChevronLeft} color={'white'} size={30} />
+  ),
+};
+const minimalistMeditationsHeader = {
+  headerShown: true,
+  headerBackTitleVisible: false,
+  headerTransparent: true,
+  headerTitle: '',
+  headerBackTitleStyle: {color: 'white'},
+  headerLeftContainerStyle: {
+    // backgroundColor: 'red',
+    marginLeft: 20,
+    marginTop: 20,
+  },
+  headerBackImage: () => (
+    <FontAwesomeIcon icon={faArrowCircleLeft} color={'white'} size={30} />
   ),
 };
 
@@ -294,7 +310,7 @@ function App() {
             <Root.Screen
               name="MeditationPlayer"
               component={MeditationPlayer}
-              options={{headerShown: false}}
+              options={minimalistMeditationsHeader}
             />
             <Root.Screen
               name="LessonVideoScreen"
