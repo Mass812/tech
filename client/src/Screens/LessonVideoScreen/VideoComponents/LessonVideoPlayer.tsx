@@ -31,28 +31,28 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
 
   const nav = useNavigation();
 
-  const handleOrientation = (orientation: string) => {
-    var initial = Orientation.getInitialOrientation();
-    if (initial == 'LANDSCAPE-RIGHT' || 'LANDSCAPE-LEFT') {
-      dispatch({type: 'LOCK_PORTRAIT', payload: false});
-      return;
-    } else {
-      dispatch({type: 'LOCK_PORTRAIT', payload: true});
-      return;
-    }
-  };
+  // const handleOrientation = (orientation: string) => {
+  //   var initial = Orientation.getInitialOrientation();
+  //   if (initial == 'LANDSCAPE-RIGHT' || 'LANDSCAPE-LEFT') {
+  //     dispatch({type: 'LOCK_PORTRAIT', payload: false});
+  //     return;
+  //   } else {
+  //     dispatch({type: 'LOCK_PORTRAIT', payload: true});
+  //     return;
+  //   }
+  // };
 
-  useEffect(() => {
-    console.log('rerendered ', state.currentTime);
-    Orientation.addOrientationListener((orientation: string) => {
-      handleOrientation(orientation);
-    });
-    return () => {
-      Orientation.removeOrientationListener((orientation: string) => {
-        console.log('no longer watching orientation');
-      });
-    };
-  }, []);
+  // useEffect(() => {
+  //   console.log('rerendered ', state.currentTime);
+  //   Orientation.addOrientationListener((orientation: string) => {
+  //     handleOrientation(orientation);
+  //   });
+  //   return () => {
+  //     Orientation.removeOrientationListener((orientation: string) => {
+  //       console.log('no longer watching orientation');
+  //     });
+  //   };
+  // }, []);
 
   const handleOnLoad = () => {
     dispatch({type: 'LOADING', payload: false});
@@ -66,6 +66,7 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
       seconds >= 10 ? seconds : '0' + seconds
     }`;
   };
+
   const onProgress = (data: iPlaybackShape) => {
     if (!state.loading && !state.paused) {
       dispatch({
@@ -92,7 +93,6 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
         payload: getMinutesFromSeconds(number),
       });
     }
-    return;
   };
 
   const seekToLocation = () => {
@@ -101,7 +101,6 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
   };
 
   const restartTheLesson = () => {
-    dispatch({type: 'Paused', paylaod: false});
     videoRef.current.seek(0);
     setHidePauseMenu(!hidePauseMenu);
   };
@@ -137,7 +136,6 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
         <VideoControls seekToLocation={seekToLocation} />
       </View>
       <TitleBannerUnderVideo />
-
       <View style={styles.componentArea}>
         <ScrollView horizontal={false}>{children}</ScrollView>
       </View>

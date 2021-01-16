@@ -155,7 +155,7 @@ const Home: React.FC<HomeProps> = () => {
         keyExtractor={(item) => item.id}
         renderItem={renderPopularMeditations}
         snapToAlignment={'center'}
-        snapToInterval={300}
+        snapToInterval={350}
         decelerationRate={'fast'}
         scrollEventThrottle={8}
         showsHorizontalScrollIndicator={false}

@@ -1,5 +1,4 @@
-import {useNavigation} from '@react-navigation/native';
-import React, {useContext, useState} from 'react';
+import React from 'react';
 import {View, StyleSheet, Text, Dimensions} from 'react-native';
 import CardButtonPink from './CardButtonPink';
 import CardButton from './CardButton';

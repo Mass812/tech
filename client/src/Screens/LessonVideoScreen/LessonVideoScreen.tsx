@@ -1,12 +1,13 @@
 import React, {useEffect, useReducer} from 'react';
-import {Dimensions} from 'react-native';
 import {useRoute} from '@react-navigation/native';
-import VideoPlayerPortraitWindow from './VideoComponents/LessonVideoPlayer';
+import LesonVideoPlayer from './VideoComponents/LessonVideoPlayer';
 import CourseOverview from '../../ReusableComponents/UiCards/CourseOverview';
 import CongratScreen from './CongratScreen/CongratScreen';
-
-let width = Dimensions.get('screen').width;
-let height = Dimensions.get('window').height;
+import {
+  iComponentState,
+  Action,
+  iVideoPlayerProps,
+} from '../../Interfaces/LessonVideoScreenInterface';
 
 const InitialState: iComponentState = {
   loading: false,
@@ -37,64 +38,6 @@ const InitialState: iComponentState = {
   outfitBottomImgUrl: '',
   lessonCompleted: false,
 };
-interface iComponentState {
-  loading: boolean;
-  paused: boolean;
-  currentTime: number;
-  userWatchTime: number;
-  playableDuration: number;
-  seekableDuration: number;
-  currentPlayerTimeAsString: string;
-  totalPlayerTimeAsString: string;
-  timeRemainingAsString: string;
-  buffering: boolean;
-  currentSlideTime: string;
-  screenOrientation: string;
-  renderedVideoTapped: boolean;
-  lockPortrait: boolean;
-  restart: boolean;
-  courseName: string;
-  instructor: string;
-  length: string;
-  weekNumber: string;
-  lessonNumber: string;
-  targets: string[];
-  title: string;
-  outfitTopName: string;
-  outfitTopImgUrl: string;
-  outfitBottomName: string;
-  outfitBottomImgUrl: string;
-  lessonCompleted: boolean;
-}
-type Action =
-  | {type: 'LOADING'; payload: boolean}
-  | {type: 'PAUSED'; payload: boolean}
-  | {type: 'CURRENT_TIME'; payload: number}
-  | {type: 'USER_WATCH_TIME'; payload: number}
-  | {type: 'PLAYABLE_DURATION'; payload: number}
-  | {type: 'SEEKABLE_DURATION'; payload: number}
-  | {type: 'CURRENT_PLAYER_TIME_AS_STRING'; payload: string}
-  | {type: 'TOTAL_PLAYER_TIME_AS_STRING'; payload: string}
-  | {type: 'TIME_REMAINING_AS_STRING'; payload: string}
-  | {type: 'BUFFERING'; payload: boolean}
-  | {type: 'CURRENT_SLIDE_TIME'; payload: string}
-  | {type: 'SCREEN_ORIENTATION'; payload: string}
-  | {type: 'RENDERED_VIDEO_TAPPED'; payload: boolean}
-  | {type: 'LOCK_PORTRAIT'; payload: boolean}
-  | {type: 'RESTART'; payload: boolean}
-  | {type: 'COURSE_NAME'; payload: string}
-  | {type: 'INSTRUCTOR'; payload: string}
-  | {type: 'LENGTH'; payload: string}
-  | {type: 'WEEK_NUMBER'; payload: string}
-  | {type: 'LESSON_NUMBER'; payload: string}
-  | {type: 'TARGETS'; payload: [string]}
-  | {type: 'CLOTHING_TOP_NAME'; payload: string}
-  | {type: 'CLOTHING_TOP_IMG'; payload: string}
-  | {type: 'CLOTHING_BOTTOM_NAME'; payload: string}
-  | {type: 'CLOTHING_BOTTOM_IMG'; payload: string}
-  | {type: 'TITLE'; payload: string}
-  | {type: 'LESSON_COMPLETED'; payload: boolean}
-  | {type: 'RESET'};
 
 export const videoReducer = (
   state = InitialState,
@@ -159,50 +102,19 @@ export const videoReducer = (
       return state;
   }
 };
-interface iSeek {
-  currentTime: number;
-  seekTime: number;
-}
-interface VideoPlayerProps {
-  key: string;
-  name: string;
-  params: Params;
-}
-
-type Params = {
-  contentUrl: string;
-  weekNumber: string;
-  lessonNumber: string;
-  courseName: string;
-  instructor: string;
-  title: string;
-  length?: string;
-  targets: [string];
-  outfitTopName: string;
-  outfitTopImgUrl: string;
-  outfitBottomName: string;
-  outfitBottomImgUrl: string;
-};
-
-interface iPlaybackShape {
-  currentTime: number;
-  playableDuration: number;
-  seekableDuration: number;
-  currentTimeRemaining?: number;
-}
 
 export const VideoStore = React.createContext<iComponentState | any>(
   InitialState,
 );
 
-const VideoPlayer: React.FC<VideoPlayerProps> = () => {
+const VideoPlayer: React.FC<iVideoPlayerProps> = () => {
   const [state, dispatch] = useReducer(videoReducer, InitialState);
   const videoRedux = React.useMemo(() => ({state, dispatch}), [
     state,
     dispatch,
   ]);
 
-  const route = useRoute<VideoPlayerProps>();
+  const route = useRoute<iVideoPlayerProps>();
   let {
     title,
     contentUrl,
@@ -231,14 +143,13 @@ const VideoPlayer: React.FC<VideoPlayerProps> = () => {
     dispatch({type: 'TARGETS', payload: targets ?? ['Whole Body']});
     dispatch({type: 'LENGTH', payload: length ?? ''});
   }, []);
-  console.log('PARAMS', route.params);
 
   return (
     <VideoStore.Provider value={videoRedux}>
       {state.lessonCompleted ? (
         <CongratScreen />
       ) : (
-        <VideoPlayerPortraitWindow contentUrl={contentUrl}>
+        <LesonVideoPlayer contentUrl={contentUrl}>
           {/* <SelfGuidedUnderVideoContent /> */}
 
           <CourseOverview
@@ -253,7 +164,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = () => {
             }
             description={'Awesomeness'}
           />
-        </VideoPlayerPortraitWindow>
+        </LesonVideoPlayer>
       )}
     </VideoStore.Provider>
   );

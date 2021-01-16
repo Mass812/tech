@@ -1,50 +1,12 @@
-import React, {useState, useContext} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  Dimensions,
-  FlatList,
-  Image,
-  TouchableOpacity,
-  ScrollViewComponent,
-} from 'react-native';
+import React from 'react';
+import {View, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
 import {useQuery} from 'urql';
 import {useNavigation} from '@react-navigation/native';
 import ProgramCard from '../../ReusableComponents/UiCards/ProgramCard';
 import LoadingScreen from '../SplashScreens/Loading';
 import ErrorScreen from '../SplashScreens/ErrorScreen';
-
-const width = Dimensions.get('window').width;
-const height = Dimensions.get('window').height;
-
-const CoursesQuery = `
-query {
-    courses {
-        courseName
-        instructor
-        description
-        lectureCount
-        length
-        equipment
-        id
-        courseImg
-    }
-}
-`;
-
-interface AllCoursesProps {
-  courseName: string;
-  instructor: string;
-  description: string;
-  lectureCount: string;
-  length: string;
-  created: string;
-  equipment: string[];
-  id: string;
-  courseImg: string;
-}
+import GetAllCourses from '../../Urql_Requests/Querys/GetAllCourses_ProgramsScreen';
+import {iRenderAllCourseProps} from '../../Interfaces/ProgamsInterface';
 
 interface ProgramsProps {}
 
@@ -52,7 +14,7 @@ const Programs: React.FC<ProgramsProps> = () => {
   const nav = useNavigation();
 
   const [result] = useQuery({
-    query: CoursesQuery,
+    query: GetAllCourses,
   });
 
   let {data, fetching, error} = result;
@@ -64,7 +26,7 @@ const Programs: React.FC<ProgramsProps> = () => {
     nav.navigate('ProgramDetail', {courseName});
   };
 
-  const renderItem = ({item}: {item: AllCoursesProps}) => {
+  const renderItem = ({item}: {item: iRenderAllCourseProps}) => {
     return (
       <TouchableOpacity
         onPress={(e: React.SyntheticEvent) => sendToLesson(e, item.courseName)}>
@@ -97,7 +59,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     height: '100%',
   },
-  bottom: {},
 });
 
 export default Programs;
