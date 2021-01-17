@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   iconHalo: {
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: '#83c0c9',
+    backgroundColor: '#abced4',
     borderRadius: 30,
     height: 60,
     width: 60,

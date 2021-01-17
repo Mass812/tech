@@ -1,13 +1,18 @@
 import React, {useContext, useEffect} from 'react';
-import {View, StyleSheet, Dimensions, TouchableOpacity} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Dimensions,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {
   faTimesCircle,
   faExpandAlt,
   faPause,
-  faPlay,
 } from '@fortawesome/free-solid-svg-icons';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {VideoStore} from '../LessonVideoScreen';
 import VideoControlSlider from './LessonVideoControlSlider';
 const width = Dimensions.get('screen').width;
@@ -19,14 +24,13 @@ interface VideoControlsProps {
 const VideoControls: React.FC<VideoControlsProps> = ({seekToLocation}) => {
   let {state, dispatch} = useContext(VideoStore);
 
-  const nav = useNavigation();
-
   const handleClose = () => {
     dispatch({type: 'PAUSED', payload: true});
   };
 
-  const hamdleExpand = () => {
+  const handleExpand = () => {
     // side view screen
+    Alert.alert('Sorry this demo app does not support landscape mode.');
   };
 
   const handlePause = () => {
@@ -45,13 +49,13 @@ const VideoControls: React.FC<VideoControlsProps> = ({seekToLocation}) => {
 
   return (
     <TouchableOpacity style={styles.parent} onPress={handlePressScreen}>
-      {state.renderedVideoTapped ? (
+      {state.renderedVideoTapped && (
         <>
           <View style={styles.topIcons}>
             <TouchableOpacity style={styles.leftIcon} onPress={handleClose}>
               <FontAwesomeIcon icon={faTimesCircle} size={17} color="black" />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.rightIcon} onPress={hamdleExpand}>
+            <TouchableOpacity style={styles.rightIcon} onPress={handleExpand}>
               <FontAwesomeIcon icon={faExpandAlt} size={17} color="black" />
             </TouchableOpacity>
           </View>
@@ -62,7 +66,7 @@ const VideoControls: React.FC<VideoControlsProps> = ({seekToLocation}) => {
           )}
           <VideoControlSlider onSlideComplete={seekToLocation} />
         </>
-      ) : null}
+      )}
     </TouchableOpacity>
   );
 };

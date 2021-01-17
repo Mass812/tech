@@ -3,8 +3,6 @@ import Video from 'react-native-video';
 import React, {useContext, useRef, useEffect, useState} from 'react';
 import {StyleSheet, Dimensions, Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import Orientation from 'react-native-orientation-locker';
-import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 import VideoControls from './LessonVideoIconsOverlay';
 import PauseOptionCard from './PauseOptionCard';
 import TitleBannerUnderVideo from './LessonTitleBannerUnderVideo';
@@ -29,44 +27,6 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
   const [hidePauseMenu, setHidePauseMenu] = useState(state.paused);
   let videoRef = useRef<HTMLElement | any>(null);
   const nav = useNavigation();
-  const isFocused = useIsFocused();
-
-  const handleOrientation = (orientation: string) => {
-    var initial = Orientation.getInitialOrientation();
-    if (initial == 'LANDSCAPE-RIGHT' || 'LANDSCAPE-LEFT') {
-      dispatch({type: 'LOCK_PORTRAIT', payload: false});
-      return;
-    } else {
-      dispatch({type: 'LOCK_PORTRAIT', payload: true});
-      return;
-    }
-  };
-
-  useFocusEffect(
-    React.useCallback(() => {
-      Orientation.lockToPortrait();
-      Orientation.addOrientationListener((orientation: string) => {
-        handleOrientation(orientation);
-      });
-
-      return () => Orientation.unlockAllOrientations();
-      Orientation.removeOrientationListener((orientation: string) => {
-        console.log('no longer watching orientation');
-      });
-    }, [isFocused]),
-  );
-
-  // useEffect(() => {
-  //   console.log('rerendered ', state.currentTime);
-  //   Orientation.addOrientationListener((orientation: string) => {
-  //     handleOrientation(orientation);
-  //   });
-  //   return () => {
-  //     Orientation.removeOrientationListener((orientation: string) => {
-  //       console.log('no longer watching orientation');
-  //     });
-  //   };
-  // }, []);
 
   const handleOnLoad = () => {
     dispatch({type: 'LOADING', payload: false});
@@ -120,7 +80,8 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
   };
 
   const onEnd = () => {
-    dispatch({type: 'USER_WATCH_TIME', payload: state.currentTime});
+    let userWatchTime = state.currentTime / 1000;
+    dispatch({type: 'USER_WATCH_TIME', payload: userWatchTime});
     dispatch({type: 'LESSON_COMPLETED', payload: true});
   };
 

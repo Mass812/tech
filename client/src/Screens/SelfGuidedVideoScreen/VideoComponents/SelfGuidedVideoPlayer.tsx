@@ -3,7 +3,6 @@ import Video from 'react-native-video';
 import React, {useContext, useRef, useEffect, useState} from 'react';
 import {StyleSheet, Dimensions, Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import Orientation from 'react-native-orientation-locker';
 import VideoControls from './SelfGuidedVideoIconOverlay';
 import PauseOptionCard from './PauseOptionCard';
 import TitleBannerUnderVideo from './SelfGuidedTitleBannerUnderVideo';
@@ -25,27 +24,8 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
 
   const nav = useNavigation();
 
-  const handleOrientation = (orientation: string) => {
-    var initial = Orientation.getInitialOrientation();
-
-    initial == 'LANDSCAPE-RIGHT' || 'LANDSCAPE-LEFT'
-      ? dispatch({type: 'LOCK_PORTRAIT', payload: false})
-      : dispatch({type: 'LOCK_PORTRAIT', payload: true});
-  };
-
-  useEffect(() => {
-    Orientation.addOrientationListener((orientation: string) => {
-      handleOrientation(orientation);
-    });
-    return () => {
-      Orientation.removeOrientationListener((orientation: string) => {
-        console.log('no longer watching orientation');
-      });
-    };
-  }, []);
-
   const onEnd = () => {
-    let cumulativeTime = state.userWatchTime + state.currentTime;
+    let cumulativeTime = (state.userWatchTime + state.currentTime) / 1000;
 
     if (state.sectionNumber + 1 === state.exerciseSections.length) {
       dispatch({type: 'USER_WATCH_TIME', payload: cumulativeTime});

@@ -7,6 +7,7 @@ interface CourseCompletedDetailBannerProps {}
 
 const CourseCompletedDetailBanner: React.FC<CourseCompletedDetailBannerProps> = () => {
   const {state, dispatch} = React.useContext(VideoStore);
+
   return (
     <View style={styles.container}>
       <CourseCompletedDetailBlock
@@ -18,8 +19,8 @@ const CourseCompletedDetailBanner: React.FC<CourseCompletedDetailBannerProps> = 
         regDetail={'intensity'}
       />
       <CourseCompletedDetailBlock
-        coloredDetail={state.userWatchTime}
-        regDetail={'trainer'}
+        coloredDetail={state.totalPlayerTimeAsString}
+        regDetail={'duration'}
       />
     </View>
   );

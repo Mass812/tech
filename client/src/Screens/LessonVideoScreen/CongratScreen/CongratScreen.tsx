@@ -1,15 +1,34 @@
 import {useNavigation} from '@react-navigation/native';
-import * as React from 'react';
+import React, {useContext} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Acheivement from './CongratScreenComponents/AcheivementBanner';
 import CourseCompletedDetailBanner from './CongratScreenComponents/CourseCompletedDetailBanner/CourseCompletedDetailBanner';
 import InstructorOutfitBlock from './CongratScreenComponents/InstructorOutfitBlock';
+import {useMutation} from 'urql';
+import updateLessonPopularity from '../../../Urql_Requests/Mutations/UpdateVideoPopularity_LessonVideoScreen_PauseOptionCard';
+import {VideoStore} from '../LessonVideoScreen';
 
 interface CongratScreenProps {}
 
 const CongratScreen: React.FC<CongratScreenProps> = () => {
+  let {state, dispatch} = useContext(VideoStore);
   const nav = useNavigation();
+  const [data, executeMutation] = useMutation(updateLessonPopularity);
+
+  const {instructor, courseName, weekNumber, lessonNumber} = state;
+
+  // TODO ADD TIME TO USER DOC
+  const handleMarkAsCompleted = () => {
+    executeMutation({
+      instructor,
+      courseName,
+      weekNumber,
+      lessonNumber,
+    })
+      .then(() => nav.navigate('Home'))
+      .catch((err) => console.log(err));
+  };
 
   return (
     <View style={styles.container}>
@@ -20,7 +39,7 @@ const CongratScreen: React.FC<CongratScreenProps> = () => {
       <View></View>
       <InstructorOutfitBlock />
       <TouchableOpacity
-        onPress={() => nav.navigate('Home')}
+        onPress={handleMarkAsCompleted}
         style={styles.buttonPink}>
         <Text style={styles.pinkButtonDetails}>Finish Workout</Text>
       </TouchableOpacity>
