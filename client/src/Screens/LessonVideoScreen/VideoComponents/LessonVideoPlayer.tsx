@@ -4,11 +4,11 @@ import React, {useContext, useRef, useEffect, useState} from 'react';
 import {StyleSheet, Dimensions, Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Orientation from 'react-native-orientation-locker';
+import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 import VideoControls from './LessonVideoIconsOverlay';
 import PauseOptionCard from './PauseOptionCard';
 import TitleBannerUnderVideo from './LessonTitleBannerUnderVideo';
 import {ScrollView} from 'react-native-gesture-handler';
-import CourseOverview from '../../../ReusableComponents/UiCards/CourseOverview';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -28,19 +28,33 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
   let {state, dispatch} = useContext(VideoStore);
   const [hidePauseMenu, setHidePauseMenu] = useState(state.paused);
   let videoRef = useRef<HTMLElement | any>(null);
-
   const nav = useNavigation();
+  const isFocused = useIsFocused();
 
-  // const handleOrientation = (orientation: string) => {
-  //   var initial = Orientation.getInitialOrientation();
-  //   if (initial == 'LANDSCAPE-RIGHT' || 'LANDSCAPE-LEFT') {
-  //     dispatch({type: 'LOCK_PORTRAIT', payload: false});
-  //     return;
-  //   } else {
-  //     dispatch({type: 'LOCK_PORTRAIT', payload: true});
-  //     return;
-  //   }
-  // };
+  const handleOrientation = (orientation: string) => {
+    var initial = Orientation.getInitialOrientation();
+    if (initial == 'LANDSCAPE-RIGHT' || 'LANDSCAPE-LEFT') {
+      dispatch({type: 'LOCK_PORTRAIT', payload: false});
+      return;
+    } else {
+      dispatch({type: 'LOCK_PORTRAIT', payload: true});
+      return;
+    }
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      Orientation.lockToPortrait();
+      Orientation.addOrientationListener((orientation: string) => {
+        handleOrientation(orientation);
+      });
+
+      return () => Orientation.unlockAllOrientations();
+      Orientation.removeOrientationListener((orientation: string) => {
+        console.log('no longer watching orientation');
+      });
+    }, [isFocused]),
+  );
 
   // useEffect(() => {
   //   console.log('rerendered ', state.currentTime);

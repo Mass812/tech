@@ -1,8 +1,8 @@
 import * as React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faClock, faDumbbell, faBolt} from '@fortawesome/free-solid-svg-icons';
-import AcheivementIconBlock from './AcheivementIconBlock';
+import TimeAcheivementIconBlock from './AcheivementIconBlock/TimeAcheivementIconBlock';
+import WorkoutsAcheivementIconBlock from './AcheivementIconBlock/WorkoutsAchievementIconBlock';
+import StreakAcheivementIconBlock from './AcheivementIconBlock/StreakAchievementIconBlock';
 import {VideoStore} from '../../LessonVideoScreen';
 
 interface AcheivementProps {
@@ -17,24 +17,12 @@ const Acheivement: React.FC<AcheivementProps> = () => {
     <View style={styles.parent}>
       <Text style={styles.title}>WEEKLY PROGRESS</Text>
       <View style={styles.badgeRow}>
-        <AcheivementIconBlock
-          icon={faClock}
-          title={'Time'}
-          detailOne={'something'}
-          detailTwo={'something Else'}
+        <TimeAcheivementIconBlock accumulativeTime={888882} />
+        <WorkoutsAcheivementIconBlock
+          lessonsCompleted={1}
+          selfGuidedCompleted={2}
         />
-        <AcheivementIconBlock
-          icon={faDumbbell}
-          title={'Workouts'}
-          detailOne={'something'}
-          detailTwo={'something Else'}
-        />
-        <AcheivementIconBlock
-          icon={faBolt}
-          title={'Streak'}
-          detailOne={'something'}
-          detailTwo={'something Else'}
-        />
+        <StreakAcheivementIconBlock streak={3} />
       </View>
     </View>
   );
@@ -43,7 +31,7 @@ const Acheivement: React.FC<AcheivementProps> = () => {
 const styles = StyleSheet.create({
   parent: {
     borderColor: 'grey',
-    borderWidth: 1,
+    // borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
@@ -51,7 +39,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     color: 'grey',
-    marginBottom: 15,
+    marginBottom: 10,
     letterSpacing: 4,
   },
   badgeRow: {
@@ -62,7 +50,7 @@ const styles = StyleSheet.create({
     height: 130,
     width: '100%',
     justifyContent: 'space-evenly',
-    padding: 1,
+    paddingTop: 5,
   },
 });
 

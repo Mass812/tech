@@ -1,30 +1,26 @@
-import * as React from 'react';
+import React, {useContext} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {faDumbbell} from '@fortawesome/free-solid-svg-icons';
 
-interface AcheivementIconBlockProps {
-  icon: any;
-  title: string;
-  detailOne: string;
-  detailTwo?: string;
+interface StreakAcheivementIconBlockProps {
+  streak: number;
 }
 
-const AcheivementIconBlock: React.FC<AcheivementIconBlockProps> = ({
-  icon,
-
-  title,
-  detailOne,
-  detailTwo,
+const StreakAcheivementIconBlock: React.FC<StreakAcheivementIconBlockProps> = ({
+  streak = 0,
 }) => {
   return (
     <View style={styles.iconColumn}>
       <View style={styles.iconHalo}>
-        <FontAwesomeIcon icon={icon} size={30} color={'#0896a3'} />
+        <FontAwesomeIcon icon={faDumbbell} size={30} color={'#0896a3'} />
       </View>
-      <Text style={styles.detailTitle}>{title}</Text>
+      <Text style={styles.detailTitle}>Streak</Text>
       <View style={styles.detailColumn}>
-        <Text style={styles.detailOne}>{detailOne}</Text>
-        <Text style={styles.detailTwo}>{detailTwo}</Text>
+        <View style={styles.detailRow}>
+          <Text style={styles.detalColored}>{streak} </Text>
+          <Text style={styles.detailRegular}> days</Text>
+        </View>
       </View>
     </View>
   );
@@ -63,11 +59,21 @@ const styles = StyleSheet.create({
   detailColumn: {
     height: 36,
     marginTop: 4,
-    justifyContent: 'space-around',
+    justifyContent: 'flex-start',
   },
   detailTitle: {
     margin: 0,
     fontWeight: '700',
+  },
+  detailRow: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  detalColored: {
+    color: 'teal',
+  },
+  detailRegular: {
+    color: 'darkgrey',
   },
   detailOne: {
     fontWeight: '500',
@@ -78,4 +84,4 @@ const styles = StyleSheet.create({
     color: 'seagreen',
   },
 });
-export default AcheivementIconBlock;
+export default StreakAcheivementIconBlock;

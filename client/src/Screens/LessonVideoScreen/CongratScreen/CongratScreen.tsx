@@ -3,6 +3,7 @@ import * as React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Acheivement from './CongratScreenComponents/AcheivementBanner';
+import CourseCompletedDetailBanner from './CongratScreenComponents/CourseCompletedDetailBanner/CourseCompletedDetailBanner';
 import InstructorOutfitBlock from './CongratScreenComponents/InstructorOutfitBlock';
 
 interface CongratScreenProps {}
@@ -14,6 +15,7 @@ const CongratScreen: React.FC<CongratScreenProps> = () => {
     <View style={styles.container}>
       <Text style={styles.title}>Good Work, USER_NAME !</Text>
       <Text style={styles.underTitle}>You completed today's class.</Text>
+      <CourseCompletedDetailBanner />
       <Acheivement />
       <View></View>
       <InstructorOutfitBlock />
