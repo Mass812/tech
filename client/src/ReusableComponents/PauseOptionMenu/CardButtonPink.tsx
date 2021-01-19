@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     backgroundColor: 'rgb(239,150,128)',
     minWidth: width - 30,
+    maxWidth: '90%',
     color: 'white',
     padding: 10,
     alignSelf: 'center',

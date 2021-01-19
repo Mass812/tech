@@ -20,11 +20,13 @@
   "dependencies": {
     "apollo-server-express": "^2.19.0",
     "aws-sdk": "^2.809.0",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "graphql": "^15.4.0",
     "graphql-tools": "^4.0.8",
+    "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.20",
     "urql": "^1.11.4",
     "uuid": "^8.3.2"

@@ -14,8 +14,8 @@ const PauseOptionCard: React.FC<PauseOptionCardProps> = ({
 }) => {
   const {state, dispatch} = useContext(VideoStore);
   const [showSecondCard, setShowSecondCard] = useState<boolean>(false);
-  const [data, executeMutation] = useMutation(updateLessonPopularity);
   const {instructor, courseName, weekNumber, lessonNumber} = state;
+  const [data, executeMutation] = useMutation(updateLessonPopularity);
 
   let nav = useNavigation();
 

@@ -1,7 +1,8 @@
 require("dotenv").config()
 const express = require("express")
 const { ApolloServer, gql } = require("apollo-server-express")
-
+const jwt = require("jsonwebtoken")
+const bcrypt = require("bcryptjs")
 const AWS = require("aws-sdk")
 
 AWS.config.update({
@@ -64,14 +65,13 @@ const Query = gql`
       lessonNumber: String!
       weekNumber: String!
     ): Lesson
+    login(email: String!, password: String!): Login
     course(courseName: String!): Course
     courses: [Course]
     coursesByCategory(category: String!): [Course]
     categoryLessons(category: String!): [CategoryLesson]
     categorySelfGuided(category: String!): [SelfGuided]
     meditations: [Meditation]
-    userWorkoutsByCategory(email: String!, category: String!): [Workout]
-    workouts(category: String!, email: String!): [Workout]!
     popularCourses: [Course]
     popularLessons: [Lesson]
     popularMeditations: [Meditation]
@@ -81,12 +81,35 @@ const Query = gql`
   }
 
   type User {
+    id: String
     firstName: String
     lastName: String
     email: String
-    courses: [Course]
+    passowrd: String
+    currentCourse: String
+    completedCourses: [String]
+    completedMeditations: [String]
+    completedLessons: [String]
+    completedSelfGuided: [String]
     created: String
     phone: String
+    weeklyInDependentWorkouts: Int
+    weeklyGuidedWorkouts: Int
+    coursesCompleted: Int
+    lessonsCompleted: Int
+    userWatchTime: Int
+    streak: Int
+  }
+
+  type Login {
+    email: String
+    password: String
+    token: String
+  }
+
+  type Auth {
+    email: String
+    token: String
   }
 
   type WeekReport {
@@ -118,24 +141,8 @@ const Query = gql`
   }
 
   input UserInput {
-    email: String
-    attribute: String
-    value: String
-  }
-
-  type Workout {
-    email: String
-    category: String
-    courseDirected: Boolean
-    exercise: String
-    timestamp: String
-    duration: Int
-    intensity: Int
-    bodyWeight: Int
-  }
-
-  input WorkoutInput {
-    email: String
+    user: String
+    password: String
   }
 
   type Course {
@@ -273,7 +280,6 @@ const Mutation = gql`
     createSelfGuidedLesson: SelfGuided
     createSelfGuidedLessonSection: SelfGuidedVideoSection
     createInstructorProfile: InstructorProfile
-    createWorkout: Workout!
     createCourseCompletionDoc: CourseCompletionDoc
     createMeditation: Meditation
     updateLessonPopularity(
@@ -317,18 +323,67 @@ let resolvers = {
     categorySelfGuided: async (_, args) => {
       return getAllSelfGuidedOfACategory_ddb(args)
     },
-    userWorkoutsByCategory: async (_, args) => {
-      return getUserWorkoutsByCategory(args)
-    },
-
-    workouts: async (_, args) => {
-      return getUserWorkoutsByCategory(args)
-    },
     lesson: async (_, args) => {
       return getSpecificCourseLesson_ddb(args)
     },
     lessons: async (_, args) => {
       return getAllLessonsOfACourse_ddb(args)
+    },
+    login: async (_, args) => {
+      // call this query during login and save Auth Context
+      const { email, password } = args
+      console.log(
+        "QUERY LOGIN PASSED IN: ",
+        "email ",
+        email,
+        "password ",
+        password
+      )
+      let Params = {
+        TableName: "App_Table",
+        Key: {
+          pk: `userEmail#${email}`,
+          sk: "profile",
+        },
+      }
+
+      try {
+        const discoveredDoc = await db.get(Params).promise()
+
+        console.log("DOC => ", discoveredDoc.Item)
+
+        if (!discoveredDoc) throw new Error({ message: "No user found" })
+
+        console.log(
+          "prior to ==>",
+          password,
+          "compared ==>",
+          discoveredDoc.Item.password
+        )
+
+        const comparePasswords = await bcrypt.compare(
+          password,
+          discoveredDoc.Item.password
+        )
+
+        if (!comparePasswords) {
+          throw new Error("Password incorrect")
+        }
+
+        const token = jwt.sign(
+          {
+            userId: discoveredDoc.Item.id,
+          },
+          `${process.env.REACT_APP_DDB_SUPER}`
+        )
+
+        return {
+          email: discoveredDoc.Item.email,
+          token: token,
+        }
+      } catch (err) {
+        console.log(err)
+      }
     },
     meditations: async () => {
       return getAllMeditations_ddb()
@@ -377,9 +432,6 @@ let resolvers = {
     },
     createSelfGuidedLessonSection: async () => {
       return createSelfGuidedLessonSection_ddb()
-    },
-    createWorkout: async () => {
-      return createWorkout()
     },
     createMeditation: async () => {
       return createMeditation_ddb()

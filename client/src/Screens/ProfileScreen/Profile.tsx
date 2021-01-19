@@ -1,16 +1,23 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import AcheivementBanner from './ProfileComponents/AcheivementBanner';
 import ProfileHeaderBanner from './ProfileComponents/ProfileHeaderBanner';
 import RecentlyDoneBanner from './ProfileComponents/RecentlyDoneBanner';
+import {AuthContext} from '../../Context/AuthContext';
 
 interface ProfileProps {}
 
 const Profile: React.FC<ProfileProps> = () => {
+  const {state, dispatch} = useContext(AuthContext);
+
+  const onPress = () => {
+    dispatch({type: 'TOKEN', payload: null});
+  };
   return (
     <ScrollView horizontal={false}>
-      <ProfileHeaderBanner />
+      <ProfileHeaderBanner onPress={onPress} />
+
       <View style={styles.spread} />
       <AcheivementBanner />
       <View style={styles.spread} />

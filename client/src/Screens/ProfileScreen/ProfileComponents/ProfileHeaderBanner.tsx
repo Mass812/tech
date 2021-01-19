@@ -2,19 +2,22 @@ import * as React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faCog} from '@fortawesome/free-solid-svg-icons';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
-interface ProfileHeaderBannerProps {}
+interface ProfileHeaderBannerProps {
+  onPress: () => void;
+}
 
-const ProfileHeaderBanner: React.FC<ProfileHeaderBannerProps> = () => {
+const ProfileHeaderBanner: React.FC<ProfileHeaderBannerProps> = ({onPress}) => {
   return (
     <View style={styles.parent}>
       <View style={styles.userEditBar}>
         <View>
           <FontAwesomeIcon icon={faCog} size={22} color={'grey'} />
         </View>
-        <View>
-          <Text style={styles.editText}>Edit</Text>
-        </View>
+        <TouchableOpacity onPress={onPress}>
+          <Text style={styles.editText}>Sign Out</Text>
+        </TouchableOpacity>
       </View>
       <Text style={styles.title}>USERNAME</Text>
       <View style={styles.split}>

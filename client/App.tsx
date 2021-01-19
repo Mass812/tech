@@ -1,24 +1,14 @@
-import React, {lazy, useState} from 'react';
+import React, {lazy, useEffect, useReducer, useState} from 'react';
 
 import {createClient, Provider as UrqlProvider} from 'urql';
-import {
-  NavigationContainer,
-  useNavigation,
-  useRoute,
-} from '@react-navigation/native';
-import {
-  createStackNavigator,
-  HeaderBackground,
-  HeaderTitle,
-} from '@react-navigation/stack';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {
-  createMaterialTopTabNavigator,
-  MaterialTopTabBar,
-} from '@react-navigation/material-top-tabs';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import Home from './src/Screens/HomeScreen/Home';
 import LessonDetail from './src/Screens/LessonDetailScreen/LessonDetail';
 import LessonVideoScreen from './src/Screens/LessonVideoScreen/LessonVideoScreen';
+import LoginScreen from './src/Screens/LoginScreen/LoginScreen';
 import Meditation from './src/Screens/MeditationScreen/MeditationScreen';
 import Profile from './src/Screens/ProfileScreen/Profile';
 import Programs from './src/Screens/AllPrograms/AllProgramsScreen';
@@ -37,12 +27,15 @@ import {
   faChevronLeft,
   faArrowCircleLeft,
 } from '@fortawesome/free-solid-svg-icons';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {Dimensions} from 'react-native';
 import CategorySelfGuided from './src/Screens/Workouts/WorkoutComponents/CategorySelfGuided';
 import CategoryLessons from './src/Screens/Workouts/WorkoutComponents/CategoryLessons';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import LoadingScreen from './src/Screens/SplashScreens/Loading';
 
+import {
+  AuthContext,
+  authReducer,
+  InitialState,
+} from './src/Context/AuthContext';
 const client = createClient({
   url: 'http://localhost:4321/graphql',
 });
@@ -136,6 +129,7 @@ type RootParams = {
     weekNumber: string;
   };
   PauseOptionCard: {};
+  Login: {};
 };
 
 const HomeStack = createStackNavigator<HomeStackParams>();
@@ -294,34 +288,49 @@ const BottomNavigatorScreens = () => {
   );
 };
 
-const AuthContext = React.createContext({userEmail: 'matt@gmail.com'});
-
 function App() {
+  const [state, dispatch] = useReducer(authReducer, InitialState);
+  let authState = React.useMemo(() => ({state, dispatch}), [state, dispatch]);
+  let {token, loading} = state;
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
   return (
     <UrqlProvider value={client}>
-      <AuthContext.Provider value={{userEmail: 'Matt Wellman'}}>
+      <AuthContext.Provider value={authState}>
         <NavigationContainer>
           <Root.Navigator mode="modal">
-            <Root.Screen
-              name="RootHome"
-              component={BottomNavigatorScreens}
-              options={{headerShown: false}}
-            />
-            <Root.Screen
-              name="MeditationPlayer"
-              component={MeditationPlayer}
-              options={minimalistMeditationsHeader}
-            />
-            <Root.Screen
-              name="LessonVideoScreen"
-              component={LessonVideoScreen}
-              options={{headerShown: false}}
-            />
-            <Root.Screen
-              name="SelfGuidedVideoScreen"
-              component={SelfGuidedVideoScreen}
-              options={{headerShown: false}}
-            />
+            {token ? (
+              <>
+                <Root.Screen
+                  name="RootHome"
+                  component={BottomNavigatorScreens}
+                  options={{headerShown: false}}
+                />
+                <Root.Screen
+                  name="MeditationPlayer"
+                  component={MeditationPlayer}
+                  options={minimalistMeditationsHeader}
+                />
+                <Root.Screen
+                  name="LessonVideoScreen"
+                  component={LessonVideoScreen}
+                  options={{headerShown: false}}
+                />
+                <Root.Screen
+                  name="SelfGuidedVideoScreen"
+                  component={SelfGuidedVideoScreen}
+                  options={{headerShown: false}}
+                />
+              </>
+            ) : (
+              <Root.Screen
+                name="Login"
+                component={LoginScreen}
+                options={{headerShown: false}}
+              />
+            )}
           </Root.Navigator>
         </NavigationContainer>
       </AuthContext.Provider>

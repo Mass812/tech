@@ -6,8 +6,6 @@ const db = new AWS.DynamoDB.DocumentClient()
 module.exports = async (args) => {
   let { courseName, instructor, lessonNumber, weekNumber } = args
 
-  console.log("inside _ddb: ", courseName, instructor, lessonNumber)
-
   let pk = `instructor#${instructor}`
   let sk = `courseName#${courseName}#weekNumber#${weekNumber}#lesson#${lessonNumber}`
   console.log("pk: ", pk, "sk: ", sk)
