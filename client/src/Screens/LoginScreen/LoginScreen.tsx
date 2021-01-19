@@ -41,7 +41,7 @@ const LoginScreen: React.FC<LoginScreenProps> = () => {
   const [returnedData, reexecuteQuery] = useQuery({
     query: checkUserAndValidity,
     variables: submitData,
-    requestPolicy: 'network-only',
+    // requestPolicy: 'network-only',
     pause: !submitData,
   });
   const checkData = async () => {
@@ -53,16 +53,17 @@ const LoginScreen: React.FC<LoginScreenProps> = () => {
       dispatch({type: 'LOADING', payload: true});
       dispatch({type: 'TOKEN', payload: data.login.token});
       dispatch({type: 'EMAIL', payload: data.login.email});
-      dispatch({type: 'LOADING', payload: false});
       setSubmitData({email: '', password: ''});
+      dispatch({type: 'LOADING', payload: false});
     }
   };
+
   useEffect(() => {
     checkData();
   }, [returnedData]);
 
   const {data, fetching, error} = returnedData;
-
+  console.log('error val: ', returnedData.operation?.variables?.password);
   if (fetching) return <LoadingScreen />;
   if (error) return <ErrorScreen error={error.message} />;
 
