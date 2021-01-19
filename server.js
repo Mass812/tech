@@ -65,7 +65,7 @@ const Query = gql`
       lessonNumber: String!
       weekNumber: String!
     ): Lesson
-    login(email: String!, password: String!): Login
+
     course(courseName: String!): Course
     courses: [Course]
     coursesByCategory(category: String!): [Course]
@@ -99,17 +99,6 @@ const Query = gql`
     lessonsCompleted: Int
     userWatchTime: Int
     streak: Int
-  }
-
-  type Login {
-    email: String
-    password: String
-    token: String
-  }
-
-  type Auth {
-    email: String
-    token: String
   }
 
   type WeekReport {
@@ -288,6 +277,13 @@ const Mutation = gql`
       weekNumber: String!
       lessonNumber: String!
     ): Lesson
+    login(email: String!, password: String!): Login
+  }
+
+  type Login {
+    email: String
+    password: String
+    token: String
   }
 `
 
@@ -328,6 +324,40 @@ let resolvers = {
     },
     lessons: async (_, args) => {
       return getAllLessonsOfACourse_ddb(args)
+    },
+
+    meditations: async () => {
+      return getAllMeditations_ddb()
+    },
+    popularCourses: async () => {
+      //  return getPopularCourses_ddb()
+    },
+    popularLessons: async () => {
+      return getPopularLessons_ddb()
+    },
+    popularMeditations: async () => {
+      return getPopularMeditations_ddb()
+    },
+    popularSelfGuided: async () => {
+      return getPopularSelfGuided_ddb()
+    },
+    selfGuided: async (parent, args) => {
+      return getSpecificSelfGuidedLesson_ddb(args)
+    },
+    allSelfGuided: async () => {
+      return getAllSelfGuided_ddb()
+    },
+  },
+
+  Mutation: {
+    createUser: async () => {
+      return createUser()
+    },
+    createCourseCompletionDoc: async () => {
+      return createCourseCompletionDoc_ddb()
+    },
+    createInstructorProfile: async () => {
+      return createInstructorProfile()
     },
     login: async (_, args) => {
       // call this query during login and save Auth Context
@@ -384,39 +414,6 @@ let resolvers = {
       } catch (err) {
         console.log(err)
       }
-    },
-    meditations: async () => {
-      return getAllMeditations_ddb()
-    },
-    popularCourses: async () => {
-      //  return getPopularCourses_ddb()
-    },
-    popularLessons: async () => {
-      return getPopularLessons_ddb()
-    },
-    popularMeditations: async () => {
-      return getPopularMeditations_ddb()
-    },
-    popularSelfGuided: async () => {
-      return getPopularSelfGuided_ddb()
-    },
-    selfGuided: async (parent, args) => {
-      return getSpecificSelfGuidedLesson_ddb(args)
-    },
-    allSelfGuided: async () => {
-      return getAllSelfGuided_ddb()
-    },
-  },
-
-  Mutation: {
-    createUser: async () => {
-      return createUser()
-    },
-    createCourseCompletionDoc: async () => {
-      return createCourseCompletionDoc_ddb()
-    },
-    createInstructorProfile: async () => {
-      return createInstructorProfile()
     },
     updateUser: async (_, args) => {
       return updateUserProfile(args)

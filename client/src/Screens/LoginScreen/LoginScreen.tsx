@@ -4,18 +4,13 @@ import Backlay from './LoginScreenComponents/Backlay';
 import FabFitIconBlock from './LoginScreenComponents/FabFitIconBlock';
 import InputBlock from './LoginScreenComponents/InputBlock';
 import PayMembershipBlock from './LoginScreenComponents/PayMembershipBlock';
-import {useQuery} from 'urql';
+import {useMutation} from 'urql';
 import LoadingScreen from '../SplashScreens/Loading';
 import ErrorScreen from '../SplashScreens/ErrorScreen';
 import {AuthContext} from '../../Context/AuthContext';
-import {
-  useNavigation,
-  useNavigationState,
-  useRoute,
-} from '@react-navigation/native';
 
 const checkUserAndValidity = `
-query ($email: String!, $password: String!) {
+mutation ($email: String!, $password: String!) {
     login(email: $email, password: $password) {
         token
         email
@@ -25,45 +20,20 @@ query ($email: String!, $password: String!) {
 interface LoginScreenProps {}
 
 type iSignIn = {
-  email: string;
-  password: string;
+  email?: string;
+  password?: string;
 };
+
+type StateConditions = null | iSignIn;
 
 const LoginScreen: React.FC<LoginScreenProps> = () => {
   const {state, dispatch} = useContext(AuthContext);
-  const [userInput, setUserInput] = useState<iSignIn>({
-    email: '',
-    password: '',
-  });
+  const [userInput, setUserInput] = useState<StateConditions>(null);
 
-  const [submitData, setSubmitData] = useState<iSignIn>();
-
-  const [returnedData, reexecuteQuery] = useQuery({
-    query: checkUserAndValidity,
-    variables: submitData,
-    // requestPolicy: 'network-only',
-    pause: !submitData,
-  });
-  const checkData = async () => {
-    if (
-      returnedData.operation?.variables?.email &&
-      data &&
-      !!data.login.token
-    ) {
-      dispatch({type: 'LOADING', payload: true});
-      dispatch({type: 'TOKEN', payload: data.login.token});
-      dispatch({type: 'EMAIL', payload: data.login.email});
-      setSubmitData({email: '', password: ''});
-      dispatch({type: 'LOADING', payload: false});
-    }
-  };
-
-  useEffect(() => {
-    checkData();
-  }, [returnedData]);
+  const [returnedData, signInUser] = useMutation(checkUserAndValidity);
 
   const {data, fetching, error} = returnedData;
-  console.log('error val: ', returnedData.operation?.variables?.password);
+
   if (fetching) return <LoadingScreen />;
   if (error) return <ErrorScreen error={error.message} />;
 
@@ -78,20 +48,28 @@ const LoginScreen: React.FC<LoginScreenProps> = () => {
   };
 
   const onPress = async () => {
-    setSubmitData({...userInput});
+    signInUser({...userInput})
+      .then((data) => {
+        console.log('data from MUTATION => ', data);
+        dispatch({type: 'EMAIL', payload: data.data.login.email});
+        dispatch({type: 'TOKEN', payload: data.data.login.token});
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
     <View style={styles.container}>
       <Backlay />
       <FabFitIconBlock />
-
       <View style={styles.bottom}>
         <InputBlock
           onChangeEmail={(text: string) => handleOnChangeEmail(text)}
           onChangePassword={(text: string) => handleOnChangePassword(text)}
           onPress={onPress}
         />
+        <Text style={styles.message}>
+          Sign in with user: matt@gmail.com, pw: password
+        </Text>
         <View style={styles.orBlock}>
           <Text style={styles.orText}>OR</Text>
         </View>
