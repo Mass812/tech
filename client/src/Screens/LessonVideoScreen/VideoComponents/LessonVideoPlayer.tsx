@@ -8,9 +8,23 @@ import VideoControls from './LessonVideoIconsOverlay';
 import PauseOptionCard from './PauseOptionCard';
 import TitleBannerUnderVideo from './LessonTitleBannerUnderVideo';
 import {ScrollView} from 'react-native-gesture-handler';
+import {useMutation} from 'urql';
+import LoadingScreen from '../../SplashScreens/Loading';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
+
+const progressTime = `
+mutation($email: String! $attr: String!, $value: Int!){
+  updateProgressValue( email: $email, attr: $attr,value: $value){
+    attr
+    value
+    email
+  }
+}
+
+`;
+
 interface VideoPlayerPortraitWindowProps {
   contentUrl: string;
 }
@@ -24,15 +38,17 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
   contentUrl,
   children,
 }) => {
-  let {state, dispatch} = useContext(VideoStore);
+  let {state: videoState, dispatch: videoDispatch} = useContext(VideoStore);
   let {state: authState, dispatch: authDispatch} = useContext(AuthContext);
-  const [hidePauseMenu, setHidePauseMenu] = useState(state.paused);
+  const [hidePauseMenu, setHidePauseMenu] = useState(videoState.paused);
   let videoRef = useRef<HTMLElement | any>(null);
+  const [data, addTimeToProgress] = useMutation(progressTime);
+
   const nav = useNavigation();
 
   const handleOnLoad = () => {
-    dispatch({type: 'LOADING', payload: false});
-    dispatch({type: 'BUFFERING', payload: false});
+    videoDispatch({type: 'LOADING', payload: false});
+    videoDispatch({type: 'BUFFERING', payload: false});
   };
 
   const getMinutesFromSeconds = (time: number) => {
@@ -44,27 +60,27 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
   };
 
   const onProgress = (data: iPlaybackShape) => {
-    if (!state.loading && !state.paused) {
-      dispatch({
+    if (!videoState.loading && !videoState.paused) {
+      videoDispatch({
         type: 'CURRENT_TIME',
         payload: data.currentTime,
       });
-      dispatch({
+      videoDispatch({
         type: 'PLAYABLE_DURATION',
         payload: data.seekableDuration,
       });
-      dispatch({
+      videoDispatch({
         type: 'TOTAL_PLAYER_TIME_AS_STRING',
-        payload: getMinutesFromSeconds(state.playableDuration),
+        payload: getMinutesFromSeconds(videoState.playableDuration),
       });
-      dispatch({
+      videoDispatch({
         type: 'CURRENT_PLAYER_TIME_AS_STRING',
-        payload: getMinutesFromSeconds(state.currentTime),
+        payload: getMinutesFromSeconds(videoState.currentTime),
       });
 
-      let number = state.playableDuration - state.currentTime;
+      let number = videoState.playableDuration - videoState.currentTime;
 
-      dispatch({
+      videoDispatch({
         type: 'TIME_REMAINING_AS_STRING',
         payload: getMinutesFromSeconds(number),
       });
@@ -72,8 +88,8 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
   };
 
   const seekToLocation = () => {
-    videoRef.current.seek(state.currentTime);
-    dispatch({type: 'Paused', paylaod: false});
+    videoRef.current.seek(videoState.currentTime);
+    videoDispatch({type: 'Paused', paylaod: false});
   };
 
   const restartTheLesson = () => {
@@ -81,13 +97,36 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
     setHidePauseMenu(!hidePauseMenu);
   };
 
-  const onEnd = () => {
-    let userWatchTime = state.currentTime / 1000;
-    dispatch({type: 'USER_WATCH_TIME', payload: userWatchTime});
-    dispatch({type: 'LESSON_COMPLETED', payload: true});
+  const onEnd = async () => {
+    videoDispatch({type: 'LOADING', payload: true});
+    let userWatchTime = videoState.currentTime * 1000;
+
+    console.log('currentTime Value: ', videoState.currentTime);
+    console.log('currentTime userWatchMath: ', userWatchTime);
+
+    videoDispatch({type: 'USER_WATCH_TIME', payload: userWatchTime});
+
+    await addTimeToProgress({
+      email: authState.email,
+      attr: 'lessonsCompleted',
+      value: 1,
+    }).catch((err) => console.log(err));
+
+    await addTimeToProgress({
+      email: authState.email,
+      attr: 'userWatchTime',
+      value: videoState.playableDuration * 1000,
+    })
+      .catch((err) => console.log(err))
+
+      .finally(() => {
+        videoDispatch({type: 'LOADING', payload: false});
+        videoDispatch({type: 'LESSON_COMPLETED', payload: true});
+      });
+
     // TODO MUTATION FOR USER WATCH TIME< LESSON COMPLETED and CHECK STREAK
   };
-
+  //if (videoState.loading) return <LoadingScreen />;
   return (
     <View style={styles.wholePage}>
       <View style={styles.videoArea}>
@@ -95,14 +134,14 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
           source={{
             uri: `${contentUrl}`,
           }}
-          onLoadStart={() => dispatch({type: 'LOADING', payload: true})}
+          onLoadStart={() => videoDispatch({type: 'LOADING', payload: true})}
           onLoad={handleOnLoad}
           // TODO END OF VIDEO FX
           onEnd={onEnd}
           // onBuffer={() => dispatch({type: 'BUFFERING', payload: true})}
           onError={() => console.log('error')}
           style={styles.videoPortrait}
-          paused={state.paused}
+          paused={videoState.paused}
           fullscreen={false}
           fullscreenOrientation={'portrait'}
           ref={(video) => (videoRef.current = video)}
@@ -117,7 +156,9 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
       <View style={styles.componentArea}>
         <ScrollView horizontal={false}>{children}</ScrollView>
       </View>
-      {state.paused && <PauseOptionCard restartTheLesson={restartTheLesson} />}
+      {videoState.paused && (
+        <PauseOptionCard restartTheLesson={restartTheLesson} />
+      )}
     </View>
   );
 };

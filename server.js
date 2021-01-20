@@ -54,6 +54,7 @@ const createSelfGuidedLesson_ddb = require("./DynamoDB_Request_Functions/Mutatio
 const createMeditation_ddb = require("./DynamoDB_Request_Functions/Mutation_Requests/createMeditation_ddb")
 const createSelfGuidedLessonSection_ddb = require("./DynamoDB_Request_Functions/Mutation_Requests/createSelfGuidedLessonVideoSection_ddb")
 const updateLessonPopularity_ddb = require("./DynamoDB_Request_Functions/Mutation_Requests/updateLessonPopularity_ddb")
+const updateUserDocValues = require("./DynamoDB_Request_Functions/Mutation_Requests/updateUserDocValues")
 
 const Query = gql`
   type Query {
@@ -278,12 +279,19 @@ const Mutation = gql`
       lessonNumber: String!
     ): Lesson
     login(email: String!, password: String!): Login
+    updateProgressValue(email: String!, attr: String!, value: Int!): Progress
   }
 
   type Login {
     email: String
     password: String
     token: String
+  }
+
+  type Progress {
+    attr: String
+    value: Int
+    email: String
   }
 `
 
@@ -414,6 +422,9 @@ let resolvers = {
       } catch (err) {
         console.log(err)
       }
+    },
+    updateProgressValue: async (_, args) => {
+      return updateUserDocValues(args)
     },
     updateUser: async (_, args) => {
       return updateUserProfile(args)
