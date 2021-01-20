@@ -8,11 +8,14 @@ import InstructorOutfitBlock from './CongratScreenComponents/InstructorOutfitBlo
 import {useMutation} from 'urql';
 import updateLessonPopularity from '../../../Urql_Requests/Mutations/UpdateVideoPopularity_LessonVideoScreen_PauseOptionCard';
 import {VideoStore} from '../../../Context/LessonVideoContext';
+import {AuthContext} from '../../../Context/AuthContext';
 
 interface CongratScreenProps {}
 
 const CongratScreen: React.FC<CongratScreenProps> = () => {
   let {state, dispatch} = useContext(VideoStore);
+  let {state: authState, dispatch: authDispatch} = useContext(AuthContext);
+  let {email, token} = authState;
   const nav = useNavigation();
   const [data, executeMutation] = useMutation(updateLessonPopularity);
 
@@ -30,9 +33,11 @@ const CongratScreen: React.FC<CongratScreenProps> = () => {
       .catch((err) => console.log(err));
   };
 
+  console.log('congrats authState: ', authState);
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Good Work, USER_NAME !</Text>
+      <Text style={styles.title}>Good Work, {email}!</Text>
       <Text style={styles.underTitle}>You completed today's class.</Text>
       <CourseCompletedDetailBanner />
       <Acheivement />
@@ -43,6 +48,7 @@ const CongratScreen: React.FC<CongratScreenProps> = () => {
         style={styles.buttonPink}>
         <Text style={styles.pinkButtonDetails}>Finish Workout</Text>
       </TouchableOpacity>
+      <Text>user token: {token.substring(0, 14)}...</Text>
     </View>
   );
 };

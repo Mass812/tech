@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useContext} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import Backlay from './LoginScreenComponents/Backlay';
 import FabFitIconBlock from './LoginScreenComponents/FabFitIconBlock';

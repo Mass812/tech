@@ -1,4 +1,5 @@
 import {VideoStore} from '../../../Context/LessonVideoContext';
+import {AuthContext} from '../../../Context/AuthContext';
 import Video from 'react-native-video';
 import React, {useContext, useRef, useEffect, useState} from 'react';
 import {StyleSheet, Dimensions, Text, View} from 'react-native';
@@ -24,6 +25,7 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
   children,
 }) => {
   let {state, dispatch} = useContext(VideoStore);
+  let {state: authState, dispatch: authDispatch} = useContext(AuthContext);
   const [hidePauseMenu, setHidePauseMenu] = useState(state.paused);
   let videoRef = useRef<HTMLElement | any>(null);
   const nav = useNavigation();
@@ -83,6 +85,7 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
     let userWatchTime = state.currentTime / 1000;
     dispatch({type: 'USER_WATCH_TIME', payload: userWatchTime});
     dispatch({type: 'LESSON_COMPLETED', payload: true});
+    // TODO MUTATION FOR USER WATCH TIME< LESSON COMPLETED and CHECK STREAK
   };
 
   return (
