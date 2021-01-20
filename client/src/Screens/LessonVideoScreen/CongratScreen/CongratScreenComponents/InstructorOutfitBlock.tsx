@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {View, StyleSheet, Text, Image} from 'react-native';
 import {State} from 'react-native-gesture-handler';
-import {VideoStore} from '../../LessonVideoScreen';
+import {VideoStore} from '../../../../Context/LessonVideoContext';
 
 interface InstructorOutfitBlockProps {}
 

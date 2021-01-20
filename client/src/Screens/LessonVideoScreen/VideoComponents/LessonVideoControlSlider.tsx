@@ -1,7 +1,7 @@
 import React, {useContext, useEffect} from 'react';
 import {View, StyleSheet, Dimensions, Text} from 'react-native';
 import Slider from '@react-native-community/slider';
-import {VideoStore} from '../LessonVideoScreen';
+import {VideoStore} from '../../../Context/LessonVideoContext';
 const width = Dimensions.get('screen').width;
 
 interface VideoControlSliderProps {

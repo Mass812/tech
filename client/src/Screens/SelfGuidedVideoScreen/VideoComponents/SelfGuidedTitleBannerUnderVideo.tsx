@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
-import {SgVideoStore} from '../SelfGuidedVideoScreen';
+import {SgVideoStore} from '../../../Context/SgVideoContext';
 
 interface TitleBannerUnderVideoProps {}
 

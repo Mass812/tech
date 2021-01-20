@@ -1,4 +1,4 @@
-import {VideoStore} from '../LessonVideoScreen';
+import {VideoStore} from '../../../Context/LessonVideoContext';
 import Video from 'react-native-video';
 import React, {useContext, useRef, useEffect, useState} from 'react';
 import {StyleSheet, Dimensions, Text, View} from 'react-native';

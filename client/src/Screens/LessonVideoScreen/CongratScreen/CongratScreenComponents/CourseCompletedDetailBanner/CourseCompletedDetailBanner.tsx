@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
-import {VideoStore} from '../../../LessonVideoScreen';
+import {VideoStore} from '../../../../../Context/LessonVideoContext';
 import CourseCompletedDetailBlock from './CourseCompletedDetailBlock';
 
 interface CourseCompletedDetailBannerProps {}

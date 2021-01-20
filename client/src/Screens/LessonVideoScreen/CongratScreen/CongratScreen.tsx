@@ -7,7 +7,7 @@ import CourseCompletedDetailBanner from './CongratScreenComponents/CourseComplet
 import InstructorOutfitBlock from './CongratScreenComponents/InstructorOutfitBlock';
 import {useMutation} from 'urql';
 import updateLessonPopularity from '../../../Urql_Requests/Mutations/UpdateVideoPopularity_LessonVideoScreen_PauseOptionCard';
-import {VideoStore} from '../LessonVideoScreen';
+import {VideoStore} from '../../../Context/LessonVideoContext';
 
 interface CongratScreenProps {}
 

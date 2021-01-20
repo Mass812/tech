@@ -1,4 +1,4 @@
-import {SgVideoStore} from '../SelfGuidedVideoScreen';
+import {SgVideoStore} from '../../../Context/SgVideoContext';
 import Video from 'react-native-video';
 import React, {useContext, useRef, useEffect, useState} from 'react';
 import {StyleSheet, Dimensions, Text, View} from 'react-native';

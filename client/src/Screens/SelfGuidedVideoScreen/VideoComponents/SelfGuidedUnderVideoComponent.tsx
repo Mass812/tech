@@ -1,7 +1,7 @@
 import Slider from '@react-native-community/slider';
 import React, {useContext, useEffect} from 'react';
 import {View, StyleSheet, Dimensions, Text, Image, Button} from 'react-native';
-import {SgVideoStore} from '../SelfGuidedVideoScreen';
+import {SgVideoStore} from '../../../Context/SgVideoContext';
 import {
   FlatList,
   ScrollView,

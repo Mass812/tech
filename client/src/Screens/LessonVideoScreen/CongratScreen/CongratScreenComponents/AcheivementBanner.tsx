@@ -3,7 +3,7 @@ import {View, StyleSheet, Text} from 'react-native';
 import TimeAcheivementIconBlock from './AcheivementIconBlock/TimeAcheivementIconBlock';
 import WorkoutsAcheivementIconBlock from './AcheivementIconBlock/WorkoutsAchievementIconBlock';
 import StreakAcheivementIconBlock from './AcheivementIconBlock/StreakAchievementIconBlock';
-import {VideoStore} from '../../LessonVideoScreen';
+import {VideoStore} from '../../../../Context/LessonVideoContext';
 
 interface AcheivementProps {
   subject?: string;

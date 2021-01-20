@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useContext, useState} from 'react';
-import {SgVideoStore} from '../SelfGuidedVideoScreen';
+import {SgVideoStore} from '../../../Context/SgVideoContext';
 import PauseOptionMenuCard from '../../../ReusableComponents/PauseOptionMenu/PauseOptionMenu';
 
 interface PauseOptionCardProps {

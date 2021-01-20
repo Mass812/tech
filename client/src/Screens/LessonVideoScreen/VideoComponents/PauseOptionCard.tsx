@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useContext, useState} from 'react';
-import {VideoStore} from '../LessonVideoScreen';
+import {VideoStore} from '../../../Context/LessonVideoContext';
 import {useMutation} from 'urql';
 import PauseOptionMenuCard from '../../../ReusableComponents/PauseOptionMenu/PauseOptionMenu';
 import updateLessonPopularity from '../../../Urql_Requests/Mutations/UpdateVideoPopularity_LessonVideoScreen_PauseOptionCard';

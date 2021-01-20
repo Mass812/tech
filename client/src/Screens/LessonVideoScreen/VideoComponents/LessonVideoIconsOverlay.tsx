@@ -13,7 +13,7 @@ import {
   faPause,
 } from '@fortawesome/free-solid-svg-icons';
 import {useNavigation} from '@react-navigation/native';
-import {VideoStore} from '../LessonVideoScreen';
+import {VideoStore} from '../../../Context/LessonVideoContext';
 import VideoControlSlider from './LessonVideoControlSlider';
 const width = Dimensions.get('screen').width;
 
