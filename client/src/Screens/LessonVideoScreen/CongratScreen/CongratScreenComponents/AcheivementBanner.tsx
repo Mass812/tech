@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import TimeAcheivementIconBlock from './AcheivementIconBlock/TimeAcheivementIconBlock';
 import WorkoutsAcheivementIconBlock from './AcheivementIconBlock/WorkoutsAchievementIconBlock';
@@ -8,21 +8,30 @@ import {VideoStore} from '../../../../Context/LessonVideoContext';
 interface AcheivementProps {
   subject?: string;
   dataPoints?: string;
+  minutes: number;
+  seconds: number;
+  lessonsCompleted: number;
+  selfGuidedCompleted: number;
+  streak: number;
 }
 
-const Acheivement: React.FC<AcheivementProps> = () => {
-  const {state, dispatch} = React.useContext(VideoStore);
-
+const Acheivement: React.FC<AcheivementProps> = ({
+  minutes,
+  seconds,
+  lessonsCompleted,
+  selfGuidedCompleted = 0,
+  streak,
+}) => {
   return (
     <View style={styles.parent}>
       <Text style={styles.title}>WEEKLY PROGRESS</Text>
       <View style={styles.badgeRow}>
-        <TimeAcheivementIconBlock accumulativeTime={888882} />
+        <TimeAcheivementIconBlock minutes={minutes} seconds={seconds} />
         <WorkoutsAcheivementIconBlock
-          lessonsCompleted={1}
-          selfGuidedCompleted={2}
+          lessonsCompleted={lessonsCompleted}
+          selfGuidedCompleted={selfGuidedCompleted}
         />
-        <StreakAcheivementIconBlock streak={3} />
+        <StreakAcheivementIconBlock streak={streak} />
       </View>
     </View>
   );

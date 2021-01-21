@@ -98,6 +98,7 @@ const Query = gql`
     weeklyGuidedWorkouts: Int
     coursesCompleted: Int
     lessonsCompleted: Int
+    selfGuidedCompleted: Int
     userWatchTime: Int
     streak: Int
   }

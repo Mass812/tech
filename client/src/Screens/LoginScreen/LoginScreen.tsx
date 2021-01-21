@@ -50,7 +50,6 @@ const LoginScreen: React.FC<LoginScreenProps> = () => {
   const onPress = async () => {
     signInUser({...userInput})
       .then((data) => {
-        console.log('data from MUTATION => ', data);
         dispatch({type: 'EMAIL', payload: data.data.login.email});
         dispatch({type: 'TOKEN', payload: data.data.login.token});
       })

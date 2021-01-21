@@ -1,30 +1,32 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faClock} from '@fortawesome/free-solid-svg-icons';
 
 interface TimeAcheivementIconBlockProps {
-  accumulativeTime: number;
+  minutes: number;
+  seconds: number;
 }
 
 const TimeAcheivementIconBlock: React.FC<TimeAcheivementIconBlockProps> = ({
-  accumulativeTime = 234000,
+  minutes,
+  seconds,
 }) => {
-  const [minutesCalc, setMinutesCalc] = useState<string>('0');
-  const [remainingSecondsCalc, setRemainingSecondsCalc] = useState<string>('0');
+  // const [minutesCalc, setMinutesCalc] = useState<string>('0');
+  // const [remainingSecondsCalc, setRemainingSecondsCalc] = useState<string>('0');
 
-  const getMinutesFromSeconds = (time: number) => {
-    const minutes = time >= 60000 ? Math.floor(time / 60000) : 0;
-    const y = Math.floor(time - minutes * 60000);
-    const seconds = (y / 6000).toFixed(0);
+  // useEffect(() => {
+  //   getMinutesFromSeconds(accumulativeTime);
+  // }, [accumulativeTime]);
 
-    setMinutesCalc(minutes.toString());
-    setRemainingSecondsCalc(seconds);
-  };
+  // function getMinutesFromSeconds(time: number) {
+  //   const minutes = time >= 60000 ? Math.floor(time / 60000) : 0;
+  //   const y = Math.floor(time - minutes * 60000);
+  //   const seconds = (y / 1000).toFixed();
 
-  useEffect(() => {
-    getMinutesFromSeconds(accumulativeTime);
-  }, [accumulativeTime]);
+  //   setMinutesCalc(minutes.toString());
+  //   setRemainingSecondsCalc(seconds);
+  // }
 
   return (
     <View style={styles.iconColumn}>
@@ -34,9 +36,9 @@ const TimeAcheivementIconBlock: React.FC<TimeAcheivementIconBlockProps> = ({
       <Text style={styles.detailTitle}>Time</Text>
       <View style={styles.detailColumn}>
         <View style={styles.detailRow}>
-          <Text style={styles.detalColored}>{minutesCalc}</Text>
+          <Text style={styles.detalColored}>{minutes}</Text>
           <Text style={styles.detailRegular}> min</Text>
-          <Text style={styles.detalColored}> {remainingSecondsCalc} </Text>
+          <Text style={styles.detalColored}> {seconds} </Text>
           <Text style={styles.detailRegular}>sec</Text>
         </View>
       </View>

@@ -10,7 +10,7 @@ interface WorkoutsAcheivementIconBlockProps {
 
 const WorkoutsAcheivementIconBlock: React.FC<WorkoutsAcheivementIconBlockProps> = ({
   lessonsCompleted = 0,
-  selfGuidedCompleted = 0,
+  selfGuidedCompleted = '0',
 }) => {
   return (
     <View style={styles.iconColumn}>
@@ -24,7 +24,9 @@ const WorkoutsAcheivementIconBlock: React.FC<WorkoutsAcheivementIconBlockProps> 
           <Text style={styles.detailRegular}>classes</Text>
         </View>
         <View style={styles.detailRow}>
-          <Text style={styles.detalColored}>{selfGuidedCompleted} </Text>
+          <Text style={styles.detalColored}>
+            {selfGuidedCompleted ? selfGuidedCompleted : ' 0'}{' '}
+          </Text>
           <Text style={styles.detailRegular}> self-guided</Text>
         </View>
       </View>

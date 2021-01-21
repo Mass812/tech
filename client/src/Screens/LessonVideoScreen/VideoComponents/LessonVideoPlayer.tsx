@@ -1,29 +1,17 @@
 import {VideoStore} from '../../../Context/LessonVideoContext';
 import {AuthContext} from '../../../Context/AuthContext';
 import Video from 'react-native-video';
-import React, {useContext, useRef, useEffect, useState} from 'react';
-import {StyleSheet, Dimensions, Text, View} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import React, {useContext, useRef, useState} from 'react';
+import {StyleSheet, Dimensions, View} from 'react-native';
 import VideoControls from './LessonVideoIconsOverlay';
 import PauseOptionCard from './PauseOptionCard';
 import TitleBannerUnderVideo from './LessonTitleBannerUnderVideo';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useMutation} from 'urql';
-import LoadingScreen from '../../SplashScreens/Loading';
+import progressTime from '../../../Urql_Requests/Mutations/UpdateProgressValue';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
-
-const progressTime = `
-mutation($email: String! $attr: String!, $value: Int!){
-  updateProgressValue( email: $email, attr: $attr,value: $value){
-    attr
-    value
-    email
-  }
-}
-
-`;
 
 interface VideoPlayerPortraitWindowProps {
   contentUrl: string;
@@ -43,8 +31,6 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
   const [hidePauseMenu, setHidePauseMenu] = useState(videoState.paused);
   let videoRef = useRef<HTMLElement | any>(null);
   const [data, addTimeToProgress] = useMutation(progressTime);
-
-  const nav = useNavigation();
 
   const handleOnLoad = () => {
     videoDispatch({type: 'LOADING', payload: false});
@@ -101,32 +87,30 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
     videoDispatch({type: 'LOADING', payload: true});
     let userWatchTime = videoState.currentTime * 1000;
 
-    console.log('currentTime Value: ', videoState.currentTime);
-    console.log('currentTime userWatchMath: ', userWatchTime);
-
     videoDispatch({type: 'USER_WATCH_TIME', payload: userWatchTime});
 
-    await addTimeToProgress({
+    let addLessonCompletedCountTOUserDoc = await addTimeToProgress({
       email: authState.email,
       attr: 'lessonsCompleted',
       value: 1,
     }).catch((err) => console.log(err));
 
-    await addTimeToProgress({
+    let addUserWatchTimeToUserDoc = await addTimeToProgress({
       email: authState.email,
       attr: 'userWatchTime',
       value: videoState.playableDuration * 1000,
-    })
-      .catch((err) => console.log(err))
+    }).catch((err) => console.log(err));
 
-      .finally(() => {
-        videoDispatch({type: 'LOADING', payload: false});
-        videoDispatch({type: 'LESSON_COMPLETED', payload: true});
-      });
-
-    // TODO MUTATION FOR USER WATCH TIME< LESSON COMPLETED and CHECK STREAK
+    try {
+      return [addLessonCompletedCountTOUserDoc, addUserWatchTimeToUserDoc];
+    } catch (err) {
+      console.log(err);
+    } finally {
+      videoDispatch({type: 'LOADING', payload: false});
+      videoDispatch({type: 'LESSON_COMPLETED', payload: true});
+    }
   };
-  //if (videoState.loading) return <LoadingScreen />;
+
   return (
     <View style={styles.wholePage}>
       <View style={styles.videoArea}>
