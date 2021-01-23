@@ -49,13 +49,13 @@ const CongratScreen: React.FC<CongratScreenProps> = () => {
     getMinutesFromSeconds();
     console.log('userInfo:: ', userInfo);
     console.log('data: ', data);
-  }, [fetching]);
+  }, [fetching, data]);
 
   if (fetching) return <LoadingScreen />;
   if (error) return <ErrorScreen error={error.message} />;
 
-  function getMinutesFromSeconds() {
-    if (data?.user?.userWatchTime) {
+  async function getMinutesFromSeconds() {
+    if (!!data?.user?.userWatchTime) {
       let time = data.user.userWatchTime;
       const minutes = time >= 60000 ? Math.floor(time / 60000) : 0;
       const y = Math.floor(time - minutes * 60000);

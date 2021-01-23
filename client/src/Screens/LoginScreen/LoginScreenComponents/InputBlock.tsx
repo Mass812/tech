@@ -1,5 +1,4 @@
-import {visitWithTypeInfo} from 'graphql';
-import React, {useState} from 'react';
+import React, {useRef} from 'react';
 import {View, StyleSheet, Text, Dimensions} from 'react-native';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 
@@ -9,46 +8,77 @@ interface InputBlockProps {
   onChangeEmail: (text: string) => void;
   onChangePassword: (text: string) => void;
   onPress: () => void;
+  onFocusInputOne?: () => void;
+  onFoucusInputTwo?: () => void;
+  onBlur?: () => void;
+  disabled: boolean;
+  hideSection: boolean;
+  fetching: boolean;
+  focusButton: () => void;
 }
 
 const InputBlock: React.FC<InputBlockProps> = ({
   onChangeEmail,
   onChangePassword,
   onPress,
+  onFocusInputOne,
+  onFoucusInputTwo,
+  onBlur,
+  hideSection,
+  disabled,
+  fetching,
+  focusButton,
 }) => {
   const SignIn = () => {};
-
+  const secondInput = useRef<any>(null);
   return (
     <View>
-      <View style={styles.infoBlock}>
-        <Text style={styles.header}>Get Active. Get Fit.</Text>
-        <View style={styles.detailLineOneBlock}>
-          <Text style={styles.detailLineOne}>Already a </Text>
-          <Text style={styles.detailLineOneColored}>Fabletics VIP </Text>
-          <Text style={styles.detailLineOne}>member?</Text>
+      {!hideSection && (
+        <View style={styles.infoBlock}>
+          <Text style={styles.header}>Get Active. Get Fit.</Text>
+          <View style={styles.detailLineOneBlock}>
+            <Text style={styles.detailLineOne}>Already a </Text>
+            <Text style={styles.detailLineOneColored}>Fabletics VIP </Text>
+            <Text style={styles.detailLineOne}>member?</Text>
+          </View>
+          <Text style={styles.detailLineTwo}>No need to sign up!</Text>
+          <Text style={styles.detailLineThree}>
+            Log in using your membership credetials.
+          </Text>
         </View>
-        <Text style={styles.detailLineTwo}>No need to sign up!</Text>
-        <Text style={styles.detailLineThree}>
-          Log in using your membership credetials.
-        </Text>
-      </View>
+      )}
       <View style={styles.container}>
         <TextInput
           style={styles.input}
           onChangeText={onChangeEmail}
           placeholder={'Email'}
           placeholderTextColor={'black'}
+          onBlur={() => secondInput.current.focus()}
+          returnKeyType={'next'}
+          onFocus={onFocusInputOne}
+          autoCompleteType={'email'}
         />
         <TextInput
+          ref={secondInput}
           style={styles.input}
           onChangeText={onChangePassword}
           placeholder={'Password'}
           placeholderTextColor={'black'}
+          onFocus={onFoucusInputTwo}
+          onBlur={onBlur}
+          autoCompleteType={'password'}
         />
 
         <View>
-          <TouchableOpacity style={styles.buttonPink} onPress={onPress}>
-            <Text style={styles.buttonText}>Sign In</Text>
+          <TouchableOpacity
+            style={styles.buttonPink}
+            onPress={onPress}
+            disabled={disabled}
+            touchSoundDisabled={true}
+            onFocus={focusButton}>
+            <Text style={styles.buttonText}>
+              {fetching === true ? 'Sign In' : 'Loading'}
+            </Text>
           </TouchableOpacity>
         </View>
         <Text style={styles.forgotText}>Forgot Password?</Text>

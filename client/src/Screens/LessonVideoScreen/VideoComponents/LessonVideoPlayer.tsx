@@ -83,6 +83,14 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
     setHidePauseMenu(!hidePauseMenu);
   };
 
+  const handleError = () => {
+    console.log(Error);
+  };
+
+  const handleInitialLoad = () => {
+    videoDispatch({type: 'LOADING', payload: true});
+  };
+
   const onEnd = async () => {
     videoDispatch({type: 'LOADING', payload: true});
     let userWatchTime = videoState.currentTime * 1000;
@@ -118,12 +126,10 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
           source={{
             uri: `${contentUrl}`,
           }}
-          onLoadStart={() => videoDispatch({type: 'LOADING', payload: true})}
+          onLoadStart={handleInitialLoad}
           onLoad={handleOnLoad}
-          // TODO END OF VIDEO FX
           onEnd={onEnd}
-          // onBuffer={() => dispatch({type: 'BUFFERING', payload: true})}
-          onError={() => console.log('error')}
+          onError={handleError}
           style={styles.videoPortrait}
           paused={videoState.paused}
           fullscreen={false}

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View, StyleSheet, Text, Image} from 'react-native';
+import {View, StyleSheet, Image} from 'react-native';
 
 interface FabFitIconBlockProps {}
 
