@@ -1,5 +1,11 @@
 import {useMutation, useQuery} from 'urql';
-import React, {useContext, useEffect, useMemo, useState} from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import Acheivement from './CongratScreenComponents/AcheivementBanner';
 import {TouchableOpacity} from 'react-native-gesture-handler';
@@ -42,13 +48,13 @@ const CongratScreen: React.FC<CongratScreenProps> = () => {
     requestPolicy: 'network-only',
   });
 
-  let {data, fetching, error} = userInfo;
-
-  useMemo(() => {
+  useEffect(() => {
     getMinutesFromSeconds();
     console.log('userInfo:: ', userInfo);
     console.log('data: ', data);
-  }, [fetching, data, error]);
+  }, [userInfo.fetching]);
+
+  let {data, fetching, error} = userInfo;
 
   if (fetching) return <LoadingScreen />;
   if (error) return <ErrorScreen error={error.message} />;
@@ -64,6 +70,7 @@ const CongratScreen: React.FC<CongratScreenProps> = () => {
       setRemainingSecondsCalc(seconds);
     }
   }
+
   // TODO ADD TIME TO USER DOC
   const handleMarkAsCompleted = () => {
     executeMutation({
