@@ -1,50 +1,261 @@
 
-//      Access Points
-
-// User Side Related
-//     
-//     _get specific user 
-//     _get all courses 
-//     _get all courses of a certain category 
-//     _get courses by instructor 
-//     _get all user workouts 
-//     _get all user workouts by category 
-// Data Side Related
-//     get popular classes
-//     get all classes
-//     get classes of a specific program
-//     get popular meditations
-//     get all meditations
-//     get a specific class
-//     
-//     
-
+ Access Patterns: 
+    
+    get specific user -- and assign a token
+    get popular courses
+    get popular lessons
+    get popular meditations
+    get all lessons
+    get all courses of a specific instructor
+    get lessons by category
+    get all lessons of a specific course
+    get a specific lesson of a specific course
+    get all self guided lessons
+    get specific self guided lesson with all video segments
+    get all meditations
+    
+    update user watch time after lesson completion
+    update lessons completed after lesson completion
+    update lesson popularity after video is played partially and when fully complted
 
 
 
+DB Relationships: 
+programs [one] are related to [many] lessons
+lessons [one] are related to [one] program
 
 
 
 
 +++++++++++++++++
-Secondary Indexes
+Local Secondary Indexes:
 +++++++++++++++++
 
 Index Name                          Partition Key     Sort Key
 __________                          _____________     _________
-course_cost                           pk              cost
-course_courseFocus                    pk              courseFocus
-course_instructor                     pk              instuctor
-user_category   **                    pk              category
-user_workout_course_relation          pk              courseRelation
 
-** used for course catagory as pk = course, sk=category -- user_ was incidental
+pk_id                                 pk              courseFocus
+pk_instructor                         pk              instuctor
+pk_category   **                      pk              category
+pk_created                            pk              courseRelation
 
 
 
 
++++++++++++++++++
+Global Secondary Indexes:
++++++++++++++++++
 
-++++++++++++++++
-App_Table Entities
-++++++++++++++++
---
+
+Index Name                          Partition Key     Sort Key
+__________                          _____________     _________    
+
+Lesson_Category                          pk           category
+Lesson_Popularity                        pk           popularity
+Meditation_Popularity                    pk           popularity
+Self_Guided_Popularity                   pk           popularity
+
+
+
+
++++++++++++++++++
+PK SK PATTERNS:
++++++++++++++++++
+
+
+USER: 
+PK: `userEmail#${email}`  SK: profile
+DDB_JSON_EXAMPLE
+{
+ "pk": "userEmail#matt@gmail.com",
+ "sk": "profile",
+ "userWatchTime": 264000,
+ "weeklyInDependentWorkouts": 0,
+ "streak": 0,
+ "completedSelfGuided": [
+  ""
+ ],
+ "lastName": "Wellman",
+ "created": "2021-01-18T03:04:58.841Z",
+ "completedLessons": [
+  ""
+ ],
+ "email": "matt@gmail.com",
+ "firstName": "Matthew",
+ "lessonsCompleted": 28,
+ "coursesCompleted": 0,
+ "currentCourse": null,
+ "password": "$2a$12$XK/0xDtk/N4NxthCZQjqp.41I89QMWseVrOO.tnaxajzVXcQuZ4ti",
+ "completedCourses": [
+  "The Rock Formula"
+ ],
+ "id": "eb5590f6-4318-438e-af8d-66eefa5fa4e9",
+ "phone": 8123334444,
+ "completedMeditations": [
+  ""
+ ],
+ "weeklyGuidedWorkouts": 0
+}
+
+
+
+
+
+COURSE: 
+PK: `course`  SK: `${courseName}`
+DDB_JSON_EXAMPLE
+{
+ "pk": "course",
+ "sk": "Body Blast",
+ "img": "https://elasticbeanstalk-us-east-2-325970805780.s3.us-east-2.amazonaws.com/body_blast_program.jpg",
+ "courseImg": "https://elasticbeanstalk-us-east-2-325970805780.s3.us-east-2.amazonaws.com/body_blast_program.jpg",
+ "targetAbsValue": 5,
+ "targetBackValue": 5,
+ "targetArmsValue": 10,
+ "created": "2021-01-02T01:52:53.426Z",
+ "popularity": 2,
+ "targets": [
+  "Upper Body"
+ ],
+ "workoutDayPattern": [
+  "_"
+ ],
+ "length": "3 Weeks",
+ "instructor": "Jeremy Forge",
+ "lectureCount": 3,
+ "targetLegsValue": 0,
+ "keywords": [
+  "weights",
+  "chest",
+  "arms",
+  "back"
+ ],
+ "category": "Strength",
+ "equipment": [
+  "Light Dumbbells",
+  "Heavy Dubbells",
+  "Body Weight",
+  "Yoga Mat"
+ ],
+ "description": "In fitness, frequency and repitition is key. Health is a journey; a lifestyle. Its not about how much you lift --but how often. Let me show you a few of the key concepts I've taken away from many years of trial and error.",
+ "id": "298c2664-08e2-4eb0-a01a-db2b32bea1c4",
+ "courseRelation": [
+  "changeThistoFirstClass"
+ ],
+ "intensity": "8",
+ "courseName": "Body Blast",
+ "targetChestValue": 7
+}
+
+
+
+
+LESSON:
+PK: `instructor#${instructor}`  SK: `courseName#${HIIT & Strength}#weekNumber#${weekNumber}#lesson#${lessonNumber}`
+DDB_JSON_EXAMPLE
+{
+ "pk": "instructor#Amy Green",
+ "sk": "courseName#HIIT & Strength#weekNumber#1#lesson#1",
+ "targetAbsValue": 6,
+ "targetBackValue": 6,
+ "targetArmsValue": 9,
+ "weekNumber": "1",
+ "selfGuidedLesson": false,
+ "lesson": "lesson",
+ "outfitBottomImgUrl": "https://fabletics-us-cdn.justfab.com/media/images/products/LG2040267-9765/LG2040267-9765-2_327x491.jpg",
+ "targets": [
+  "Whole Body"
+ ],
+ "instructor": "Amy Green",
+ "length": "16 min",
+ "targetLegsValue": 8,
+ "lessonNumber": "1",
+ "outfitBottomId": "86f73ba1-3760-4d62-86f1-d4c748964d0d",
+ "equipment": [
+  "Yoga Mat",
+  "Body Weight"
+ ],
+ "id": "b515eff0-4889-4857-be99-65313a45238e",
+ "outfitBottomName": "Panther Yogas",
+ "outfitTopImgUrl": "https://fabletics-us-cdn.justfab.com/media/images/products/LS2146119-0001/LS2146119-0001-2_327x491.jpg",
+ "contentUrl": "https://elasticbeanstalk-us-east-2-325970805780.s3.us-east-2.amazonaws.com/ollie_workout_vid.mp4",
+ "intensity": 10,
+ "courseName": "HIIT & Strength",
+ "targetChestValue": 6,
+ "img": "https://elasticbeanstalk-us-east-2-325970805780.s3.us-east-2.amazonaws.com/HIIT_lesson_1.jpg",
+ "created": "2021-01-02T04:24:27.729Z",
+ "popularity": 9,
+ "outfitTopId": "1d2c218c-4dca-4c14-ac26-d3c063ee2e02",
+ "category": "HIIT",
+ "courseRelation": [
+  "changeThistoFirstClass"
+ ],
+ "description": "We will begin the course with climbers and proceed in burpies.",
+ "outfitTopName": "Basic Perfmance Top",
+ "title": "Climbers"
+}
+
+SELF GUIDED: 
+pk: 'selfGuided'  sk: `selfGuided#${28af38a5-a5e9-463f-a1e7-dfd6344cb599}`
+DDB_JSON_EXAMPLE
+{
+ "pk": "selfGuided",
+ "sk": "selfGuided#28af38a5-a5e9-463f-a1e7-dfd6344cb599",
+ "img": "https://elasticbeanstalk-us-east-2-325970805780.s3.us-east-2.amazonaws.com/rosannagh_macLennan_workout.jpg",
+ "exerciseSections": "6",
+ "created": "2021-01-10T18:26:04.479Z",
+ "selfGuidedLesson": true,
+ "popularity": 9,
+ "length": "10 min",
+ "selfGuided": "selfGuided",
+ "category": "HIIT",
+ "equipment": [
+  "Yoga Mat",
+  "Light Dumbbells"
+ ],
+ "id": "28af38a5-a5e9-463f-a1e7-dfd6344cb599",
+ "contentUrl": "https://elasticbeanstalk-us-east-2-325970805780.s3.us-east-2.amazonaws.com/focus_energy_1.mp4",
+ "title": "Total Body Build"
+}
+
+
+
+
+SELF GUIDED VIDEO SEGMENT:
+pk: `selfGuided#${id}` sk: `sectionNumber#${sectionNumber}`
+DDB_JSON_EXAMPLE
+{
+ "pk": "selfGuided#28af38a5-a5e9-463f-a1e7-dfd6344cb599",
+ "sk": "sectionNumber#1",
+ "length": 7000,
+ "created": "2021-01-10T21:15:47.234Z",
+ "category": "HIIT",
+ "sectionNumber": 1,
+ "equipment": [
+  "Yoga Mat",
+  "Light Dumbbells"
+ ],
+ "id": "55ca726c-1d5e-4ddf-8c87-679ddad6ec7d",
+ "contentUrl": "https://elasticbeanstalk-us-east-2-325970805780.s3.us-east-2.amazonaws.com/group_woman_curling.mp4",
+ "title": "Pure Burn"
+}
+
+
+
+MEDITATION: 
+pk: Meditation  sk: 'meditation#${title}'
+DDB_JSON_EXAMPLE
+{
+ "pk": "meditation",
+ "sk": "meditation#The Wisdom of Sitting",
+ "popularity": 3,
+ "contentImg": "https://elasticbeanstalk-us-east-2-325970805780.s3.us-east-2.amazonaws.com/meditation_beach.jpg",
+ "length": "19 min",
+ "instructor": "Karla Hernandez ",
+ "meditation": "meditation",
+ "category": "Stress & Anxiety",
+ "id": "c916c32f-e498-435b-9300-3fe680aea876",
+ "description": "To regain energy you must let energy accumulate. This sitting meditation will help your body focus on the rest centers of your mind to better achieve that goal. ",
+ "contentUrl": "https://elasticbeanstalk-us-east-2-325970805780.s3.us-east-2.amazonaws.com/meditation_wisdom_sitting.mp3",
+ "title": "The Wisdom of Sitting"
+}
