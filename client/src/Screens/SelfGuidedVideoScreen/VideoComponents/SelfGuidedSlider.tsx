@@ -16,7 +16,7 @@ const VideoControlSlider: React.FC<VideoControlSliderProps> = () => {
           value={state.currentTime}
           minimumValue={0}
           maximumValue={state.playableDuration}
-          minimumTrackTintColor={'#689493'}
+          minimumTrackTintColor={'salmon'}
           maximumTrackTintColor={'#FFFFFF'}
           step={1}
           thumbTintColor={'rgba(28, 158, 155, 0.0)'}

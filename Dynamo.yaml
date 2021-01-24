@@ -150,7 +150,7 @@ DDB_JSON_EXAMPLE
 
 
 
-LESSON:
+LESSON: (of a course)
 PK: `instructor#${instructor}`  SK: `courseName#${HIIT & Strength}#weekNumber#${weekNumber}#lesson#${lessonNumber}`
 DDB_JSON_EXAMPLE
 {

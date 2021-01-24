@@ -1,16 +1,16 @@
-import {useNavigation} from '@react-navigation/native';
-import React, {useContext, useEffect, useState} from 'react';
+import {useMutation, useQuery} from 'urql';
+import React, {useContext, useEffect, useMemo, useState} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import Acheivement from './CongratScreenComponents/AcheivementBanner';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import CourseCompletedDetailBanner from './CongratScreenComponents/CourseCompletedDetailBanner/CourseCompletedDetailBanner';
 import InstructorOutfitBlock from './CongratScreenComponents/InstructorOutfitBlock';
-import {useMutation, useQuery} from 'urql';
 import updateLessonPopularity from '../../../Urql_Requests/Mutations/UpdateVideoPopularity_LessonVideoScreen_PauseOptionCard';
 import {VideoStore} from '../../../Context/LessonVideoContext';
 import {AuthContext} from '../../../Context/AuthContext';
 import LoadingScreen from '../../SplashScreens/Loading';
 import ErrorScreen from '../../SplashScreens/ErrorScreen';
+import {useNavigation} from '@react-navigation/native';
 
 const showUserDetails = ` 
 query($email: String!){
@@ -32,7 +32,6 @@ const CongratScreen: React.FC<CongratScreenProps> = () => {
   const [mutationData, executeMutation] = useMutation(updateLessonPopularity);
   const [minutes, setMinutesCalc] = useState<number>(0);
   const [seconds, setRemainingSecondsCalc] = useState<number>(0);
-  const [queryState, setQueryState] = useState<number>(0);
   const nav = useNavigation();
 
   const [userInfo, reUser] = useQuery({
@@ -45,17 +44,17 @@ const CongratScreen: React.FC<CongratScreenProps> = () => {
 
   let {data, fetching, error} = userInfo;
 
-  useEffect(() => {
+  useMemo(() => {
     getMinutesFromSeconds();
     console.log('userInfo:: ', userInfo);
     console.log('data: ', data);
-  }, [fetching, data]);
+  }, [fetching, data, error]);
 
   if (fetching) return <LoadingScreen />;
   if (error) return <ErrorScreen error={error.message} />;
 
-  async function getMinutesFromSeconds() {
-    if (!!data?.user?.userWatchTime) {
+  function getMinutesFromSeconds() {
+    if (data?.user?.userWatchTime) {
       let time = data.user.userWatchTime;
       const minutes = time >= 60000 ? Math.floor(time / 60000) : 0;
       const y = Math.floor(time - minutes * 60000);
