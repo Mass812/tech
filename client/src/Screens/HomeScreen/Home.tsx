@@ -117,7 +117,10 @@ const Home: React.FC<HomeProps> = () => {
   };
 
   return (
-    <ScrollView ref={screen} decelerationRate={'fast'} scrollEventThrottle={9}>
+    <ScrollView
+      ref={screen}
+      decelerationRate={'normal'}
+      scrollEventThrottle={5}>
       <View style={styles.main}>
         <Mega />
       </View>

@@ -1,7 +1,13 @@
-import React from 'react';
-import {View, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
+import React, {useRef} from 'react';
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  Dimensions,
+} from 'react-native';
 import {useQuery} from 'urql';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useScrollToTop} from '@react-navigation/native';
 import ProgramCard from '../../ReusableComponents/UiCards/ProgramCard';
 import LoadingScreen from '../SplashScreens/Loading';
 import ErrorScreen from '../SplashScreens/ErrorScreen';
@@ -11,8 +17,9 @@ import {iRenderAllCourseProps} from '../../Interfaces/ProgamsInterface';
 interface ProgramsProps {}
 
 const Programs: React.FC<ProgramsProps> = () => {
+  const top = useRef<HTMLElement | any>(null);
   const nav = useNavigation();
-
+  useScrollToTop(top);
   const [result] = useQuery({
     query: GetAllCourses,
   });
@@ -44,7 +51,7 @@ const Programs: React.FC<ProgramsProps> = () => {
   };
 
   return (
-    <View style={styles.main}>
+    <View style={styles.main} ref={top}>
       <FlatList
         data={data.courses}
         renderItem={renderItem}
