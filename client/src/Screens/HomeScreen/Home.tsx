@@ -23,6 +23,7 @@ interface HomeProps {}
 const Home: React.FC<HomeProps> = () => {
   const nav = useNavigation();
   const screen = useRef<HTMLElement | any>(null);
+  const [picsLoaded, setPicsLoaded] = useState<boolean>(false);
   useScrollToTop(screen);
 
   const [result, reexecuteQuery] = useQuery({

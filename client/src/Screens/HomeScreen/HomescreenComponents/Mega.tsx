@@ -11,7 +11,7 @@ import photoArray from './HardCodedMegaArrayData';
 interface MegaProps {}
 
 interface FlatListProps {
-  photoArray: MegaProps[];
+  photoArray: [];
 }
 
 const width = Dimensions.get('window').width;
@@ -23,6 +23,7 @@ const Mega: React.FC<MegaProps> = () => {
   let displayPhotos = photoArray.map((n, idx) => (
     <View key={idx + n.id} style={styles.imageParent}>
       <Image style={styles.image} source={n.photo} />
+
       <Text style={styles.instructor}>{n.instructor}</Text>
       <Text style={styles.title}>{n.title}</Text>
       <Text style={styles.bulletPoints}>{n.bulletPoints}</Text>
@@ -42,7 +43,8 @@ const Mega: React.FC<MegaProps> = () => {
       decelerationRate={0}
       showsHorizontalScrollIndicator={false}
       snapToInterval={width}
-      snapToAlignment={'start'}>
+      snapToAlignment={'start'}
+      disableIntervalMomentum={true}>
       {displayPhotos}
     </ScrollView>
   );
