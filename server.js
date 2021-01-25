@@ -13,8 +13,6 @@ AWS.config.update({
   },
 })
 
-console.log("accessKeyId ", REACT_APP_DDB_ACCESS)
-
 const db = new AWS.DynamoDB.DocumentClient()
 
 //spread resolvers later if needed
