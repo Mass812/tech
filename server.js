@@ -369,15 +369,8 @@ let resolvers = {
       return createInstructorProfile()
     },
     login: async (_, args) => {
-      // call this query during login and save Auth Context
       const { email, password } = args
-      console.log(
-        "QUERY LOGIN PASSED IN: ",
-        "email ",
-        email,
-        "password ",
-        password
-      )
+
       let Params = {
         TableName: "App_Table",
         Key: {
@@ -389,16 +382,7 @@ let resolvers = {
       try {
         const discoveredDoc = await db.get(Params).promise()
 
-        console.log("DOC => ", discoveredDoc.Item)
-
         if (!discoveredDoc) throw new Error({ message: "No user found" })
-
-        console.log(
-          "prior to ==>",
-          password,
-          "compared ==>",
-          discoveredDoc.Item.password
-        )
 
         const comparePasswords = await bcrypt.compare(
           password,
