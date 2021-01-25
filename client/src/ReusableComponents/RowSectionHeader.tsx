@@ -16,10 +16,11 @@ const RowSectionHeader: React.FC<RowSectionHeaderProps> = ({text}) => {
 const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
-    color: 'darkgrey',
+    color: 'rgba(87, 87, 87, 0.8)',
     marginLeft: 12,
     marginTop: 23,
     textAlign: 'left',
+    paddingBottom: 8,
   },
   sectionTitleParent: {
     //height: 30,

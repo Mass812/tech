@@ -1,22 +1,36 @@
-import * as React from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faClock, faDumbbell, faBolt} from '@fortawesome/free-solid-svg-icons';
-import AcheivementIconBlock from './AcheivementBannerIconBlock';
+import TimeAcheivementIconBlock from './AcheivementIconBlock/TimeAcheivementIconBlock';
+import WorkoutsAcheivementIconBlock from './AcheivementIconBlock/WorkoutsAchievementIconBlock';
+import StreakAcheivementIconBlock from './AcheivementIconBlock/StreakAchievementIconBlock';
 
 interface AcheivementProps {
   subject?: string;
   dataPoints?: string;
+  minutes: number;
+  seconds: number;
+  lessonsCompleted: number;
+  selfGuidedCompleted: number;
+  streak: number;
 }
 
-const Acheivement: React.FC<AcheivementProps> = () => {
+const Acheivement: React.FC<AcheivementProps> = ({
+  minutes = 0,
+  seconds = 0,
+  lessonsCompleted,
+  selfGuidedCompleted = 0,
+  streak,
+}) => {
   return (
     <View style={styles.parent}>
       <Text style={styles.title}>WEEKLY PROGRESS</Text>
       <View style={styles.badgeRow}>
-        <AcheivementIconBlock icon={faClock} textSubject={'Time'} />
-        <AcheivementIconBlock icon={faDumbbell} textSubject={'Workouts'} />
-        <AcheivementIconBlock icon={faBolt} textSubject={'Streak'} />
+        <TimeAcheivementIconBlock minutes={minutes} seconds={seconds} />
+        <WorkoutsAcheivementIconBlock
+          lessonsCompleted={lessonsCompleted}
+          selfGuidedCompleted={selfGuidedCompleted}
+        />
+        <StreakAcheivementIconBlock streak={streak} />
       </View>
     </View>
   );
@@ -25,7 +39,7 @@ const Acheivement: React.FC<AcheivementProps> = () => {
 const styles = StyleSheet.create({
   parent: {
     borderColor: 'grey',
-    borderWidth: 1,
+    // borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
@@ -33,7 +47,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     color: 'grey',
-    marginBottom: 15,
+    marginBottom: 10,
     letterSpacing: 4,
   },
   badgeRow: {
@@ -44,7 +58,7 @@ const styles = StyleSheet.create({
     height: 130,
     width: '100%',
     justifyContent: 'space-evenly',
-    padding: 1,
+    paddingTop: 5,
   },
 });
 

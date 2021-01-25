@@ -1,25 +1,65 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
+import {useQuery} from 'urql';
 import {View, StyleSheet, Text} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import AcheivementBanner from './ProfileComponents/AcheivementBanner';
 import ProfileHeaderBanner from './ProfileComponents/ProfileHeaderBanner';
 import RecentlyDoneBanner from './ProfileComponents/RecentlyDoneBanner';
 import {AuthContext} from '../../Context/AuthContext';
+import ErrorScreen from '../SplashScreens/ErrorScreen';
+import LoadingScreen from '../SplashScreens/Loading';
+import userDetails from '../../Urql_Requests/Querys/UserDetails_Congrats_Profile';
 
 interface ProfileProps {}
 
 const Profile: React.FC<ProfileProps> = () => {
   const {state, dispatch} = useContext(AuthContext);
+  const [minutes, setMinutesCalc] = useState<number>(0);
+  const [seconds, setRemainingSecondsCalc] = useState<number>(0);
 
-  const onPress = () => {
+  const [userInfo, refetchUserInfo] = useQuery({
+    query: userDetails,
+    variables: {email: state.email},
+  });
+
+  useEffect(() => {
+    if (userInfo?.data?.user?.userWatchTime) {
+      getMinutesFromSeconds(userInfo.data.user.userWatchTime);
+      console.log('userInfo:: ', userInfo);
+    }
+    console.log('data: ', data);
+  }, [userInfo.data, minutes]);
+
+  let {data, fetching, error} = userInfo;
+
+  if (fetching) return <LoadingScreen />;
+  if (error) return <ErrorScreen error={error.message} />;
+
+  const handleSignOut = () => {
     dispatch({type: 'TOKEN', payload: null});
   };
+
+  function getMinutesFromSeconds(time: number) {
+    //  let time = data.user.userWatchTime;
+    const minutes = time >= 60000 ? Math.floor(time / 60000) : 0;
+    const y = Math.floor(time - minutes * 60000);
+    const seconds = y / 1000;
+    setMinutesCalc(minutes);
+    setRemainingSecondsCalc(seconds);
+  }
+
   return (
     <ScrollView horizontal={false}>
-      <ProfileHeaderBanner onPress={onPress} />
+      <ProfileHeaderBanner onPress={handleSignOut} />
 
       <View style={styles.spread} />
-      <AcheivementBanner />
+      <AcheivementBanner
+        minutes={minutes}
+        seconds={seconds}
+        lessonsCompleted={data.user.lessonsCompleted}
+        selfGuidedCompleted={data.user.selfGuidedCompleted}
+        streak={data.user.streak}
+      />
       <View style={styles.spread} />
       <RecentlyDoneBanner
         header={'Recent Meditations'}

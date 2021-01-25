@@ -1,29 +1,25 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faClock} from '@fortawesome/free-solid-svg-icons';
+import {faDumbbell} from '@fortawesome/free-solid-svg-icons';
 
-interface TimeAcheivementIconBlockProps {
-  minutes: number;
-  seconds: number;
+interface StreakAcheivementIconBlockProps {
+  streak: number;
 }
 
-const TimeAcheivementIconBlock: React.FC<TimeAcheivementIconBlockProps> = ({
-  minutes,
-  seconds,
+const StreakAcheivementIconBlock: React.FC<StreakAcheivementIconBlockProps> = ({
+  streak = 0,
 }) => {
   return (
     <View style={styles.iconColumn}>
       <View style={styles.iconHalo}>
-        <FontAwesomeIcon icon={faClock} size={30} color={'#0896a3'} />
+        <FontAwesomeIcon icon={faDumbbell} size={30} color={'#0896a3'} />
       </View>
-      <Text style={styles.detailTitle}>Time</Text>
+      <Text style={styles.detailTitle}>Streak</Text>
       <View style={styles.detailColumn}>
         <View style={styles.detailRow}>
-          <Text style={styles.detalColored}>{minutes}</Text>
-          <Text style={styles.detailRegular}> min</Text>
-          <Text style={styles.detalColored}> {seconds} </Text>
-          <Text style={styles.detailRegular}>sec</Text>
+          <Text style={styles.detalColored}>{streak} </Text>
+          <Text style={styles.detailRegular}> days</Text>
         </View>
       </View>
     </View>
@@ -79,5 +75,13 @@ const styles = StyleSheet.create({
   detailRegular: {
     color: 'darkgrey',
   },
+  detailOne: {
+    fontWeight: '500',
+    color: 'red',
+  },
+  detailTwo: {
+    fontWeight: '500',
+    color: 'seagreen',
+  },
 });
-export default TimeAcheivementIconBlock;
+export default StreakAcheivementIconBlock;

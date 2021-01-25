@@ -17,17 +17,8 @@ import {AuthContext} from '../../../Context/AuthContext';
 import LoadingScreen from '../../SplashScreens/Loading';
 import ErrorScreen from '../../SplashScreens/ErrorScreen';
 import {useNavigation} from '@react-navigation/native';
+import userDetails from '../../../Urql_Requests/Querys/UserDetails_Congrats_Profile';
 
-const showUserDetails = ` 
-query($email: String!){
-  user(email: $email){
-    userWatchTime
-    lessonsCompleted
-    selfGuidedCompleted
-    streak
-  }
-}
-`;
 interface CongratScreenProps {}
 
 const CongratScreen: React.FC<CongratScreenProps> = () => {
@@ -41,7 +32,7 @@ const CongratScreen: React.FC<CongratScreenProps> = () => {
   const nav = useNavigation();
 
   const [userInfo, reUser] = useQuery({
-    query: showUserDetails,
+    query: userDetails,
     variables: {
       email: authState.email,
     },
@@ -49,27 +40,17 @@ const CongratScreen: React.FC<CongratScreenProps> = () => {
   });
 
   useEffect(() => {
-    getMinutesFromSeconds();
-    console.log('userInfo:: ', userInfo);
+    if (userInfo?.data?.user?.userWatchTime) {
+      getMinutesFromSeconds(userInfo.data.user.userWatchTime);
+      console.log('userInfo:: ', userInfo);
+    }
     console.log('data: ', data);
-  }, [userInfo.fetching]);
+  }, [userInfo.data, minutes]);
 
   let {data, fetching, error} = userInfo;
 
   if (fetching) return <LoadingScreen />;
   if (error) return <ErrorScreen error={error.message} />;
-
-  function getMinutesFromSeconds() {
-    if (data?.user?.userWatchTime) {
-      let time = data.user.userWatchTime;
-      const minutes = time >= 60000 ? Math.floor(time / 60000) : 0;
-      const y = Math.floor(time - minutes * 60000);
-      const seconds = y / 1000;
-
-      setMinutesCalc(minutes);
-      setRemainingSecondsCalc(seconds);
-    }
-  }
 
   // TODO ADD TIME TO USER DOC
   const handleMarkAsCompleted = () => {
@@ -82,6 +63,15 @@ const CongratScreen: React.FC<CongratScreenProps> = () => {
       .then(() => nav.navigate('Home'))
       .catch((err) => console.log(err));
   };
+
+  function getMinutesFromSeconds(time: number) {
+    //  let time = data.user.userWatchTime;
+    const minutes = time >= 60000 ? Math.floor(time / 60000) : 0;
+    const y = Math.floor(time - minutes * 60000);
+    const seconds = y / 1000;
+    setMinutesCalc(minutes);
+    setRemainingSecondsCalc(seconds);
+  }
 
   return (
     <View style={styles.container}>
