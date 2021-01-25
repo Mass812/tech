@@ -16,6 +16,7 @@ import {useMutation} from 'urql';
 import ErrorScreen from '../SplashScreens/ErrorScreen';
 import {AuthContext} from '../../Context/AuthContext';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import {useNavigation} from '@react-navigation/native';
 
 const height = Dimensions.get('screen').height;
 
@@ -38,6 +39,7 @@ type StateConditions = null | iSignIn;
 
 const LoginScreen: React.FC<LoginScreenProps> = () => {
   const {state, dispatch} = useContext(AuthContext);
+  const nav = useNavigation();
   const [userInput, setUserInput] = useState<StateConditions>(null);
   const [hideSection, setHideSection] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -65,19 +67,23 @@ const LoginScreen: React.FC<LoginScreenProps> = () => {
     if (isValidInput) {
       return;
     } else {
+      // TODO DB FAIL FALLBACK
       signInUser({...userInput})
         .then((data) => {
           console.log('error Data ==> ', data);
-          if (data.data.login === null) {
+          if (data.data.login === null || undefined) {
             setHideSection(true);
             setErrorMessage('Please try again, invalid credentials');
-            Keyboard.dismiss;
-          } else {
+          } else if (data?.data?.login) {
             dispatch({type: 'EMAIL', payload: data.data.login.email});
             dispatch({type: 'TOKEN', payload: data.data.login.token});
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.log(err);
+          nav.navigate('LoginScreen');
+          setErrorMessage('Sorry something went wrong. Please log in again.');
+        });
     }
   };
 

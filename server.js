@@ -1,16 +1,16 @@
 require("dotenv").config()
+
 const express = require("express")
 const { ApolloServer, gql } = require("apollo-server-express")
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcryptjs")
 const AWS = require("aws-sdk")
 
-AWS.config.update({
+let techAppConfig = new AWS.Config()
+
+techAppConfig.update({
   region: "us-east-2",
-  credentials: {
-    accessKeyId: process.env.REACT_APP_DDB_ACCESS,
-    secretAccessKey: process.env.REACT_APP_DDB_SUPER,
-  },
+  endpoint: "hhtp://dynamodb.us-east-2.amazonaws.com",
 })
 
 const db = new AWS.DynamoDB.DocumentClient()

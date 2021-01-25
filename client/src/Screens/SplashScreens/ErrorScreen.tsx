@@ -1,8 +1,9 @@
 import React, {useEffect} from 'react';
 import {View, StyleSheet, Image, Text} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faDizzy} from '@fortawesome/free-solid-svg-icons';
-import {useNavigation} from '@react-navigation/native';
+import {faChevronCircleLeft, faDizzy} from '@fortawesome/free-solid-svg-icons';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 interface ErrorProps {
   error?: string;
@@ -10,10 +11,12 @@ interface ErrorProps {
 
 const ErrorScreen: React.FC<ErrorProps> = ({error}) => {
   const nav = useNavigation();
-
+  const route = useRoute();
   useEffect(() => {
     setTimeout(() => {
-      nav.navigate('Home');
+      if (route.name !== 'Login') {
+        nav.navigate('Home');
+      }
     }, 2500);
   }, []);
 
@@ -29,6 +32,13 @@ const ErrorScreen: React.FC<ErrorProps> = ({error}) => {
         <Text style={styles.text}>Redirecting</Text>
       </View>
       <Text>{error ? error : ''}</Text>
+      <TouchableOpacity>
+        <FontAwesomeIcon icon={faChevronCircleLeft} color={'salmon'} />
+        <Text>
+          {' '}
+          Go Back name: {route.name}, key: {route.key}
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 };
