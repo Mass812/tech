@@ -32,13 +32,10 @@ const ErrorScreen: React.FC<ErrorProps> = ({error}) => {
         <Text style={styles.text}>Redirecting</Text>
       </View>
       <Text>{error ? error : ''}</Text>
-      <TouchableOpacity>
+      {/* <TouchableOpacity>
         <FontAwesomeIcon icon={faChevronCircleLeft} color={'salmon'} />
-        <Text>
-          {' '}
-          Go Back name: {route.name}, key: {route.key}
-        </Text>
-      </TouchableOpacity>
+      
+      </TouchableOpacity> */}
     </View>
   );
 };
