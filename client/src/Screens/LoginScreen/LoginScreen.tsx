@@ -44,11 +44,19 @@ const LoginScreen: React.FC<LoginScreenProps> = () => {
     email: '',
     password: '',
   });
+  const [isDisabled, setIsDisabled] = useState(true);
   const [hideSection, setHideSection] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [returnedData, signInUser] = useMutation(checkUserAndValidity);
 
   const {data, fetching, error} = returnedData;
+
+  useEffect(() => {
+    userInput.email.trim().length === 0 ||
+    userInput.password.trim().length === 0
+      ? setIsDisabled(true)
+      : setIsDisabled(false);
+  }, [userInput.email, userInput.password]);
 
   if (error) return <ErrorScreen error={error.message} />;
 
@@ -62,13 +70,6 @@ const LoginScreen: React.FC<LoginScreenProps> = () => {
     setUserInput({...userInput, password: textLowerCase});
   };
 
-  let isValidInput =
-    userInput.email.trim().length !== undefined &&
-    userInput.password.trim().length !== 0 &&
-    !fetching
-      ? false
-      : true;
-
   const onPress = () => {
     signInUser({...userInput})
       .then((data) => {
@@ -76,6 +77,9 @@ const LoginScreen: React.FC<LoginScreenProps> = () => {
         if (data.data.login === null) {
           setHideSection(true);
           setErrorMessage('Please try again, invalid credentials');
+          setTimeout(() => {
+            setErrorMessage('');
+          }, 2400);
         } else {
           dispatch({type: 'EMAIL', payload: data.data.login.email});
           dispatch({type: 'TOKEN', payload: data.data.login.token});
@@ -98,12 +102,15 @@ const LoginScreen: React.FC<LoginScreenProps> = () => {
             {errorMessage !== '' ? (
               <Text style={styles.errorMessage}>{errorMessage}</Text>
             ) : null}
+            {fetching ? (
+              <Text style={styles.errorMessage}>Checking Database</Text>
+            ) : null}
             <InputBlock
               onChangeEmail={(text: string) => handleOnChangeEmail(text)}
               onChangePassword={(text: string) => handleOnChangePassword(text)}
               onPress={onPress}
               hideSection={hideSection}
-              disabled={isValidInput}
+              disabled={isDisabled}
               onFocusInputOne={() => setHideSection(true)}
               onFoucusInputTwo={() => setHideSection(true)}
               onBlur={() => setHideSection(false)}

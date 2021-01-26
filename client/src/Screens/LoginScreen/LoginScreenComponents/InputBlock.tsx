@@ -56,7 +56,7 @@ const InputBlock: React.FC<InputBlockProps> = ({
           onBlur={() => secondInput.current.focus()}
           returnKeyType={'next'}
           onFocus={onFocusInputOne}
-          autoCompleteType={'email'}
+          autoCorrect={false}
         />
         <TextInput
           ref={secondInput}
@@ -66,7 +66,7 @@ const InputBlock: React.FC<InputBlockProps> = ({
           placeholderTextColor={'black'}
           onFocus={onFoucusInputTwo}
           onBlur={onBlur}
-          autoCompleteType={'password'}
+          autoCorrect={false}
         />
 
         <View>
@@ -77,7 +77,7 @@ const InputBlock: React.FC<InputBlockProps> = ({
             touchSoundDisabled={true}
             onFocus={focusButton}>
             <Text style={styles.buttonText}>
-              {disabled === true ? 'Sign In' : 'Loading'}
+              {disabled === true ? 'Sign In' : 'Next'}
             </Text>
           </TouchableOpacity>
         </View>

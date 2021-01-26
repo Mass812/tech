@@ -4,7 +4,8 @@ AWS.config.update({ region: "us-east-2" })
 const db = new AWS.DynamoDB.DocumentClient()
 
 module.exports = async () => {
-  let baseLink = process.env.REACT_APP_S3
+  let baseLink =
+    "https://elasticbeanstalk-us-east-2-325970805780.s3.us-east-2.amazonaws.com"
   let instructor = "RichardSimmons"
 
   const Params = {

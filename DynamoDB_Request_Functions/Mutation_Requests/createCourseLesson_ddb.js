@@ -10,7 +10,8 @@ module.exports = async () => {
   let weekNumber = "1"
   let courseName = "Cardio Tactics"
 
-  let baseLink = process.env.REACT_APP_S3
+  let baseLink =
+    "https://elasticbeanstalk-us-east-2-325970805780.s3.us-east-2.amazonaws.com"
   let contentUrl = "group_women_jumping_onto_step.mp4"
   let img = "form_focus.jpg"
 

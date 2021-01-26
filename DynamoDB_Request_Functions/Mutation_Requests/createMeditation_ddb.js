@@ -8,7 +8,8 @@ const db = new AWS.DynamoDB.DocumentClient()
 module.exports = async () => {
   let title = "The Wisdom of Sitting"
   let subTitle = "Calm can be created."
-  let Link = process.env.REACT_APP_S3
+  let Link =
+    "https://elasticbeanstalk-us-east-2-325970805780.s3.us-east-2.amazonaws.com"
 
   let url = `${Link}/meditation_wisdom_sitting.mp3`
   let img = `${Link}/meditation_beach.jpg`

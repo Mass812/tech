@@ -6,7 +6,8 @@ const db = new AWS.DynamoDB.DocumentClient()
 
 module.exports = async () => {
   let courseName = "Blitz Energy"
-  let baseLink = process.env.REACT_APP_S3
+  let baseLink =
+    "https://elasticbeanstalk-us-east-2-325970805780.s3.us-east-2.amazonaws.com"
   let contentUrl = "focus_energy_1.mp4"
   let img = "richard_simmons_course_img.png"
   let id = uuidv4()

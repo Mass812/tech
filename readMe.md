@@ -30,6 +30,10 @@ $ npm install
 $ cd ..
 
 - after install completes
+You will need to unSilence lines 9-14 in the server.js file
+and paste in your aws secret and ddb access keys into their
+respective values
+
 
 $ npm run server
 $ cd client
