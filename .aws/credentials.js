@@ -1,2 +1,2 @@
-aws_access_key_id = AWS_ACCESS_KEY_ID
-aws_secret_access_key = AWS_SECRET_ACCESS_KEY
+aws_access_key_id = process.env.REACT_AWS_ACCESS_KEY_ID
+aws_secret_access_key = process.env.REACT_AWS_SECRET_ACCESS_KEY

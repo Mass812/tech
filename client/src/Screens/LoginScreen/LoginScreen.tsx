@@ -31,16 +31,19 @@ mutation ($email: String!, $password: String!) {
 interface LoginScreenProps {}
 
 type iSignIn = {
-  email?: string;
-  password?: string;
+  email: string;
+  password: string;
 };
 
-type StateConditions = null | iSignIn;
+type StateConditions = iSignIn;
 
 const LoginScreen: React.FC<LoginScreenProps> = () => {
   const {state, dispatch} = useContext(AuthContext);
   const nav = useNavigation();
-  const [userInput, setUserInput] = useState<StateConditions>(null);
+  const [userInput, setUserInput] = useState<StateConditions>({
+    email: '',
+    password: '',
+  });
   const [hideSection, setHideSection] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [returnedData, signInUser] = useMutation(checkUserAndValidity);
@@ -60,31 +63,27 @@ const LoginScreen: React.FC<LoginScreenProps> = () => {
   };
 
   let isValidInput =
-    userInput?.email?.trim().length === 0 ||
-    userInput?.password?.trim().length === 0;
+    userInput.email.trim().length !== undefined &&
+    userInput.password.trim().length !== 0 &&
+    !fetching
+      ? true
+      : false;
 
-  const onPress = async () => {
-    if (isValidInput) {
-      return;
-    } else {
-      // TODO DB FAIL FALLBACK
-      signInUser({...userInput})
-        .then((data) => {
-          console.log('error Data ==> ', data);
-          if (data.data.login === null || undefined) {
-            setHideSection(true);
-            setErrorMessage('Please try again, invalid credentials');
-          } else if (data?.data?.login) {
-            dispatch({type: 'EMAIL', payload: data.data.login.email});
-            dispatch({type: 'TOKEN', payload: data.data.login.token});
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          nav.navigate('LoginScreen');
-          setErrorMessage('Sorry something went wrong. Please log in again.');
-        });
-    }
+  const onPress = () => {
+    signInUser({...userInput})
+      .then((data) => {
+        console.log('error Data ==> ', data);
+        if (data.data.login === null) {
+          setHideSection(true);
+          setErrorMessage('Please try again, invalid credentials');
+        } else {
+          dispatch({type: 'EMAIL', payload: data.data.login.email});
+          dispatch({type: 'TOKEN', payload: data.data.login.token});
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (

@@ -6,11 +6,11 @@ const jwt = require("jsonwebtoken")
 const bcrypt = require("bcryptjs")
 const AWS = require("aws-sdk")
 
-let techAppConfig = new AWS.Config()
-
-techAppConfig.update({
+AWS.config.update({
   region: "us-east-2",
-  endpoint: "hhtp://dynamodb.us-east-2.amazonaws.com",
+  endpoint: "http://dynamodb.us-east-2.amazonaws.com",
+  accessKeyId: process.env.REACT_APP_ACCESS_KEY_ID,
+  secretAccessKey: process.env.REACT_APP_DDB_SUPER,
 })
 
 const db = new AWS.DynamoDB.DocumentClient()
