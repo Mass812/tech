@@ -118,7 +118,7 @@ const LoginScreen: React.FC<LoginScreenProps> = () => {
               focusButton={Keyboard.dismiss}
             />
             <Text style={styles.message}>
-              Sign in with user: matt@gmail.com, pw: password
+              SignIn user: matt@gmail.com, pw: password
             </Text>
           </KeyboardAvoidingView>
           <View style={styles.orBlock}>

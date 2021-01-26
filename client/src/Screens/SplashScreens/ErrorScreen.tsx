@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {View, StyleSheet, Image, Text, BackHandler} from 'react-native';
+import {View, StyleSheet, Image, Text} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faChevronCircleLeft, faDizzy} from '@fortawesome/free-solid-svg-icons';
 import {useNavigation, useRoute} from '@react-navigation/native';
