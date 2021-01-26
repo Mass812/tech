@@ -13,10 +13,8 @@ import FabFitIconBlock from './LoginScreenComponents/FabFitIconBlock';
 import InputBlock from './LoginScreenComponents/InputBlock';
 import PayMembershipBlock from './LoginScreenComponents/PayMembershipBlock';
 import {useMutation} from 'urql';
-import ErrorScreen from '../SplashScreens/ErrorScreen';
 import {AuthContext} from '../../Context/AuthContext';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
-import {useNavigation} from '@react-navigation/native';
 
 const height = Dimensions.get('screen').height;
 
@@ -39,7 +37,7 @@ type StateConditions = iSignIn;
 
 const LoginScreen: React.FC<LoginScreenProps> = () => {
   const {state, dispatch} = useContext(AuthContext);
-  const nav = useNavigation();
+
   const [userInput, setUserInput] = useState<StateConditions>({
     email: '',
     password: '',
@@ -47,18 +45,19 @@ const LoginScreen: React.FC<LoginScreenProps> = () => {
   const [isDisabled, setIsDisabled] = useState(true);
   const [hideSection, setHideSection] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+
   const [returnedData, signInUser] = useMutation(checkUserAndValidity);
 
-  const {data, fetching, error} = returnedData;
-
-  useEffect(() => {
+  const checkInputs = () => {
     userInput.email.trim().length === 0 ||
     userInput.password.trim().length === 0
       ? setIsDisabled(true)
       : setIsDisabled(false);
-  }, [userInput.email, userInput.password]);
+  };
 
-  if (error) return <ErrorScreen error={error.message} />;
+  useEffect(() => {
+    checkInputs();
+  }, [userInput.email, userInput.password]);
 
   const handleOnChangeEmail = (text: string) => {
     let textLowerCase = text.trim().toLowerCase();
@@ -74,12 +73,13 @@ const LoginScreen: React.FC<LoginScreenProps> = () => {
     signInUser({...userInput})
       .then((data) => {
         console.log('error Data ==> ', data);
-        if (data.data.login === null) {
+        if (data.error !== undefined) {
+          if (data?.error?.message)
+            setErrorMessage(`${data.error.message}, No internet.`);
+        } else if (data.data.login === null) {
           setHideSection(true);
+
           setErrorMessage('Please try again, invalid credentials');
-          setTimeout(() => {
-            setErrorMessage('');
-          }, 2400);
         } else {
           dispatch({type: 'EMAIL', payload: data.data.login.email});
           dispatch({type: 'TOKEN', payload: data.data.login.token});
@@ -99,12 +99,12 @@ const LoginScreen: React.FC<LoginScreenProps> = () => {
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={styles.container}>
             <FabFitIconBlock />
-            {errorMessage !== '' ? (
-              <Text style={styles.errorMessage}>{errorMessage}</Text>
+            {errorMessage ? (
+              <Text style={styles.errorMessage}>
+                {errorMessage ? errorMessage : null}
+              </Text>
             ) : null}
-            {fetching ? (
-              <Text style={styles.errorMessage}>Checking Database</Text>
-            ) : null}
+
             <InputBlock
               onChangeEmail={(text: string) => handleOnChangeEmail(text)}
               onChangePassword={(text: string) => handleOnChangePassword(text)}

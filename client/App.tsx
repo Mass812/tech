@@ -36,6 +36,7 @@ import {
   authReducer,
   InitialState,
 } from './src/Context/AuthContext';
+import ErrorScreen from './src/Screens/SplashScreens/ErrorScreen';
 const client = createClient({
   url: 'http://localhost:4321/graphql',
 });
@@ -128,6 +129,7 @@ type RootParams = {
     lessonNumber: string;
     weekNumber: string;
   };
+  ErrorScreen: {};
   PauseOptionCard: {};
   Login: {};
 };
@@ -321,6 +323,11 @@ function App() {
                 <Root.Screen
                   name="SelfGuidedVideoScreen"
                   component={SelfGuidedVideoScreen}
+                  options={{headerShown: false}}
+                />
+                <Root.Screen
+                  name="ErrorScreen"
+                  component={ErrorScreen}
                   options={{headerShown: false}}
                 />
               </>

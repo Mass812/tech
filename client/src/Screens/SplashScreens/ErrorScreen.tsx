@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {View, StyleSheet, Image, Text} from 'react-native';
+import {View, StyleSheet, Image, Text, BackHandler} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faChevronCircleLeft, faDizzy} from '@fortawesome/free-solid-svg-icons';
 import {useNavigation, useRoute} from '@react-navigation/native';
@@ -7,16 +7,20 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 
 interface ErrorProps {
   error?: string;
+  routeBackTo?: string;
+  onPress?: () => void;
 }
 
-const ErrorScreen: React.FC<ErrorProps> = ({error}) => {
+const ErrorScreen: React.FC<ErrorProps> = ({
+  error,
+  routeBackTo = 'Home',
+  onPress,
+}) => {
   const nav = useNavigation();
-  const route = useRoute();
+
   useEffect(() => {
     setTimeout(() => {
-      if (route.name !== 'Login') {
-        nav.navigate('Home');
-      }
+      nav.navigate(routeBackTo);
     }, 2500);
   }, []);
 
@@ -32,10 +36,14 @@ const ErrorScreen: React.FC<ErrorProps> = ({error}) => {
         <Text style={styles.text}>Redirecting</Text>
       </View>
       <Text>{error ? error : ''}</Text>
-      {/* <TouchableOpacity>
-        <FontAwesomeIcon icon={faChevronCircleLeft} color={'salmon'} />
-      
-      </TouchableOpacity> */}
+      <Text>Go Back</Text>
+      <TouchableOpacity onPress={onPress}>
+        <FontAwesomeIcon
+          icon={faChevronCircleLeft}
+          color={'salmon'}
+          size={24}
+        />
+      </TouchableOpacity>
     </View>
   );
 };
