@@ -77,7 +77,7 @@ const InputBlock: React.FC<InputBlockProps> = ({
             touchSoundDisabled={true}
             onFocus={focusButton}>
             <Text style={styles.buttonText}>
-              {fetching === true ? 'Sign In' : 'Loading'}
+              {disabled === true ? 'Sign In' : 'Loading'}
             </Text>
           </TouchableOpacity>
         </View>

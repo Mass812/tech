@@ -66,8 +66,8 @@ const LoginScreen: React.FC<LoginScreenProps> = () => {
     userInput.email.trim().length !== undefined &&
     userInput.password.trim().length !== 0 &&
     !fetching
-      ? true
-      : false;
+      ? false
+      : true;
 
   const onPress = () => {
     signInUser({...userInput})
