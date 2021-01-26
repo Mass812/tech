@@ -9,8 +9,8 @@ const AWS = require("aws-sdk")
 AWS.config.update({
   region: "us-east-2",
   endpoint: "http://dynamodb.us-east-2.amazonaws.com",
-  accessKeyId: "AKIAUXZK7YQKJ5BKSE44",
-  secretAccessKey: "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",
+  accessKeyId: process.env.REACT_APP_DDB_ACCESS,
+  secretAccessKey: process.env.REACT_APP_DDB_SUPER,
 })
 
 const db = new AWS.DynamoDB.DocumentClient()
