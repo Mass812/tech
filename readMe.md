@@ -16,16 +16,16 @@ This app was intended to display the same UI and give some of the basic function
 
 ### Notes on Completion & Funcionality
 
-- All tabs and navigation with the exception of Self Guided Lesson Card being displayed prior to video launch
-- Home Tab displays lessons and meditations by popularity
-- Workouts gives the user teh ability to select lesson by category-- Lesson complete / Self Guided incomplete
+- All tabs and navigation with the exception of the component that is immidiately presented when a Self Guided Lesson is selected been completed
+- The Home Screen, after sign in, does display the lessons and meditations by their popularity as in the Fit App.
+- Workouts Screen separates lessons by category. (Lessons complete / Self Guided not completed)
 - Upon completion of a video lesson updates are made to user acheivement stats (userWatchTime, lessonsCompleted)
 - Lesson popularity is updated by any of the following conditions: video is exited via mark completed, quit or completion.
-- Sign on was generic and used only to provide a user token -- app never had a chance to be developed further; to a point where it could be utilized for securing db requests, spotify or anything else that may require credentials.
+- Sign on was generic and used only to provide a user token --this app will need to be developed further; to a point where it can be utilized for securing db requests, spotify or anything else that may require credentials.
 
 ### Context
 
-- Context is utilized for Auth token and email values @ the root App level.
+- Context is utilized for giving the user an Auth token and email values @ the root App level.
 - Context is utilized in Each of the video players.
 
 ### useReducer
@@ -34,7 +34,7 @@ Reducers are used in accompaniment to context in order to manage state where I f
 
 ### DynamoDb Table Design
 
-<img src = "./Dynamo_Schema.png" width="900">
+<img src = "./Dynamo_Schema.png" width="800">
 
 # Installation
 
