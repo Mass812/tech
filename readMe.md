@@ -1,6 +1,6 @@
 ## Fabletics Fit Mimic
 
-This app was intended to display the same UI and give some of the basic functionalities of the FIT app. For this sprint project I felt the Congrats Screen (rendered after video completion) was a good stopping point in that this screen seemed to be the demarcation point between app services [lessons, videos, content] and where the user stats, activity tracking became more of the focus. I felt that continuing beyond the point of the Congrats Screen would procure no further benefit to the purposes of why this app demo was created.
+This app was intended to display the same UI and give some of the basic functionalities of the FIT app. For this sprint project I felt the Congrats Screen (rendered after video completion) was a good stopping point in that this screen seemed to be the demarcation point between app services [lessons; videos; content] and where the user stats, activity and tracking became more of the focus. I felt that continuing beyond the point of the Congrats Screen would procure no further benefit to the purposes of why this app demo was created.
 
 ### Tech Stack
 
