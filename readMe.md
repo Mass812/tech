@@ -1,6 +1,6 @@
 ## Fabletics Fit Mimic
 
-This app was intended to display the same UI and give some of the basic functionalities of the FIT app. For this sprint project I felt the congrats screen (rendered after video completion) was a good stopping point in that that was the demarcation point between app services [lessons, videos, content] and where the user stats, activity tracking became more of the focus. I felt that continuing beyond the point of the Congrats Screen would procure no further benefit to the purposes of why this app demo was created.
+This app was intended to display the same UI and give some of the basic functionalities of the FIT app. For this sprint project I felt the Congrats Screen (rendered after video completion) was a good stopping point in that this screen seemed to be the demarcation point between app services [lessons, videos, content] and where the user stats, activity tracking became more of the focus. I felt that continuing beyond the point of the Congrats Screen would procure no further benefit to the purposes of why this app demo was created.
 
 ### Tech Stack
 
@@ -51,7 +51,7 @@ $ npm install
 $ cd ..
 ```
 
-### After install completes
+After install completes
 
 - You will need to unSilence lines 9-14 in the server.js file and paste in your aws secret and ddb access keys into their respective values
 
@@ -76,9 +76,9 @@ This was a really interesting project to work on. I liked using the tech stack:
 
 - Reverse engineering an app came with some struggles
 
-  - - creating a single table design that would work for this application
-  - - missing something in the app flow, such as a detail or entire component had me back peddling once in a while
-  - - learning while doing is always the best approach but in this case where there were multiple things being learned simultaneiously
+  - creating a single table design that would work for this application
+  - missing something in the app flow, such as a detail or entire component had me back peddling once in a while
+  - learning while doing is always the best approach but in this case where there were multiple things being learned simultaneiously
 
 - personl bio site can be found at:
   https://mattwellman.dev
