@@ -35,7 +35,7 @@ Reducers are used to manage all of the functionality in the Self Guided and Less
 - [Typescript] - javascript more strictly typed
 - [URQL] - client side graphql interface
 
-![Single Table Design] (Dynamo_Schema.png)
+<img src = "./Dynamo_Schema.png">
 
 # Installation
 
