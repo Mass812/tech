@@ -1,11 +1,27 @@
 ## Fabletics Fit Mimic
 
-- personl bio site can be found at:
-  https://mattwellman.dev
+### Site Purpose
 
-## Site Purpose!
+- [App Overview]
+  1] Home Screen: displays lesseons (classes) and meditations by popularity.
+  2] LessonVideoScreen: can take in any child component that will be rendered under the video player.
+  4a] Lessons **_(many)_** are related **_(to)_** Courses **_(one)_**
+  4b] Marking a Lesson as complete or quiting a lesson while paused update lesson popularity.
+  4c] Upon Lesson completion user documents update userWatchTime and the count of Lessons the user has completed.
 
--Demonstrative purposes
+  3] Workouts Screen displays lessons by categories, a tab navigation allows for a division of self guided and class based lessons
+  4]
+  4] Profile Screen displays user acheivements
+
+### Context
+
+Context is utilized for Auth token and email values @ the root level.
+Context is utilized in Each of the video players.
+1] The SelfGuidedVideoScreen plays each segment of its lesson. each segment can be selected, skipped, or replayed
+
+### useReducer
+
+Reducers are used to manage all of the functionality in the Self Guided and Lesson video players.
 
 ### Tech Stack
 
@@ -19,7 +35,9 @@
 - [Typescript] - javascript more strictly typed
 - [URQL] - client side graphql interface
 
-### Installation
+![Single Table Design] (Dynamo_Schema.png)
+
+# Installation
 
 Clone Repo
 
@@ -46,6 +64,7 @@ $ npm run ios
 
 ```
 
-## License
+#Personal Bio
 
-**I am sharing the codebase for display purposes only, it is not to fork or copy.**
+- personl bio site can be found at:
+  https://mattwellman.dev
