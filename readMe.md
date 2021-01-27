@@ -1,6 +1,6 @@
 ## Fabletics Fit Mimic
 
-This app was intended to display the same UI and give some of the basic functionalities of the FIT app.
+This app was intended to display the same UI and give some of the basic functionalities of the FIT app. For this sprint project I felt the congrats screen (rendered after video completion) was a good stopping point in that that was the demarcation point between app services [lessons, videos, content] and where the user stats, activity tracking became more of the focus. I felt that continuing beyond the point of the Congrats Screen would procure no further benefit to the purposes of why this app demo was created.
 
 ### Tech Stack
 
@@ -51,7 +51,7 @@ $ npm install
 $ cd ..
 ```
 
-## after install completes
+### After install completes
 
 - You will need to unSilence lines 9-14 in the server.js file and paste in your aws secret and ddb access keys into their respective values
 
