@@ -1,7 +1,10 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useContext, useState} from 'react';
 import {SgVideoStore} from '../../../Context/SgVideoContext';
+import {AuthContext} from '../../../Context/AuthContext';
 import PauseOptionMenuCard from '../../../ReusableComponents/PauseOptionMenu/PauseOptionMenu';
+import {useMutation} from 'urql';
+import UpdateUserDocAttribute from '../../../Urql_Requests/Mutations/UpdateUserDocAttribute';
 
 interface PauseOptionCardProps {
   restartTheLesson?: () => void | any;
@@ -10,7 +13,10 @@ interface PauseOptionCardProps {
 const PauseOptionCard: React.FC<PauseOptionCardProps> = ({
   restartTheLesson,
 }) => {
-  const {state, dispatch} = useContext(SgVideoStore);
+  const {state: sgState, dispatch: sgDispatch} = useContext(SgVideoStore);
+  const {state: authState, dispatch: authDispatch} = useContext(SgVideoStore);
+  const [data, updateUserDocAttribute] = useMutation(UpdateUserDocAttribute);
+
   const [showSecondCard, setShowSecondCard] = useState<boolean>(false);
 
   let nav = useNavigation();
@@ -19,20 +25,49 @@ const PauseOptionCard: React.FC<PauseOptionCardProps> = ({
     setShowSecondCard(true);
   };
   const handleResumeLesson = () => {
-    dispatch({type: 'PAUSED', payload: false});
+    sgDispatch({type: 'PAUSED', payload: false});
   };
 
   const handleMarkAsCompleted = () => {
-    console.log('do something');
+    // self guided update popularity
+    // add user time and lesson completed
+
+    sgDispatch({type: 'LOADING', payload: true});
+    let userWatchTime = sgState.currentTime * 1000;
+
+    sgDispatch({type: 'USER_WATCH_TIME', payload: userWatchTime});
+
+    let addLessonCompletedCountTOUserDoc = updateUserDocAttribute({
+      email: authState.email,
+      attr: 'selfGuidedCompleted',
+      value: 1,
+    }).catch((err) => console.log(err));
+
+    let addUserWatchTimeToUserDoc = updateUserDocAttribute({
+      email: authState.email,
+      attr: 'userWatchTime',
+      value: sgState.playableDuration * 1000,
+    }).catch((err) => console.log(err));
+
+    try {
+      return [addLessonCompletedCountTOUserDoc, addUserWatchTimeToUserDoc];
+    } catch (err) {
+      console.log(err);
+    } finally {
+      sgDispatch({type: 'LOADING', payload: false});
+      // TODO congrats screen
+      nav.navigate('Home');
+      // sgDispatch({type: 'LESSON_COMPLETED', payload: true});
+    }
   };
 
   return (
     <PauseOptionMenuCard
       showSecondCard={showSecondCard}
-      cardOneQuestion={state.title}
-      cardOneSubQuestionLeft={`${state.totalPlayerTimeAsString}`}
-      cardOneSubQuestionRight={`${state.sectionNumber + 1} / ${
-        state.exerciseSections.length
+      cardOneQuestion={sgState.title}
+      cardOneSubQuestionLeft={`${sgState.totalPlayerTimeAsString}`}
+      cardOneSubQuestionRight={`${sgState.sectionNumber + 1} / ${
+        sgState.exerciseSections.length
       } `}
       cardOneButtonOneText={`Restart Workout`}
       cardOneButtonOneOnPress={restartTheLesson}
@@ -41,7 +76,7 @@ const PauseOptionCard: React.FC<PauseOptionCardProps> = ({
       cardOneButtonThreeText={'Resume Lesson'}
       cardOneButtonThreeOnPress={handleResumeLesson}
       cardTwoQuestion={'How do you want to end your workout?'}
-      cardTwoSubQuestionLeft={`${state.timeRemainingAsString.substring(
+      cardTwoSubQuestionLeft={`${sgState.timeRemainingAsString.substring(
         0,
         5,
       )} Remaining`}
@@ -49,7 +84,7 @@ const PauseOptionCard: React.FC<PauseOptionCardProps> = ({
       cardTwoButtonOneOnPress={handleMarkAsCompleted}
       cardTwoButtonTwoText={'Quit Workout'}
       cardTwoButtonTwoOnPress={() => nav.navigate('Home')}
-      onPressHaze={() => dispatch({type: 'PAUSED', payload: !state.paused})}
+      onPressHaze={() => sgDispatch({type: 'PAUSED', payload: !sgState.paused})}
     />
   );
 };

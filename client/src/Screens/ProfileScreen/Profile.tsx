@@ -20,14 +20,13 @@ const Profile: React.FC<ProfileProps> = () => {
   const [userInfo, refetchUserInfo] = useQuery({
     query: userDetails,
     variables: {email: state.email},
+    requestPolicy: 'network-only',
   });
 
   useEffect(() => {
     if (userInfo?.data?.user?.userWatchTime) {
       getMinutesFromSeconds(userInfo.data.user.userWatchTime);
-      console.log('userInfo:: ', userInfo);
     }
-    console.log('data: ', data);
   }, [userInfo.data, minutes]);
 
   let {data, fetching, error} = userInfo;
@@ -40,7 +39,6 @@ const Profile: React.FC<ProfileProps> = () => {
   };
 
   function getMinutesFromSeconds(time: number) {
-    //  let time = data.user.userWatchTime;
     const minutes = time >= 60000 ? Math.floor(time / 60000) : 0;
     const y = Math.floor(time - minutes * 60000);
     const seconds = y / 1000;

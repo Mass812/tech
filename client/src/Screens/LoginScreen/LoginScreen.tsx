@@ -72,7 +72,6 @@ const LoginScreen: React.FC<LoginScreenProps> = () => {
   const onPress = () => {
     signInUser({...userInput})
       .then((data) => {
-        console.log('error Data ==> ', data);
         if (data.error !== undefined) {
           if (data?.error?.message)
             setErrorMessage(`${data.error.message}, No internet.`);

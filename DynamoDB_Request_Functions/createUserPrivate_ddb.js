@@ -1,7 +1,7 @@
-const AWS = require("aws-sdk");
-AWS.config.update({ region: "us-east-2" });
+const AWS = require("aws-sdk")
+AWS.config.update({ region: "us-east-2" })
 
-const db = new AWS.DynamoDB.DocumentClient();
+const db = new AWS.DynamoDB.DocumentClient()
 
 const createItem = async () => {
   const Params = {
@@ -27,13 +27,12 @@ const createItem = async () => {
         zipCode: 47129,
       },
     },
-  };
+  }
 
   try {
-    const data = db.put(Params).promise();
-    console.log(data);
-    return data;
+    const data = db.put(Params).promise()
+    return data
   } catch (err) {
-    console.log("Oops there was an err ", err);
+    console.log("Oops there was an err ", err)
   }
-};
+}

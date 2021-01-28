@@ -10,7 +10,6 @@ const InstructorOutfitBlock: React.FC<InstructorOutfitBlockProps> = () => {
 
   let name = state.instructor.split(' ')[0];
   let capitalizedName = name.toUpperCase();
-  console.log('NAME: ', name);
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{capitalizedName}'S OUTFIT</Text>

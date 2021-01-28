@@ -42,9 +42,7 @@ const CongratScreen: React.FC<CongratScreenProps> = () => {
   useEffect(() => {
     if (userInfo?.data?.user?.userWatchTime) {
       getMinutesFromSeconds(userInfo.data.user.userWatchTime);
-      console.log('userInfo:: ', userInfo);
     }
-    console.log('data: ', data);
   }, [userInfo.data, minutes]);
 
   let {data, fetching, error} = userInfo;

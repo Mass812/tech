@@ -1,7 +1,11 @@
+import {AuthContext} from '../../../Context/AuthContext';
 import {SgVideoStore} from '../../../Context/SgVideoContext';
 import Video from 'react-native-video';
 import React, {useContext, useRef, useEffect, useState} from 'react';
 import {StyleSheet, Dimensions, Text, View} from 'react-native';
+import {useMutation} from 'urql';
+import UpdateUserDocAttribute from '../../../Urql_Requests/Mutations/UpdateUserDocAttribute';
+import UpdateSelfGuidedPopularity from '../../../Urql_Requests/Mutations/UpdateSelfGuidedPopularity';
 import {useNavigation} from '@react-navigation/native';
 import VideoControls from './SelfGuidedVideoIconOverlay';
 import PauseOptionCard from './PauseOptionCard';
@@ -18,28 +22,59 @@ interface VideoPlayerPortraitWindowProps {
 const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
   children,
 }) => {
-  let {state, dispatch} = useContext(SgVideoStore);
-  const [hidePauseMenu, setHidePauseMenu] = useState(state.paused);
+  let {state: sgState, dispatch: sgDispatch} = useContext(SgVideoStore);
+  let {state: authState, dispatch: authDispatch} = useContext(AuthContext);
+  const [hidePauseMenu, setHidePauseMenu] = useState(sgState.paused);
+  let [data, updateUserDocAttribute] = useMutation(UpdateUserDocAttribute);
+  let [sgPopData, updateSelfGuidedPopularity] = useMutation(
+    UpdateSelfGuidedPopularity,
+  );
   let videoRef = useRef<HTMLElement | any>(null);
 
   const nav = useNavigation();
 
-  const onEnd = () => {
-    let cumulativeTime = (state.userWatchTime + state.currentTime) / 1000;
+  const onEnd = async () => {
+    let cumulativeTime = sgState.userWatchTime + sgState.currentTime;
 
-    if (state.sectionNumber + 1 === state.exerciseSections.length) {
-      dispatch({type: 'USER_WATCH_TIME', payload: cumulativeTime});
-      // TODO congrats screen
-      nav.navigate('Home');
+    if (sgState.sectionNumber + 1 === sgState.exerciseSections.length) {
+      sgDispatch({type: 'USER_WATCH_TIME', payload: cumulativeTime});
+      sgDispatch({type: 'LOADING', payload: true});
+      let cumulativeInMs = Math.floor(cumulativeTime) * 1000;
+
+      try {
+        updateSelfGuidedPopularity({
+          id: sgState.id,
+        });
+        let addUserWatchTimeToUserDoc = await updateUserDocAttribute({
+          email: authState.email,
+          attr: 'userWatchTime',
+          value: cumulativeInMs,
+        }).catch((err) => console.log(err));
+
+        let addLessonCompletedCountTOUserDoc = await updateUserDocAttribute({
+          email: authState.email,
+          attr: 'selfGuidedCompleted',
+          value: 1,
+        }).catch((err) => console.log(err));
+        return [addUserWatchTimeToUserDoc, addLessonCompletedCountTOUserDoc];
+      } catch (err) {
+        console.log(err);
+        nav.navigate('Home');
+      } finally {
+        sgDispatch({type: 'LOADING', payload: false});
+        nav.navigate('Home');
+        // sgDispatch({type: 'LESSON_COMPLETED', payload: true});
+      }
+      // end of condition
     } else {
-      dispatch({type: 'USER_WATCH_TIME', payload: cumulativeTime});
-      let next = state.sectionNumber + 1;
+      sgDispatch({type: 'USER_WATCH_TIME', payload: cumulativeTime});
+      let next = sgState.sectionNumber + 1;
 
-      dispatch({
+      sgDispatch({
         type: 'VIDEO_PLAYING',
-        payload: state.exerciseSections[next],
+        payload: sgState.exerciseSections[next],
       });
-      dispatch({
+      sgDispatch({
         type: 'SECTION_NUMBER',
         payload: next,
       });
@@ -47,8 +82,8 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
   };
 
   const handleOnLoad = () => {
-    dispatch({type: 'LOADING', payload: false});
-    dispatch({type: 'BUFFERING', payload: false});
+    sgDispatch({type: 'LOADING', payload: false});
+    sgDispatch({type: 'BUFFERING', payload: false});
   };
 
   const getMinutesFromSeconds = (time: number) => {
@@ -60,27 +95,27 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
   };
 
   const onProgress = (data: iPlaybackShape) => {
-    if (!state.loading && !state.paused) {
-      dispatch({
+    if (!sgState.loading && !sgState.paused) {
+      sgDispatch({
         type: 'CURRENT_TIME',
         payload: data.currentTime,
       });
-      dispatch({
+      sgDispatch({
         type: 'PLAYABLE_DURATION',
         payload: data.seekableDuration,
       });
-      dispatch({
+      sgDispatch({
         type: 'TOTAL_PLAYER_TIME_AS_STRING',
-        payload: getMinutesFromSeconds(state.playableDuration),
+        payload: getMinutesFromSeconds(sgState.playableDuration),
       });
-      dispatch({
+      sgDispatch({
         type: 'CURRENT_PLAYER_TIME_AS_STRING',
-        payload: getMinutesFromSeconds(state.currentTime),
+        payload: getMinutesFromSeconds(sgState.currentTime),
       });
 
-      let number = state.playableDuration - state.currentTime;
+      let number = sgState.playableDuration - sgState.currentTime;
 
-      dispatch({
+      sgDispatch({
         type: 'TIME_REMAINING_AS_STRING',
         payload: getMinutesFromSeconds(number),
       });
@@ -88,7 +123,7 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
   };
 
   const restartTheLesson = () => {
-    dispatch({type: 'Paused', paylaod: false});
+    sgDispatch({type: 'Paused', paylaod: false});
     videoRef.current.seek(0);
     setHidePauseMenu(!hidePauseMenu);
   };
@@ -96,15 +131,15 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
   let displayThisVideo = (
     <Video
       source={{
-        uri: state.videoPlaying,
+        uri: sgState.videoPlaying,
       }}
-      onLoadStart={() => dispatch({type: 'LOADING', payload: true})}
+      onLoadStart={() => sgDispatch({type: 'LOADING', payload: true})}
       onLoad={handleOnLoad}
       onEnd={onEnd}
-      // onBuffer={() => dispatch({type: 'BUFFERING', payload: true})}
+      // onBuffer={() => sgDispatch({type: 'BUFFERING', payload: true})}
       onError={() => console.log('error')}
       style={styles.videoPortrait}
-      paused={state.paused}
+      paused={sgState.paused}
       fullscreen={false}
       fullscreenOrientation={'portrait'}
       ref={(video) => (videoRef.current = video)}
@@ -122,7 +157,9 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
       </View>
       <TitleBannerUnderVideo />
       <View style={styles.componentArea}>{children}</View>
-      {state.paused && <PauseOptionCard restartTheLesson={restartTheLesson} />}
+      {sgState.paused && (
+        <PauseOptionCard restartTheLesson={restartTheLesson} />
+      )}
     </View>
   );
 };

@@ -8,8 +8,7 @@ import PauseOptionCard from './PauseOptionCard';
 import TitleBannerUnderVideo from './LessonTitleBannerUnderVideo';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useMutation} from 'urql';
-import progressTime from '../../../Urql_Requests/Mutations/UpdateProgressValue';
-
+import UpdateUserDocAttribute from '../../../Urql_Requests/Mutations/UpdateUserDocAttribute';
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
@@ -30,7 +29,7 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
   let {state: authState, dispatch: authDispatch} = useContext(AuthContext);
   const [hidePauseMenu, setHidePauseMenu] = useState(videoState.paused);
   let videoRef = useRef<HTMLElement | any>(null);
-  const [data, addTimeToProgress] = useMutation(progressTime);
+  const [data, updateUserDocAttribute] = useMutation(UpdateUserDocAttribute);
 
   const handleOnLoad = () => {
     videoDispatch({type: 'LOADING', payload: false});
@@ -91,25 +90,26 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
     videoDispatch({type: 'LOADING', payload: true});
   };
 
+  let userWatchTimeCalcMs = Math.floor(videoState.playableDuration) * 1000;
+
   const onEnd = async () => {
     videoDispatch({type: 'LOADING', payload: true});
     let userWatchTime = videoState.currentTime * 1000;
 
     videoDispatch({type: 'USER_WATCH_TIME', payload: userWatchTime});
 
-    let addLessonCompletedCountTOUserDoc = await addTimeToProgress({
-      email: authState.email,
-      attr: 'lessonsCompleted',
-      value: 1,
-    }).catch((err) => console.log(err));
-
-    let addUserWatchTimeToUserDoc = await addTimeToProgress({
-      email: authState.email,
-      attr: 'userWatchTime',
-      value: videoState.playableDuration * 1000,
-    }).catch((err) => console.log(err));
-
     try {
+      let addUserWatchTimeToUserDoc = await updateUserDocAttribute({
+        email: authState.email,
+        attr: 'userWatchTime',
+        value: userWatchTimeCalcMs,
+      }).catch((err) => console.log(err));
+
+      let addLessonCompletedCountTOUserDoc = await updateUserDocAttribute({
+        email: authState.email,
+        attr: 'lessonsCompleted',
+        value: 1,
+      }).catch((err) => console.log(err));
       return [addLessonCompletedCountTOUserDoc, addUserWatchTimeToUserDoc];
     } catch (err) {
       console.log(err);

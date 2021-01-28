@@ -35,7 +35,7 @@ const PauseOptionCard: React.FC<PauseOptionCardProps> = ({
       courseName,
       weekNumber,
       lessonNumber,
-    }).then(() => console.log(data, 'fired off mutation'));
+    }).catch((err) => console.log(data, 'fired off mutation', err));
   };
 
   const handleJustQuit = () => {
@@ -44,7 +44,9 @@ const PauseOptionCard: React.FC<PauseOptionCardProps> = ({
       courseName,
       weekNumber,
       lessonNumber,
-    }).then(() => nav.navigate('Home'));
+    })
+      .catch((err) => console.log(err))
+      .then(() => nav.navigate('Home'));
   };
 
   return (

@@ -54,8 +54,6 @@ const ProgramDetail: React.FC<ProgramDetailProps> = () => {
     });
   };
 
-  console.log('desired state attribute: ', showThis);
-
   const renderItem = ({item}: {item: LessonProps}) => {
     const {
       img,
@@ -76,7 +74,6 @@ const ProgramDetail: React.FC<ProgramDetailProps> = () => {
         length={length}
         wideDimension={true}
         id={id}
-        //   onPress={() => console.log('uh Oh')}
         onPress={(e: EventTarget) =>
           onPress(e, courseName, instructor, weekNumber, lessonNumber)
         }

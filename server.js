@@ -55,6 +55,7 @@ const createMeditation_ddb = require("./DynamoDB_Request_Functions/Mutation_Requ
 const createSelfGuidedLessonSection_ddb = require("./DynamoDB_Request_Functions/Mutation_Requests/createSelfGuidedLessonVideoSection_ddb")
 const updateLessonPopularity_ddb = require("./DynamoDB_Request_Functions/Mutation_Requests/updateLessonPopularity_ddb")
 const updateUserDocValues = require("./DynamoDB_Request_Functions/Mutation_Requests/updateUserDocValues")
+const UpdateSelfGuidedPoplarity = require("./DynamoDB_Request_Functions/Mutation_Requests/UpdateSelfGuidedPopularity")
 
 const Query = gql`
   type Query {
@@ -94,8 +95,6 @@ const Query = gql`
     completedSelfGuided: [String]
     created: String
     phone: String
-    weeklyInDependentWorkouts: Int
-    weeklyGuidedWorkouts: Int
     coursesCompleted: Int
     lessonsCompleted: Int
     selfGuidedCompleted: Int
@@ -279,6 +278,7 @@ const Mutation = gql`
       weekNumber: String!
       lessonNumber: String!
     ): Lesson
+    updateSelfGuidedPopularity(id: String): SelfGuided
     login(email: String!, password: String!): Login
     updateProgressValue(email: String!, attr: String!, value: Int!): Progress
   }
@@ -408,6 +408,7 @@ let resolvers = {
         console.log(err)
       }
     },
+
     updateProgressValue: async (_, args) => {
       return updateUserDocValues(args)
     },
@@ -431,6 +432,9 @@ let resolvers = {
     },
     updateLessonPopularity: async (_, args) => {
       return updateLessonPopularity_ddb(args)
+    },
+    updateSelfGuidedPopularity: async (_, args) => {
+      UpdateSelfGuidedPoplarity(args)
     },
   },
   Course: {
