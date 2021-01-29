@@ -33,6 +33,15 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
 
   const nav = useNavigation();
 
+  const onLoadStart = () => {
+    // if (sgState.exerciseSections.length < 1) {
+    //   sgDispatch({
+    //     type: 'VIDEO_PLAYING',
+    //     payload: sgState.exerciseSections[0],
+    //   });
+    // }
+  };
+
   const onEnd = async () => {
     let cumulativeTime = sgState.userWatchTime + sgState.currentTime;
 
@@ -56,6 +65,7 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
           attr: 'selfGuidedCompleted',
           value: 1,
         }).catch((err) => console.log(err));
+
         return [addUserWatchTimeToUserDoc, addLessonCompletedCountTOUserDoc];
       } catch (err) {
         console.log(err);
@@ -130,10 +140,8 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
 
   let displayThisVideo = (
     <Video
-      source={{
-        uri: sgState.videoPlaying,
-      }}
-      onLoadStart={() => sgDispatch({type: 'LOADING', payload: true})}
+      source={{uri: sgState.videoPlaying}}
+      onLoadStart={onLoadStart}
       onLoad={handleOnLoad}
       onEnd={onEnd}
       // onBuffer={() => sgDispatch({type: 'BUFFERING', payload: true})}
@@ -152,7 +160,7 @@ const VideoPlayerPortraitWindow: React.FC<VideoPlayerPortraitWindowProps> = ({
   return (
     <View style={styles.wholePage}>
       <View style={styles.videoArea}>
-        {displayThisVideo}
+        {sgState.videoPlaying ? displayThisVideo : null}
         <VideoControls />
       </View>
       <TitleBannerUnderVideo />

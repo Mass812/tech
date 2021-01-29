@@ -1,6 +1,7 @@
 import React, {useRef} from 'react';
 import {View, StyleSheet, Text, Dimensions} from 'react-native';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
+import LoadingScreen from '../../SplashScreens/Loading';
 
 const width = Dimensions.get('screen').width;
 
@@ -70,16 +71,27 @@ const InputBlock: React.FC<InputBlockProps> = ({
         />
 
         <View>
-          <TouchableOpacity
-            style={styles.buttonPink}
-            onPress={onPress}
-            disabled={disabled}
-            touchSoundDisabled={true}
-            onFocus={focusButton}>
-            <Text style={styles.buttonText}>
-              {disabled === true ? 'Sign In' : 'Next'}
-            </Text>
-          </TouchableOpacity>
+          {!fetching ? (
+            <TouchableOpacity
+              style={styles.buttonPink}
+              onPress={onPress}
+              disabled={disabled}
+              touchSoundDisabled={true}
+              onFocus={focusButton}>
+              <Text style={styles.buttonText}>
+                {disabled ? 'Sign In' : 'Next'}
+              </Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              style={styles.buttonPink}
+              onPress={onPress}
+              disabled={disabled}
+              touchSoundDisabled={true}
+              onFocus={focusButton}>
+              <Text style={styles.buttonText}>loading...</Text>
+            </TouchableOpacity>
+          )}
         </View>
         <Text style={styles.forgotText}>Forgot Password?</Text>
       </View>

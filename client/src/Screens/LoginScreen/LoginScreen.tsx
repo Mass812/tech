@@ -45,6 +45,7 @@ const LoginScreen: React.FC<LoginScreenProps> = () => {
   const [isDisabled, setIsDisabled] = useState(true);
   const [hideSection, setHideSection] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [fetching, setFetching] = useState(false);
 
   const [returnedData, signInUser] = useMutation(checkUserAndValidity);
 
@@ -70,21 +71,26 @@ const LoginScreen: React.FC<LoginScreenProps> = () => {
   };
 
   const onPress = () => {
+    setFetching(true);
     signInUser({...userInput})
       .then((data) => {
         if (data.error !== undefined) {
           if (data?.error?.message)
             setErrorMessage(`${data.error.message}, No internet.`);
+          setFetching(false);
         } else if (data.data.login === null) {
           setHideSection(true);
-
           setErrorMessage('Please try again, invalid credentials');
+          setFetching(false);
         } else {
+          setFetching(false);
           dispatch({type: 'EMAIL', payload: data.data.login.email});
           dispatch({type: 'TOKEN', payload: data.data.login.token});
+          console.log('got token');
         }
       })
       .catch((err) => {
+        setFetching(false);
         console.log(err);
       });
   };
@@ -113,7 +119,7 @@ const LoginScreen: React.FC<LoginScreenProps> = () => {
               onFocusInputOne={() => setHideSection(true)}
               onFoucusInputTwo={() => setHideSection(true)}
               onBlur={() => setHideSection(false)}
-              fetching={true}
+              fetching={fetching}
               focusButton={Keyboard.dismiss}
             />
             <Text style={styles.message}>
