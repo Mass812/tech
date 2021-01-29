@@ -89,7 +89,7 @@ const MeditationPlayer: React.FC<MeditationPlayerProps> = () => {
           value={progressData.currentTime}
           minimumValue={0}
           maximumValue={progressData.playableDuration}
-          minimumTrackTintColor={'#689493'}
+          minimumTrackTintColor={'salmon'}
           maximumTrackTintColor={'#FFFFFF'}
           step={1}
           thumbTintColor={'rgba(28, 158, 155, 0.0)'}

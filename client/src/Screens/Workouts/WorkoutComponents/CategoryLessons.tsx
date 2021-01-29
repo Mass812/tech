@@ -40,7 +40,6 @@ const WorkoutCard: React.FC<WorkoutCardProps> = () => {
   const renderItem = ({item}: {item: Category}) => {
     return (
       <TouchableOpacity
-        key={item.id}
         onPress={() =>
           nav.navigate('LessonDetail', {
             courseName: item.courseName,
