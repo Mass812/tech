@@ -2,6 +2,8 @@ import React, {useContext, useState, useEffect} from 'react';
 import {useQuery} from 'urql';
 import {View, StyleSheet, Text} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
+
 import AcheivementBanner from './ProfileComponents/AcheivementBanner';
 import ProfileHeaderBanner from './ProfileComponents/ProfileHeaderBanner';
 import RecentlyDoneBanner from './ProfileComponents/RecentlyDoneBanner';
@@ -16,12 +18,21 @@ const Profile: React.FC<ProfileProps> = () => {
   const {state, dispatch} = useContext(AuthContext);
   const [minutes, setMinutesCalc] = useState<number>(0);
   const [seconds, setRemainingSecondsCalc] = useState<number>(0);
+  const nav = useNavigation();
 
   const [userInfo, refetchUserInfo] = useQuery({
     query: userDetails,
     variables: {email: state.email},
-    requestPolicy: 'network-only',
+    requestPolicy: 'cache-and-network',
   });
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const unsubscribe = nav.addListener('focus', () => refetchUserInfo());
+
+      return () => unsubscribe();
+    }, []),
+  );
 
   useEffect(() => {
     if (userInfo?.data?.user?.userWatchTime) {

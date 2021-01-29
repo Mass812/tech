@@ -28,6 +28,7 @@
     "graphql-tools": "^4.0.8",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.20",
+    "subscriptions-transport-ws": "^0.9.18",
     "urql": "^1.11.4",
     "uuid": "^8.3.2"
   },
