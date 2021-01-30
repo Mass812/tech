@@ -85,8 +85,6 @@ const InputBlock: React.FC<InputBlockProps> = ({
           ) : (
             <TouchableOpacity
               style={styles.buttonPink}
-              onPress={onPress}
-              disabled={disabled}
               touchSoundDisabled={true}
               onFocus={focusButton}>
               <Text style={styles.buttonText}>loading...</Text>

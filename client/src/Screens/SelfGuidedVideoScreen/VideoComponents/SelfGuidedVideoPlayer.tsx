@@ -1,8 +1,8 @@
 import {AuthContext} from '../../../Context/AuthContext';
 import {SgVideoStore} from '../../../Context/SgVideoContext';
 import Video from 'react-native-video';
-import React, {useContext, useRef, useEffect, useState} from 'react';
-import {StyleSheet, Dimensions, Text, View} from 'react-native';
+import React, {useContext, useRef, useState} from 'react';
+import {StyleSheet, Dimensions, View} from 'react-native';
 import {useMutation} from 'urql';
 import UpdateUserDocAttribute from '../../../Urql_Requests/Mutations/UpdateUserDocAttribute';
 import UpdateSelfGuidedPopularity from '../../../Urql_Requests/Mutations/UpdateSelfGuidedPopularity';

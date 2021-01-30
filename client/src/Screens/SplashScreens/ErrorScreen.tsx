@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {View, StyleSheet, Image, Text} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faChevronCircleLeft, faDizzy} from '@fortawesome/free-solid-svg-icons';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 interface ErrorProps {

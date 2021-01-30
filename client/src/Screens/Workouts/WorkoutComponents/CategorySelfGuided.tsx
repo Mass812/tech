@@ -11,7 +11,7 @@ import {
 import {useQuery} from 'urql';
 import LoadingScreen from '../../SplashScreens/Loading';
 import ErrorScreen from '../../SplashScreens/ErrorScreen';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import SelfGuidedCardMini from './SelfGuidedCardMini';
 import GetAllSelfGuided from '../../../Urql_Requests/Querys/GetAllSelfGuided_CategorySelfGuided';
 import {SelfGuidedCategory} from '../../../Interfaces/WorkoutScreenInterfaces';

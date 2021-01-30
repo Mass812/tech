@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faTimesCircle, faMusic} from '@fortawesome/free-solid-svg-icons';
-import {useNavigation, useRoute} from '@react-navigation/native';
 import {SgVideoStore} from '../../../Context/SgVideoContext';
 
 const width = Dimensions.get('screen').width;

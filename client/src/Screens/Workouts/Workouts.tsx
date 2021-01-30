@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useState} from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import React from 'react';
+import {View, StyleSheet} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 
 import LessonThumbnail from './WorkoutComponents/LessonThumbNail';
@@ -16,60 +16,26 @@ const CategoryLessons: React.FC<CategoryLessonsProps> = ({text}) => {
     <ScrollView>
       <>
         <View style={styles.container}>
-          <>
-            {/* <LessonThumbnail
-            text={'Barre'}
-            onPress={() => nav.navigate('CategoryLessons', {category: 'Barre'})}
-          /> */}
-            <LessonThumbnail
-              text={'Cardio'}
-              onPress={() =>
-                nav.navigate('CategoryLessons', {category: 'Cardio'})
-              }
-            />
-            {/* <LessonThumbnail
-            text={'Dance'}
-            onPress={() => nav.navigate('CategoryLessons', {category: 'Dance'})}
-          /> */}
-            <LessonThumbnail
-              text={'HIIT'}
-              onPress={() =>
-                nav.navigate('CategoryLessons', {category: 'HIIT'})
-              }
-            />
-            <LessonThumbnail
-              text={'Meditations'}
-              onPress={() => nav.navigate('Meditation')}
-            />
-            <LessonThumbnail
-              text={'Pilates'}
-              onPress={() =>
-                nav.navigate('CategoryLessons', {category: 'Pilates'})
-              }
-            />
-            {/* <LessonThumbnail
-            text={'Recovery'}
+          <LessonThumbnail
+            text={'Cardio'}
             onPress={() =>
-              nav.navigate('CategoryLessons', {category: 'Recovery'})
+              nav.navigate('CategoryLessons', {category: 'Cardio'})
             }
           />
           <LessonThumbnail
-            text={'Strength'}
-            onPress={() =>
-              nav.navigate('CategoryLessons', {category: 'Strength'})
-            }
+            text={'HIIT'}
+            onPress={() => nav.navigate('CategoryLessons', {category: 'HIIT'})}
           />
           <LessonThumbnail
-            text={'Toning'}
-            onPress={() =>
-              nav.navigate('CategoryLessons', {category: 'Toning'})
-            }
+            text={'Meditations'}
+            onPress={() => nav.navigate('Meditation')}
           />
           <LessonThumbnail
-            text={'Yoga'}
-            onPress={() => nav.navigate('CategoryLessons', {category: 'Yoga'})}
-          /> */}
-          </>
+            text={'Pilates'}
+            onPress={() =>
+              nav.navigate('CategoryLessons', {category: 'Pilates'})
+            }
+          />
         </View>
       </>
     </ScrollView>
@@ -96,14 +62,12 @@ const styles = StyleSheet.create({
     paddingRight: 25,
   },
   tabBlock: {
-    //height: 60,
     width: '50%',
     justifyContent: 'center',
     alignItems: 'center',
     margin: 12,
   },
   tabBlockTarget: {
-    //height: 60,
     width: '50%',
     justifyContent: 'center',
     alignItems: 'center',

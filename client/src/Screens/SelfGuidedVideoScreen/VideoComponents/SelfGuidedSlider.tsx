@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext} from 'react';
 import {View, StyleSheet, Dimensions, Text} from 'react-native';
 import Slider from '@react-native-community/slider';
 import {SgVideoStore} from '../../../Context/SgVideoContext';
@@ -7,7 +7,7 @@ const width = Dimensions.get('screen').width;
 interface VideoControlSliderProps {}
 
 const VideoControlSlider: React.FC<VideoControlSliderProps> = () => {
-  let {state, dispatch} = useContext(SgVideoStore);
+  let {state, _dispatch} = useContext(SgVideoStore);
 
   return (
     <>

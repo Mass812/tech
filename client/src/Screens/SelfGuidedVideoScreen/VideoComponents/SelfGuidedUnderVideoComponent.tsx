@@ -1,12 +1,7 @@
-import Slider from '@react-native-community/slider';
 import React, {useContext, useEffect} from 'react';
-import {View, StyleSheet, Dimensions, Text, Image, Button} from 'react-native';
+import {View, StyleSheet, Dimensions, Text} from 'react-native';
 import {SgVideoStore} from '../../../Context/SgVideoContext';
-import {
-  FlatList,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native-gesture-handler';
+import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 import SelfGuidedSlider from './SelfGuidedSlider';
 
 const width = Dimensions.get('window').width;

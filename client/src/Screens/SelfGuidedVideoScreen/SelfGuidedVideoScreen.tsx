@@ -36,7 +36,6 @@ const SgVideoPlayer: React.FC<SgVideoPlayerProps> = () => {
   const {data, fetching, error} = results;
 
   if (fetching) return <LoadingScreen />;
-
   if (error) return <ErrorScreen error={error.message} />;
 
   return (

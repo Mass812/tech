@@ -29,7 +29,7 @@ const Programs: React.FC<ProgramsProps> = () => {
   if (fetching) return <LoadingScreen />;
   if (error) return <ErrorScreen error={error.message} />;
 
-  const sendToLesson = async (e: EventTarget, courseName: string) => {
+  const sendToLesson = (e: EventTarget, courseName: string) => {
     nav.navigate('ProgramDetail', {courseName});
   };
 
