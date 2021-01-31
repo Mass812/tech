@@ -39,6 +39,7 @@
     "react-native-svg": "^12.1.0",
     "react-native-tab-view": "^2.15.2",
     "react-native-video": "^5.1.0-alpha8",
+    "subscriptions-transport-ws": "^0.9.18",
     "urql": "^1.11.4",
     "uuid": "^3.4.0"
   },

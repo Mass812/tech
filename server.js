@@ -1,10 +1,11 @@
 require("dotenv").config()
 
+const AWS = require("aws-sdk")
 const express = require("express")
 const { ApolloServer, gql } = require("apollo-server-express")
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcryptjs")
-const AWS = require("aws-sdk")
+const isAuth = require("./server_isAuth")
 
 AWS.config.update({
   region: "us-east-2",
@@ -20,13 +21,11 @@ const fs = require("fs")
 const path = require("path")
 const { merge } = require("lodash")
 
-//ACCESS PATTERNS
+//ACCESS PATTERNS ,
 //db query calls
-const getUserWorkoutsByCategory = require("./DynamoDB_Request_Functions/Query_Requests/getUserWorkoutsByCategory_ddb")
 const getUserProfile = require("./DynamoDB_Request_Functions/Query_Requests/getUserProfile_ddb")
 const getCoursesByName = require("./DynamoDB_Request_Functions/Query_Requests/getCoursesByName_ddb")
 const getAllCourses = require("./DynamoDB_Request_Functions/Query_Requests/getAllCourses_ddb")
-const getCoursesForCategory = require("./DynamoDB_Request_Functions/Query_Requests/getCoursesForCategory_ddb")
 const getAllLessonsOfACourse_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getAllLessonsOfACourse_ddb")
 const getAllMeditations_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getAllMeditations_ddb")
 const getPopularLessons_ddb = require("./DynamoDB_Request_Functions/Query_Requests/getPopularLessons_ddb")
@@ -45,7 +44,6 @@ const getAllSelfGuided_ddb = require("./DynamoDB_Request_Functions/Query_Request
 //db mutation calls
 const createUser = require("./DynamoDB_Request_Functions/Mutation_Requests/createUser_ddb")
 const createCourse = require("./DynamoDB_Request_Functions/Mutation_Requests/createCourse_ddb")
-const createWorkout = require("./DynamoDB_Request_Functions/Mutation_Requests/createWorkout_ddb")
 const updateUserProfile = require("./DynamoDB_Request_Functions/Mutation_Requests/updateUser_ddb")
 const createCourseLesson = require("./DynamoDB_Request_Functions/Mutation_Requests/createCourseLesson_ddb")
 const createInstructorProfile = require("./DynamoDB_Request_Functions/Mutation_Requests/createInstructorProfile_ddb")
@@ -287,6 +285,7 @@ const Mutation = gql`
     email: String
     password: String
     token: String
+    membershipStatus: Boolean
   }
 
   type Progress {
@@ -396,12 +395,15 @@ let resolvers = {
         const token = jwt.sign(
           {
             userId: discoveredDoc.Item.id,
+            email: discoveredDoc.Item.email,
+            membershipStatus: discoveredDoc.Item.membershipStatus,
           },
-          `${process.env.REACT_APP_DDB_SUPER}`
+          `angerMewiththyWrathAchilles`
         )
 
         return {
           email: discoveredDoc.Item.email,
+          membershipStatus: discoveredDoc.Item.membershipStatus,
           token: token,
         }
       } catch (err) {
@@ -438,12 +440,12 @@ let resolvers = {
     },
   },
   Course: {
-    courseRelation: (parent, args) => {
+    courseRelation: (parent) => {
       return getLessonsOfCourses_ddb(parent)
     },
   },
   SelfGuided: {
-    exerciseSections: (parent, args) => {
+    exerciseSections: (parent) => {
       return getVideoSectionsOfSelfGuidedLesson_ddb(parent)
     },
   },
@@ -451,14 +453,29 @@ let resolvers = {
 
 const typeDefs = [Query, Mutation]
 
+// app.use((req, res, next) => {
+//   res.setHeader("Access-Control-Allow-Origin", "*")
+//   res.setHeader("Access-Control-Allow-Methods", "POST,GET,OPTIONS")
+//   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization")
+//   if (res.method === "OPTIONS") {
+//     return res.sendStatus(200)
+//   }
+//   next()
+// })
+
+//app.use(isAuth)
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,
   playground: {
     endpoint: "/graphql",
   },
+  // context(request) {
+  //   console.log("context graphql", request.req)
+  //   return request.rawHeaders
+  // },
 })
-
 const app = express()
 server.applyMiddleware({ app })
 

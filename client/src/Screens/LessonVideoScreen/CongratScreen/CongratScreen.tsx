@@ -39,11 +39,11 @@ const CongratScreen: React.FC<CongratScreenProps> = () => {
     requestPolicy: 'network-only',
   });
 
-  useEffect(() => {
-    if (userInfo?.data?.user?.userWatchTime) {
-      getMinutesFromSeconds(userInfo.data.user.userWatchTime);
-    }
-  }, [userInfo.data, userInfo.fetching]);
+  // useEffect(() => {
+  //   if (userInfo?.data?.user?.userWatchTime) {
+  //     getMinutesFromSeconds(userInfo.data.user.userWatchTime);
+  //   }
+  // }, [userInfo.data, userInfo.fetching]);
 
   let {data, fetching, error} = userInfo;
 
@@ -82,6 +82,9 @@ const CongratScreen: React.FC<CongratScreenProps> = () => {
         lessonsCompleted={data.user.lessonsCompleted}
         selfGuidedCompleted={data.user.selfGuidedCompleted}
         streak={data.user.streak}
+        msToMinSec={() =>
+          getMinutesFromSeconds(userInfo.data.user.userWatchTime)
+        }
       />
       <View></View>
       <InstructorOutfitBlock />

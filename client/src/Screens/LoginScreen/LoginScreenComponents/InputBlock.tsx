@@ -53,7 +53,7 @@ const InputBlock: React.FC<InputBlockProps> = ({
           style={styles.input}
           onChangeText={onChangeEmail}
           placeholder={'Email'}
-          placeholderTextColor={'black'}
+          placeholderTextColor={'#c2c2c2'}
           onBlur={() => secondInput.current.focus()}
           returnKeyType={'next'}
           onFocus={onFocusInputOne}
@@ -64,7 +64,7 @@ const InputBlock: React.FC<InputBlockProps> = ({
           style={styles.input}
           onChangeText={onChangePassword}
           placeholder={'Password'}
-          placeholderTextColor={'black'}
+          placeholderTextColor={'#c2c2c2'}
           onFocus={onFoucusInputTwo}
           onBlur={onBlur}
           autoCorrect={false}

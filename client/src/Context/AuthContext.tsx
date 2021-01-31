@@ -5,6 +5,7 @@ export interface iAuthState {
   token: string | null;
   loading: boolean;
   signedIn: boolean;
+  membershipStatus: boolean;
 }
 
 export const InitialState: iAuthState = {
@@ -12,12 +13,14 @@ export const InitialState: iAuthState = {
   token: null,
   loading: false,
   signedIn: false,
+  membershipStatus: false,
 };
 
 export type Action =
   | {type: 'TOKEN'; payload: string | null}
   | {type: 'EMAIL'; payload: string}
   | {type: 'LOADING'; payload: boolean}
+  | {type: 'MEMBERSHIP_STATUS'; payload: boolean}
   | {type: 'SIGNED_IN'; payload: boolean};
 
 export const authReducer = (
@@ -27,6 +30,8 @@ export const authReducer = (
   switch (action.type) {
     case 'TOKEN':
       return {...state, token: action.payload};
+    case 'MEMBERSHIP_STATUS':
+      return {...state, membershipStatus: action.payload};
     case 'EMAIL':
       return {...state, email: action.payload};
     case 'LOADING':

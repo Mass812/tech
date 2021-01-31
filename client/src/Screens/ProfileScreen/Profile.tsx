@@ -3,7 +3,6 @@ import {useQuery} from 'urql';
 import {View, StyleSheet, Text} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
-
 import AcheivementBanner from './ProfileComponents/AcheivementBanner';
 import ProfileHeaderBanner from './ProfileComponents/ProfileHeaderBanner';
 import RecentlyDoneBanner from './ProfileComponents/RecentlyDoneBanner';
@@ -29,7 +28,6 @@ const Profile: React.FC<ProfileProps> = () => {
   useFocusEffect(
     React.useCallback(() => {
       const unsubscribe = nav.addListener('focus', () => refetchUserInfo());
-
       return () => unsubscribe();
     }, []),
   );
@@ -47,6 +45,7 @@ const Profile: React.FC<ProfileProps> = () => {
 
   const handleSignOut = () => {
     dispatch({type: 'TOKEN', payload: null});
+    dispatch({type: 'MEMBERSHIP_STATUS', payload: false});
   };
 
   function getMinutesFromSeconds(time: number) {

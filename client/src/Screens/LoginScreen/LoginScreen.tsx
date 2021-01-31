@@ -23,6 +23,7 @@ mutation ($email: String!, $password: String!) {
     login(email: $email, password: $password) {
         token
         email
+        membershipStatus
     }
 }
 `;
@@ -86,7 +87,11 @@ const LoginScreen: React.FC<LoginScreenProps> = () => {
           setFetching(false);
           dispatch({type: 'EMAIL', payload: data.data.login.email});
           dispatch({type: 'TOKEN', payload: data.data.login.token});
-          console.log('got token');
+          dispatch({
+            type: 'MEMBERSHIP_STATUS',
+            payload: data.data.login.membershipStatus,
+          });
+          console.log('got token', state.membershipStatus, state.token);
         }
       })
       .catch((err) => {

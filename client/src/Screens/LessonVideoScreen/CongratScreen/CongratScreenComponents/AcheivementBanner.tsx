@@ -13,6 +13,7 @@ interface AcheivementProps {
   lessonsCompleted: number;
   selfGuidedCompleted: number;
   streak: number;
+  msToMinSec?: () => void;
 }
 
 const Acheivement: React.FC<AcheivementProps> = ({
@@ -21,10 +22,12 @@ const Acheivement: React.FC<AcheivementProps> = ({
   lessonsCompleted,
   selfGuidedCompleted = 0,
   streak,
+  msToMinSec,
 }) => {
   return (
     <View style={styles.parent}>
       <Text style={styles.title}>WEEKLY PROGRESS</Text>
+      {msToMinSec && msToMinSec?.()}
       <View style={styles.badgeRow}>
         <TimeAcheivementIconBlock minutes={minutes} seconds={seconds} />
         <WorkoutsAcheivementIconBlock

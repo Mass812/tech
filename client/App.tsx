@@ -1,6 +1,6 @@
 import React, {useReducer} from 'react';
-
 import {createClient, Provider as UrqlProvider} from 'urql';
+import {SubscriptionClient} from 'subscriptions-transport-ws';
 import LessonVideoScreen from './src/Screens/LessonVideoScreen/LessonVideoScreen';
 import LoginScreen from './src/Screens/LoginScreen/LoginScreen';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
@@ -17,6 +17,13 @@ import BottomNavigatorScreens from './src/Navigation/BottomNav';
 import MeditationPlayer from './src/Screens/MeditationScreen/MeditationPlayer/MeditationPlayer';
 import SelfGuidedVideoScreen from './src/Screens/SelfGuidedVideoScreen/SelfGuidedVideoScreen';
 import LoadingScreen from './src/Screens/SplashScreens/Loading';
+
+const subscriptionClient = new SubscriptionClient(
+  'ws://localhost:4321/graphql',
+  {
+    // reconnect: true,
+  },
+);
 
 const client = createClient({
   url: 'http://localhost:4321/graphql',
@@ -65,7 +72,7 @@ const Root = createStackNavigator<RootParams>();
 function App() {
   const [state, dispatch] = useReducer(authReducer, InitialState);
   let authState = React.useMemo(() => ({state, dispatch}), [state, dispatch]);
-  let {token, loading} = state;
+  let {token, loading, membershipStatus} = state;
   if (loading) {
     return <LoadingScreen />;
   }
@@ -75,7 +82,7 @@ function App() {
       <AuthContext.Provider value={authState}>
         <NavigationContainer>
           <Root.Navigator mode="modal">
-            {token ? (
+            {token && membershipStatus ? (
               <>
                 <Root.Screen
                   name="RootHome"
