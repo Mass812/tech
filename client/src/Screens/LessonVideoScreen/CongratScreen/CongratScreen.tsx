@@ -39,16 +39,12 @@ const CongratScreen: React.FC<CongratScreenProps> = () => {
     requestPolicy: 'network-only',
   });
 
-  // useEffect(() => {
-  //   if (userInfo?.data?.user?.userWatchTime) {
-  //     getMinutesFromSeconds(userInfo.data.user.userWatchTime);
-  //   }
-  // }, [userInfo.data, userInfo.fetching]);
-
   let {data, fetching, error} = userInfo;
 
   if (fetching) return <LoadingScreen />;
   if (error) return <ErrorScreen error={error.message} />;
+  if (minutes === 0 && seconds === 0)
+    return getMinutesFromSeconds(userInfo.data.user.userWatchTime);
 
   // TODO ADD TIME TO USER DOC
   const handleMarkAsCompleted = () => {
@@ -64,11 +60,12 @@ const CongratScreen: React.FC<CongratScreenProps> = () => {
 
   function getMinutesFromSeconds(time: number) {
     //  let time = data.user.userWatchTime;
-    const minutes = time >= 60000 ? Math.floor(time / 60000) : 0;
-    const y = Math.floor(time - minutes * 60000);
-    const seconds = y / 1000;
-    setMinutesCalc(minutes);
-    setRemainingSecondsCalc(seconds);
+    const mins = time >= 60000 ? Math.floor(time / 60000) : 0;
+    const y = Math.floor(time - mins * 60000);
+    const secs = y / 1000;
+
+    setMinutesCalc(mins);
+    setRemainingSecondsCalc(secs);
   }
 
   return (
@@ -82,10 +79,8 @@ const CongratScreen: React.FC<CongratScreenProps> = () => {
         lessonsCompleted={data.user.lessonsCompleted}
         selfGuidedCompleted={data.user.selfGuidedCompleted}
         streak={data.user.streak}
-        msToMinSec={() =>
-          getMinutesFromSeconds(userInfo.data.user.userWatchTime)
-        }
       />
+
       <View></View>
       <InstructorOutfitBlock />
       <TouchableOpacity
