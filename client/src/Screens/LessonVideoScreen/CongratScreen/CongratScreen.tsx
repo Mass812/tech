@@ -43,9 +43,9 @@ const CongratScreen: React.FC<CongratScreenProps> = () => {
 
   if (fetching) return <LoadingScreen />;
   if (error) return <ErrorScreen error={error.message} />;
-  if (minutes === 0 && seconds === 0)
-    return getMinutesFromSeconds(userInfo.data.user.userWatchTime);
-
+  if (minutes === 0 && seconds === 0) {
+    getMinutesFromSeconds(userInfo.data.user.userWatchTime);
+  }
   // TODO ADD TIME TO USER DOC
   const handleMarkAsCompleted = () => {
     executeMutation({

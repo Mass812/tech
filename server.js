@@ -2,7 +2,7 @@ require("dotenv").config()
 
 const AWS = require("aws-sdk")
 const express = require("express")
-const { ApolloServer, gql } = require("apollo-server-express")
+const { ApolloServer } = require("apollo-server-express")
 
 const isAuth = require("./server_isAuth")
 
