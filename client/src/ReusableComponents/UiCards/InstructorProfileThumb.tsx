@@ -19,7 +19,9 @@ const InstructorProfileThumb: React.FC<InstructorProfileThumbProps> = ({
 
         <View style={styles.cardDetailsParent}>
           <Text style={styles.title}>{name}</Text>
-          <Text style={styles.subTitle}>dahdah... </Text>
+          <Text style={styles.subTitle}>
+            Example Component...could be expanded{' '}
+          </Text>
         </View>
 
         <View style={styles.buttonParent}>

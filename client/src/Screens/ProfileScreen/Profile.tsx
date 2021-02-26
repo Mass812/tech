@@ -22,7 +22,7 @@ const Profile: React.FC<ProfileProps> = () => {
   const [userInfo, refetchUserInfo] = useQuery({
     query: userDetails,
     variables: {email: state.email},
-    requestPolicy: 'cache-and-network',
+    requestPolicy: 'network-only',
   });
 
   useFocusEffect(
@@ -32,13 +32,14 @@ const Profile: React.FC<ProfileProps> = () => {
     }, []),
   );
 
+  let {data, fetching, error} = userInfo;
+
   useEffect(() => {
     if (userInfo?.data?.user?.userWatchTime) {
       getMinutesFromSeconds(userInfo.data.user.userWatchTime);
     }
-  }, [userInfo.data, minutes]);
-
-  let {data, fetching, error} = userInfo;
+    // getMinutesFromSeconds(userInfo.data.user.userWatchTime);
+  }, [userInfo.data, minutes, fetching, data]);
 
   if (fetching) return <LoadingScreen />;
   if (error) return <ErrorScreen error={error.message} />;

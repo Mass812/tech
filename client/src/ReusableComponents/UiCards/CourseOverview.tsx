@@ -120,10 +120,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: 40,
     textAlign: 'left',
-    borderBottomWidth: 2,
-    borderColor: 'darkgrey',
+    // borderBottomWidth: 2,
+    // borderColor: 'darkgrey',
     justifyContent: 'flex-start',
     alignItems: 'center',
+    paddingBottom: 10,
   },
 
   tableItemName: {

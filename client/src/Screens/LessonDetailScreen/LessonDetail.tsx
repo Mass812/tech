@@ -12,7 +12,7 @@ import {
   LessonDetailProps,
   ParamList,
 } from '../../Interfaces/LessonDetailScreenInterfaces';
-import {VideoStore} from '../LessonVideoScreen/LessonVideoScreen';
+//import {VideoStore} from '../LessonVideoScreen/LessonVideoScreen';
 
 const LessonDetail: React.FC<LessonDetailProps> = () => {
   const nav = useNavigation();

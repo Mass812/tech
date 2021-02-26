@@ -18,13 +18,6 @@ import MeditationPlayer from './src/Screens/MeditationScreen/MeditationPlayer/Me
 import SelfGuidedVideoScreen from './src/Screens/SelfGuidedVideoScreen/SelfGuidedVideoScreen';
 import LoadingScreen from './src/Screens/SplashScreens/Loading';
 
-const subscriptionClient = new SubscriptionClient(
-  'ws://localhost:4321/graphql',
-  {
-    // reconnect: true,
-  },
-);
-
 const client = createClient({
   url: 'http://localhost:4321/graphql',
 });
