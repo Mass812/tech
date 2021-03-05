@@ -1,6 +1,5 @@
 import React, {useReducer} from 'react';
 import {createClient, Provider as UrqlProvider} from 'urql';
-import {SubscriptionClient} from 'subscriptions-transport-ws';
 import LessonVideoScreen from './src/Screens/LessonVideoScreen/LessonVideoScreen';
 import LoginScreen from './src/Screens/LoginScreen/LoginScreen';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
